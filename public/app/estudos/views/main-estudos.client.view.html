@@ -1,0 +1,23 @@
+<section data-ng-controller="EstudosController" data-ng-init="listProdutos()">
+    <div class="col-xs-3">
+        <ul class="list-group">
+            <li class="list-group-item" data-ng-repeat="item in produtos">
+                <p class="text-primary" data-ng-bind="item.nome"></p>
+                <p class="text-muted" data-ng-bind="item.modelo"></p>
+                <button class="btn btn-sm btn-info" ng-click="selecionaProdutoEstudo(item)">Adicionar</button>
+                <hr>
+            </li>
+        </ul>
+    </div>
+    <div class="col-xs-6">
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="itemEstudo in produtosDoEstudo">
+                <p class="text-primary" data-ng-bind="itemEstudo.nome"></p>
+                <p class="text-muted" data-ng-bind="itemEstudo.custo_usd | currency: 'U$ '"></p>
+            </li>
+        </ul>
+    </div>
+    <div class="col-xs-3">
+        <h3 class="text-primary">Total: </h3><p class="text-primary" data-ng-bind="estudo.totalFob | currency: 'U$ '"></p>
+    </div>
+</section>

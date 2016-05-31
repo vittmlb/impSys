@@ -80,7 +80,7 @@
     {{/each}}
     {{{body}}}
     <toast></toast>
-    <section class="container">
+    <section>
         <section ng-view>
         </section>
     </section>
@@ -100,11 +100,18 @@
 <script src="bower_components/ngToast/dist/ngToast.min.js"></script>
 
 
-<!--Scripts - Vendedores-->
+<!--Scripts - Produtos -->
 <script src="./app/produtos/produtos.client.module.js"></script>
 <script src="./app/produtos/config/produtos.client.routes.js"></script>
 <script src="./app/produtos/controllers/produtos.client.controller.js"></script>
 <script src="./app/produtos/services/produtos.client.service.js"></script>
+
+<!--Scripts - Estudos -->
+<script src="./app/estudos/estudos.client.module.js"></script>
+<script src="./app/estudos/config/estudos.client.routes.js"></script>
+<script src="./app/estudos/controllers/estudos.client.controller.js"></script>
+<script src="./app/estudos/services/estudos.client.service.js"></script>
+
 <!--<script src="./produtos/produtos.client.module.js"></script>-->
 <!--<script src="./produtos/controllers/produtos.client.controller.js"></script>-->
 <!--<script src="./produtos/services/produtos.client.service.js"></script>-->

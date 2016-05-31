@@ -20,8 +20,16 @@ var ProdutoSchema = new Schema({
     },
     custo_usd: {
         type: Currency,
-        default: 0
+        default: 0,
+        get: function(value) {
+            return value / 100;
+        }
     }
+});
+
+ProdutoSchema.set('toJSON', {
+    getters: true,
+    virtuals: true
 });
 
 mongoose.model('Produto', ProdutoSchema);
