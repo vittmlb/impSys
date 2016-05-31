@@ -1,0 +1,17 @@
+<section ng-controller="ProdutosController">
+    <form data-ng-submit="create()" novalidate>
+        <label for="inputNome">Nome:</label>
+        <div class="form-group">
+            <input type="text" class="form-control" id="inputNome" data-ng-model="nome">
+        </div>
+        <label for="inputModelo">Modelo:</label>
+        <div class="form-group">
+            <input type="text" class="form-control" id="inputModelo" data-ng-model="modelo">
+        </div>
+        <label for="inputCusto_usd">Custo Usd:</label>
+        <div class="form-group">
+            <input type="text" class="form-control" id="inputCusto_usd" data-ng-model="custo_usd">
+        </div>
+        <input type="submit" class="btn btn-info" value="Cadastrar">
+    </form>
+</section>
