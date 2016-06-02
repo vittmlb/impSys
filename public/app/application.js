@@ -3,7 +3,8 @@
  */
 
 var mainAppModuleName = 'impsys';
-var mainAppModule = angular.module(mainAppModuleName, ['ngResource', 'ngRoute', 'produtos', 'estudos', 'despesas', 'ngToast']);
+var mainAppModule = angular.module(mainAppModuleName, ['ngResource', 'ngRoute', 'produtos', 'estudos', 'despesas', 'ngToast', 'ui.router']);
+//todo: Ver se dá pra tirar o ui.router daí.
 
 mainAppModule.config(['$locationProvider', function($locationProvider) {
     $locationProvider.hashPrefix('!');
