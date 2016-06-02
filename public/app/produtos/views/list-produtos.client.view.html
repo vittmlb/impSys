@@ -1,0 +1,11 @@
+<section data-ng-controller="ProdutosController" data-ng-init="find()">
+    <div class="container">
+        <h2>Produtos</h2>
+        <hr>
+        <ul class="list-group">
+            <li class="list-group-item" data-ng-repeat="item in produtos">
+                <h3 data-ng-bind="item.nome"></h3>
+            </li>
+        </ul>
+    </div>
+</section>

@@ -8,7 +8,7 @@ angular.module('produtos').config(['$routeProvider', function($routeProvider) {
         templateUrl: 'app/produtos/views/view-produto.client.view.html'
     }).when('/produtos/:produtoId/edit', {
         templateUrl: 'app/produtos/views/edit-produto.client.view.html'
-    }).when('/produto/create', {
+    }).when('/produtos/create', {
         templateUrl: 'app/produtos/views/create-produto.client.view.html'
     });
 }]);
