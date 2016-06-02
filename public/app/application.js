@@ -3,7 +3,7 @@
  */
 
 var mainAppModuleName = 'impsys';
-var mainAppModule = angular.module(mainAppModuleName, ['ngResource', 'ngRoute', 'produtos', 'estudos', 'ngToast']);
+var mainAppModule = angular.module(mainAppModuleName, ['ngResource', 'ngRoute', 'produtos', 'estudos', 'despesas', 'ngToast']);
 
 mainAppModule.config(['$locationProvider', function($locationProvider) {
     $locationProvider.hashPrefix('!');

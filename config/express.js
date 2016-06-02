@@ -47,6 +47,7 @@ module.exports = function() {
     });
 
     require('../app/routes/produtos.server.routes.js')(app);
+    require('../app/routes/despesas.server.routes.js')(app);
     
     return app;
 
