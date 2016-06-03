@@ -1,8 +1,8 @@
 <section ng-controller="ProdutosController" data-ng-init="findOne()">
     <div class="container">
         <h2>Produto</h2>
-        <a href="#!/produtos/{{produto._id}}/edit" class="btn btn-info">Editar</a>
-        <button class="btn btn-danger" data-ng-click="delete()">Remover</button>
+        <a href="#!/produtos/{{produto._id}}/edit" class="btn btn-warning btn-xs btn-round"><span class="glyphicon glyphicon-pencil"></span></a>
+        <button class="btn btn-danger btn-xs btn-round" data-ng-click="delete()"><span class="glyphicon glyphicon-trash"></span></button>
         <hr>
         <h1 data-ng-bind="produto.nome"></h1>
         <h2 data-ng-bind="produto.modelo"></h2>
