@@ -31,6 +31,10 @@ exports.list = function(req, res) {
 exports.update = function(req, res) {
     var despesa = req.despesa;
     despesa.nome = req.body.nome;
+    despesa.tipo = req.body.tipo;
+    despesa.moeda = req.body.moeda;
+    despesa.valor = req.body.valor;
+    despesa.aliquota = req.body.aliquota;
     despesa.save(function (err, despesa) {
         if(err) {
             return res.status(400).send({

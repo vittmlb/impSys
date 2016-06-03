@@ -4,9 +4,29 @@
             <div class="col-xs-8">
                 <h2>Editar Despesa</h2>
                 <hr>
-                <label for="inputNome">Nome:</label>
+                <label for="inputNomeDespesa">Nome da Despesa:</label>
                 <div class="form-group">
-                    <input type="text" class="form-control" id="inputNome" placeholder="Nome" data-ng-model="despesa.nome">
+                    <input type="text" class="form-control" id="inputNomeDespesa" data-ng-model="despesa.nome">
+                </div>
+                <label for="inputTipoDespesa">Tipo da Despesa:</label>
+                <div class="form-group">
+                    <select class="form-control" name="inputTipoDespesa" id="inputTipoDespesa" data-ng-model="despesa.tipo">
+                        <option class="form-control" ng-repeat="tipoDespesa in enumTiposDespesas" value="{{tipoDespesa}}">{{tipoDespesa}}</option>
+                    </select>
+                </div>
+                <label for="inputTipoMoeda">Moeda: </label>
+                <div class="form-group">
+                    <select name="inputTipoMoeda" id="inputTipoMoeda" class="form-control" data-ng-model="despesa.moeda">
+                        <option ng-repeat="tipoMoeda in enumTiposMoedas" value="{{tipoMoeda}}" class="form-control">{{tipoMoeda}}</option>
+                    </select>
+                </div>
+                <label for="inputValorDespesa">Valor:</label>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="inputValorDespesa" data-ng-model="despesa.valor">
+                </div>
+                <label for="inputAliquota">Alíquota:</label>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="inputAliquota" data-ng-model="despesa.aliquota">
                 </div>
                 <input type="submit" class="btn btn-info" value="Update">
             </div>

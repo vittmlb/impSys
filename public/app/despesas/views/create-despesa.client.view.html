@@ -4,9 +4,29 @@
         <hr>
         <div class="col-xs-8">
             <form data-ng-submit="create()">
-                <label for="inputNomeDespesa">Nome da Despesa</label>
+                <label for="inputNomeDespesa">Nome da Despesa:</label>
                 <div class="form-group">
                     <input type="text" class="form-control" id="inputNomeDespesa" ng-model="nome">
+                </div>
+                <label for="inputTipoDespesa">Tipo da Despesa:</label>
+                <div class="form-group">
+                    <select class="form-control" name="inputTipoDespesa" id="inputTipoDespesa" ng-model="tipo">
+                        <option class="form-control" ng-repeat="tipoDespesa in enumTiposDespesas" value="{{tipoDespesa}}">{{tipoDespesa}}</option>
+                    </select>
+                </div>
+                <label for="inputTipoMoeda">Moeda: </label>
+                <div class="form-group">
+                    <select name="inputTipoMoeda" id="inputTipoMoeda" class="form-control" ng-model="moeda">
+                        <option ng-repeat="tipoMoeda in enumTiposMoedas" value="{{tipoMoeda}}" class="form-control">{{tipoMoeda}}</option>
+                    </select>
+                </div>
+                <label for="inputValorDespesa">Valor:</label>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="inputValorDespesa" ng-model="valor">
+                </div>
+                <label for="inputAliquota">Alíquota:</label>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="inputAliquota" ng-model="aliquota">
                 </div>
                 <input type="submit" class="btn btn-info" value="Cadastrar">
             </form>

@@ -9,8 +9,32 @@ var Currency = mongoose.Types.Currency;
 
 var DespesasSchema = new Schema({
     nome: {
-        type: String
+        type: String,
+        trim: true,
+        required: 'O campo nome é obrigatório'
+    },
+    tipo: {
+        type: String,
+        enum: ['despesa aduaneira', 'alíquota', 'outras']
+    },
+    valor: {
+        type: Currency,
+        get: function(value) {
+            return value / 100;
+        }
+    },
+    moeda: {
+        type: String,
+        enum: ['R$', 'U$']
+    },
+    aliquota: {
+        type: Number
     }
+});
+
+DespesasSchema.set('toJSON', {
+    getters: true,
+    virtuals: true
 });
 
 mongoose.model('Despesa', DespesasSchema);

@@ -3,9 +3,17 @@
  */
 angular.module('despesas').controller('DespesasController', ['$scope', '$routeParams', '$location', 'Despesas', 'ngToast', '$stateParams', '$state',
     function($scope, $routeParams, $location, Despesas, ngToast, $stateParams, $state) {
+        
+        $scope.enumTiposDespesas = ['despesa aduaneira', 'alíquota', 'outras']; // todo: Encontrar solução que envolva o mongoose.
+        $scope.enumTiposMoedas = ['R$', 'U$'];
+        
         $scope.create = function() {
             var despesa = new Despesas({
-                nome: this.nome
+                nome: this.nome,
+                tipo: this.tipo,
+                moeda: this.moeda,
+                valor: this.valor,
+                aliquota: this.aliquota
             });
             despesa.$save(function(response) {
                 $location.path('/despesas/' + response._id);
