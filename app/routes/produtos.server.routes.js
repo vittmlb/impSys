@@ -11,7 +11,8 @@ module.exports = function(app) {
 
     app.route('/api/produtos/:produtoId')
         .get(produtos.read)
-        .put(produtos.update);
+        .put(produtos.update)
+        .delete(produtos.delete);
 
 
     app.param('produtoId', produtos.findById);

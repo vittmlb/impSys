@@ -32,6 +32,19 @@ exports.read = function(req, res) {
     res.send(req.produto);
 };
 
+exports.delete = function(req, res) {
+    var produto = req.produto;
+    produto.remove(function (err) {
+        if(err) {
+            return res.status(400).send({
+                message: err
+            });
+        } else {
+            res.json(produto);
+        }
+    });
+};
+
 exports.update = function(req, res) {
     var produto = req.produto;
     produto.nome = req.body.nome;

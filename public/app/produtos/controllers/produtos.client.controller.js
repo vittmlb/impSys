@@ -23,6 +23,21 @@ angular.module('produtos').controller('ProdutosController', ['$scope', '$routePa
                 produtoId: $stateParams.produtoId
             });
         };
+        $scope.delete = function(produto) {
+            if(produto) {
+                produto.$remove(function () {
+                    for (var i in $scope.produtos) {
+                        if($scope.produtos[i] === produto) {
+                            $scope.produtos.splice(i, 1);
+                        }
+                    }
+                });
+            } else {
+                $scope.produto.$remove(function () {
+                    $location.path('/produtos');
+                });
+            }
+        };
         $scope.update = function() {
             $scope.produto.$update(function () {
                 $location.path('produtos/' + $scope.produto._id); // todo: Tentar usar também o $state.go()
