@@ -4,7 +4,12 @@
         <hr>
         <ul class="list-group">
             <li class="list-group-item" data-ng-repeat="item in produtos">
-                <h3 data-ng-bind="item.nome"></h3>
+                <a href="#!/produtos/{{item._id}}">
+                    <div>
+                        <h3 class="text-primary" data-ng-bind="item.nome"></h3>
+                        <h4 class="text-muted" data-ng-bind="item.custo_usd | currency: 'U$ '"></h4>
+                    </div>
+                </a>
             </li>
         </ul>
     </div>

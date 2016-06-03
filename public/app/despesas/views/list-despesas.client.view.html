@@ -4,7 +4,11 @@
         <hr>
         <ul class="list-group">
             <li class="list-group-item" data-ng-repeat="item in despesas">
-                <h3 data-ng-bind="item.nome"></h3>
+                <a href="#!/despesas/{{item._id}}">
+                    <div>
+                        <h3 data-ng-bind="item.nome"></h3>
+                    </div>
+                </a>
             </li>
         </ul>
     </div>
