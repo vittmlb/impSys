@@ -1,8 +1,8 @@
 /**
  * Created by Vittorio on 01/06/2016.
  */
-angular.module('despesas').controller('DespesasController', ['$scope', '$routeParams', '$location', 'Despesas', 'ngToast',
-    function($scope, $routeParams, $location, Despesas, ngToast) {
+angular.module('despesas').controller('DespesasController', ['$scope', '$routeParams', '$location', 'Despesas', 'ngToast', '$stateParams', '$state',
+    function($scope, $routeParams, $location, Despesas, ngToast, $stateParams, $state) {
         $scope.create = function() {
             var despesa = new Despesas({
                 nome: this.nome
@@ -19,7 +19,7 @@ angular.module('despesas').controller('DespesasController', ['$scope', '$routePa
         };
         $scope.findOne = function() {
             $scope.despesa = Despesas.get({
-                despesaId: $routeParams.despesaId
+                despesaId: $stateParams.despesaId
             });
         };
         $scope.update = function() {
