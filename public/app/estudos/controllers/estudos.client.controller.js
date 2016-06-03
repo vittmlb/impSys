@@ -1,8 +1,8 @@
 /**
  * Created by Vittorio on 30/05/2016.
  */
-angular.module('estudos').controller('EstudosController', ['$scope', '$routeParams', '$location', 'Produtos',
-    function($scope, $routeParams, $location, Produtos) {
+angular.module('estudos').controller('EstudosController', ['$scope', '$routeParams', '$location', 'Produtos', '$stateParams', '$state',
+    function($scope, $routeParams, $location, Produtos, $stateParams, $state) {
 
         $scope.quantidades = [];
         $scope.produtosDoEstudo = [];
