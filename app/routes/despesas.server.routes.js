@@ -11,7 +11,8 @@ module.exports = function(app) {
 
     app.route('/api/despesas/:despesaId')
         .get(despesas.read)
-        .put(despesas.update);
+        .put(despesas.update)
+        .delete(despesas.delete);
 
     app.param('despesaId', despesas.findById);
     

@@ -1,6 +1,8 @@
 <section data-ng-controller="DespesasController" data-ng-init="findOne()">
     <div class="container">
         <h2>Despesas</h2>
+        <a href="#!/despesas/{{despesa._id}}/edit" class="btn btn-info">Editar</a>&nbsp
+        <button class="btn btn-danger" data-ng-click="delete()">Remover</button>
         <hr>
         <h3 data-ng-bind="despesa.nome"></h3>
     </div>

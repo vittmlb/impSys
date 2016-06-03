@@ -42,6 +42,19 @@ exports.update = function(req, res) {
     });
 };
 
+exports.delete = function(req, res) {
+    var despesa = req.despesa;
+    despesa.remove(function (err) {
+        if(err) {
+            return res.status(400).send({
+                message: err
+            });
+        } else {
+            res.json(despesa);
+        }
+    });
+};
+
 exports.read = function(req, res) {
     res.json(req.despesa);
 };

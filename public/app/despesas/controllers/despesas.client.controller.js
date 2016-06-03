@@ -22,6 +22,21 @@ angular.module('despesas').controller('DespesasController', ['$scope', '$routePa
                 despesaId: $stateParams.despesaId
             });
         };
+        $scope.delete = function(despesa) {
+            if(despesa) {
+                despesa.$remove(function () {
+                    for (var i in $scope.despesas) {
+                        if($scope.despesas[i] === despesa) {
+                            $scope.despesas.splice(i, 1);
+                        }
+                    }
+                });
+            } else {
+                $scope.despesa.$remove(function () {
+                    $location.path('/despesas');
+                });
+            }
+        };
         $scope.update = function() {
             $scope.despesa.$update(function () {
                 $location.path('/despesas/' + $scope.despesa._id);
