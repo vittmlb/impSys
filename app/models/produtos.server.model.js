@@ -18,12 +18,33 @@ var ProdutoSchema = new Schema({
         default: '',
         trim: true
     },
+    descricao: {
+        type: String,
+        default: '',
+        trim: true
+    },
     custo_usd: {
         type: Currency,
         default: 0,
         get: function(value) {
             return value / 100;
         }
+    },
+    ncm: {
+        type: String,
+        trim: true
+    },
+    impostos: {
+        ii: {
+            type: Number
+        },
+        ipi: Number,
+        pis: Number,
+        cofins: Number
+    },
+    medidas: {
+        cbm: Number,
+        peso: Number
     }
 });
 
@@ -33,3 +54,16 @@ ProdutoSchema.set('toJSON', {
 });
 
 mongoose.model('Produto', ProdutoSchema);
+
+// imposto_importacao: {
+//     type: Number
+// },
+// imposto_ipi: {
+//     type: Number
+// },
+// imposto_pis: {
+//     type: Number
+// },
+// imposto_cofins: {
+//     type: Number
+// },

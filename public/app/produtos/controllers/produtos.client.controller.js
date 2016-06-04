@@ -7,7 +7,19 @@ angular.module('produtos').controller('ProdutosController', ['$scope', '$routePa
             var produto = new Produtos({
                 nome: this.nome,
                 modelo: this.modelo,
-                custo_usd: this.custo_usd
+                descricao: this.descricao,
+                custo_usd: this.custo_usd,
+                ncm: this.ncm,
+                impostos: {
+                    ii: this.impostos.ii,
+                    ipi: this.impostos.ipi,
+                    pis: this.impostos.pis,
+                    cofins: this.impostos.cofins
+                },
+                medidas: {
+                    cbm: this.medidas.cbm,
+                    peso: this.medidas.peso
+                }
             });
             produto.$save(function (response) {
                 $location.path('/produtos/' + response._id); // todo: Tentar usar o $state.go()

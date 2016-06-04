@@ -1,23 +1,81 @@
 <section ng-controller="ProdutosController">
     <div class="container">
+        <h2>Cadastro de Produto</h2>
+        <hr>
         <form data-ng-submit="create()" novalidate>
-            <div class="col-xs-6">
-                <h2>Cadastro de Produto</h2>
-                <hr>
-                <label for="inputNome">Nome:</label>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="inputNome" data-ng-model="nome">
+        <div class="container">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#principal">Principal</a></li>
+                <li><a data-toggle="tab" href="#impostos">Impostos</a></li>
+                <li><a data-toggle="tab" href="#medidas">Medidas</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="principal" class="tab-pane fade in active">
+                    <h3>Dados Básicos</h3><br/>
+                        <div class="">
+                            <label for="inputNome">Nome:</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="inputNome" data-ng-model="nome">
+                            </div>
+                            <label for="inputModelo">Modelo:</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="inputModelo" data-ng-model="modelo">
+                            </div>
+                            <label for="inputDescricao">Descrição:</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="inputDescricao" data-ng-model="descricao">
+                            </div>
+                            <label for="inputCusto_usd">Custo Usd:</label>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="inputCusto_usd" data-ng-model="custo_usd">
+                            </div>
+                        </div>
                 </div>
-                <label for="inputModelo">Modelo:</label>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="inputModelo" data-ng-model="modelo">
+                <div id="impostos" class="tab-pane fade">
+                    <h3>Dados sobre Impostos</h3>
+                    <div class="">
+                        <label for="inputNcm">N.C.M:</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="inputNcm" data-ng-model="ncm">
+                        </div>
+                        <label for="inputIi">Imposto de Importação:</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="inputIi" data-ng-model="impostos.ii">
+                        </div>
+                        <label for="inputImpostoIpi">IPI:</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="inputImpostoIpi" data-ng-model="impostos.ipi">
+                        </div>
+                        <label for="inputImpostoPis">Pis:</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="inputImpostoPis" data-ng-model="impostos.pis">
+                        </div>
+                        <label for="inputImpostoCofins">Cofins:</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="inputImpostoCofins" data-ng-model="impostos.cofins">
+                        </div>
+                    </div>
                 </div>
-                <label for="inputCusto_usd">Custo Usd:</label>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="inputCusto_usd" data-ng-model="custo_usd">
+                <div id="medidas" class="tab-pane fade">
+                    <h3>Medidas</h3>
+                    <label for="inputCbm">CBM</label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="inputCbm" data-ng-model="medidas.cbm">
+                    </div>
+                    <label for="inputPeso">Peso</label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="inputPeso" data-ng-model="medidas.peso">
+                    </div>
                 </div>
+            </div>
+        </div>
+            <div class="container">
+                <br>
                 <input type="submit" class="btn btn-info" value="Cadastrar">
             </div>
         </form>
     </div>
 </section>
+
+

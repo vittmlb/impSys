@@ -49,7 +49,11 @@ exports.update = function(req, res) {
     var produto = req.produto;
     produto.nome = req.body.nome;
     produto.modelo = req.body.modelo;
+    produto.descricao = req.body.descricao;
     produto.custo_usd = req.body.custo_usd;
+    produto.ncm = req.body.ncm;
+    produto.impostos = req.body.impostos;
+    produto.medidas = req.body.medidas;
     produto.save(function (err, produto) {
         if(err) {
             return res.status(400).send({
