@@ -1,4 +1,4 @@
-<section data-ng-controller="EstudosController" data-ng-init="listProdutos()">
+<section data-ng-controller="EstudosController" data-ng-init="loadData()">
     <div class="col-xs-3">
         <ul class="list-group">
             <li class="list-group-item" data-ng-repeat="item in produtos">
@@ -42,6 +42,69 @@
         </ul>
     </div>
     <div class="col-xs-3">
-        <h3 class="text-primary">Total: </h3><p class="text-primary" data-ng-bind="estudo.totalFob | currency: 'U$ '"></p>
+        <h2>Estudo</h2>
+        <p>Resutados do Estudo</p>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Principal</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Fob</td>
+                <td data-ng-bind="estudo.totalFob | currency: 'U$ '"></td>
+            </tr>
+            <tr>
+                <td>CIF</td>
+                <td data-ng-bind="estudo.cif_brl | currency: 'R$ '"></td>
+            </tr>
+            <tr>
+                <td>Peso Total:</td>
+                <td data-ng-bind="estudo.totalPeso"></td>
+            </tr>
+            <tr>
+                <td>AFRMM</td>
+                <td data-ng-bind="estudo.afrmm_brl | currency: 'R$ '"></td>
+            </tr>
+            <tr>
+                <td>Despesas</td>
+                <td data-ng-bind="estudo.total_despesas | currency: 'R$ '"></td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Impostos</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>II</td>
+                <td data-ng-bind="estudo.tributos.ii | currency: 'R$ '"></td>
+            </tr>
+            <tr>
+                <td>IPI</td>
+                <td data-ng-bind="estudo.tributos.ipi | currency: 'R$ '"></td>
+            </tr>
+            <tr>
+                <td>PIS</td>
+                <td data-ng-bind="estudo.tributos.pis | currency: 'R$ '"></td>
+            </tr>
+            <tr>
+                <td>Cofins</td>
+                <td data-ng-bind="estudo.tributos.cofins | currency: 'R$ '"></td>
+            </tr>
+            <tr>
+                <td>ICMS</td>
+                <td data-ng-bind="estudo.tributos.icms | currency: 'R$ '"></td>
+            </tr>
+            <tr>
+                <td>Total Tributos</td>
+                <td data-ng-bind="estudo.tributos.total_dos_tributos | currency: 'R$ '"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </section>
