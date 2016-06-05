@@ -1,8 +1,8 @@
 /**
  * Created by Vittorio on 30/05/2016.
  */
-angular.module('estudos').controller('EstudosController', ['$scope', '$routeParams', '$location', 'Produtos', 'Despesas', '$stateParams', '$state',
-    function($scope, $routeParams, $location, Produtos, Despesas, $stateParams, $state) {
+angular.module('estudos').controller('EstudosController', ['$scope', '$routeParams', '$location', 'Produtos', 'Despesas', '$http', '$stateParams', '$state',
+    function($scope, $routeParams, $location, Produtos, Despesas, $http, $stateParams, $state) {
 
         var cotacaoDolar = 2.68;
 
@@ -32,11 +32,15 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             },
             total_despesas: 0
         };
+        $scope.config = {};
 
 
         $scope.loadData = function() {
             $scope.produtos = Produtos.query();
             $scope.despesas = Despesas.query();
+            $http.get('/app/data/config.json').success(function (data) {
+                $scope.config = data;
+            });
         };
         
         $scope.adicionaProdutoEstudo = function(item) {
@@ -65,6 +69,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
         }
 
         function calculaTotalDespesas() {
+            $scope.estudo.cotacao_dolar = $scope.config.cotacao_dolar;
             $scope.estudo.frete_maritimo_brl = $scope.estudo.frete_maritimo_usd * $scope.estudo.cotacao_dolar;
             $scope.estudo.seguro_brl = $scope.estudo.seguro_usd * $scope.estudo.cotacao_dolar;
             var aliqAfrmm = $scope.despesas.filter(function(item) {
