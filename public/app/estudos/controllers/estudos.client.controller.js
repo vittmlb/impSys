@@ -39,10 +39,15 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.despesas = Despesas.query();
         };
         
-        $scope.selecionaProdutoEstudo = function(item) {
+        $scope.adicionaProdutoEstudo = function(item) {
             item.qtd = 0;
             item.estudo = {};
             $scope.produtosDoEstudo.push(item);
+        };
+
+        $scope.removeProdutoEstudo = function(item) {
+            $scope.produtosDoEstudo.splice($scope.produtosDoEstudo.indexOf(item), 1);
+            $scope.iniImport();
         };
 
 
@@ -103,7 +108,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             
         }
 
-        $scope.iniImport = function() {
+        function zeraDadosEstudo() {
             $scope.estudo.totalFob = 0;
             $scope.estudo.totalPeso = 0;
             $scope.estudo.tributos.ii = 0;
@@ -112,17 +117,33 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.estudo.tributos.cofins = 0;
             $scope.estudo.tributos.icms = 0;
             $scope.estudo.tributos.total_dos_tributos = 0;
+            $scope.estudo.cif_brl = 0;
+            $scope.estudo.afrmm_brl = 0;
+            $scope.estudo.total_despesas = 0;
+        }
+
+        function totalizaFobPeso() {
             $scope.produtosDoEstudo.forEach(function (produto) {
                 $scope.estudo.totalFob += calculaTotalFob(produto);
                 $scope.estudo.totalPeso += calculaTotalPeso(produto);
             });
-            calculaCif();
-            calculaTotalDespesas();
+        }
+
+        function calculaImportacaoProdutos() {
             $scope.produtosDoEstudo.forEach(function (produto) {
                 calculaImpostosPorProduto(produto);
             });
         }
-        
+
+        $scope.iniImport = function() {
+            zeraDadosEstudo();
+            if($scope.produtosDoEstudo.length > 0) {
+                totalizaFobPeso();
+                calculaCif();
+                calculaTotalDespesas();
+                calculaImportacaoProdutos();
+            }
+        }
     }
 ]);
 

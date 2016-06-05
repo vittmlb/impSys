@@ -6,7 +6,7 @@
         <hr>
         <h3 data-ng-bind="despesa.nome"></h3>
         <h4 data-ng-bind="despesa.tipo"></h4>
-        <p class="text-primary" data-ng-bind="despesa.valor | currency: despesa.moeda"></p>
-        <p class="text-muted" data-ng-bind="despesa.aliquota" data-ng-show="despesa.aliquota"></p>
+        <p class="text-primary" data-ng-bind="despesa.valor | currency: despesa.moeda + ' '" data-ng-show="despesa.valor"></p>
+        <p class="text-muted" data-ng-bind="despesa.aliquota | percentage:2" data-ng-show="despesa.aliquota"></p>
     </div>
 </section>

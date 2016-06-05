@@ -2,25 +2,26 @@
     <div class="container">
         <h2>Despesas</h2>
         <hr>
-        <ul class="list-group">
-            <li class="list-group-item" data-ng-repeat="item in despesas">
-                    <a href="#!/despesas/{{item._id}}">
-                        <div>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <h4 data-ng-bind="item.nome"></h4>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <span class="text-primary" data-ng-bind="item.tipo"></span>
-                                    <p class="text-primary" data-ng-bind="item.valor | currency: item.moeda" ng-show="item.valor"></p>
-                                    <p class="text-primary" data-ng-bind="item.aliquota"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-            </li>
-        </ul>
+        <div class="row">
+            <div class="col-xs-10">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Valor/Alíquota</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr data-ng-repeat="item in despesas">
+                        <td><a href="#!/despesas/{{item._id}}">{{item.nome}}</a></td>
+                        <td data-ng-bind="item.tipo"></td>
+                        <td data-ng-bind="item.valor | currency: item.moeda + ' '" data-ng-show="item.valor"></td>
+                        <td data-ng-bind="item.aliquota | percentage: 2" data-ng-show="item.aliquota"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </section>

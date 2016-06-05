@@ -1,15 +1,17 @@
 <section ng-controller="ProdutosController" data-ng-init="findOne()">
     <div class="container">
-        <h2>Produto</h2>
-        <a href="#!/produtos/{{produto._id}}/edit" class="btn btn-warning btn-xs btn-round"><span class="glyphicon glyphicon-pencil"></span></a>
-        <button class="btn btn-danger btn-xs btn-round" data-ng-click="delete()"><span class="glyphicon glyphicon-trash"></span></button>
-        <hr>
-        <h1 data-ng-bind="produto.nome"></h1>
-        <h2 data-ng-bind="produto.modelo"></h2>
-        <h3 data-ng-bind="produto.descricao"></h3>
-        <h3 data-ng-bind="produto.custo_usd"></h3>
-        <h3 data-ng-bind="produto.ncm"></h3>
-        <span data-ng-bind="produto.impostos.ii"></span>
-        <p data-ng-bind="produto.medidas.cbm"></p>
+        <div class="col-xs-8">
+            <h1>Produto</h1>
+            <a href="#!/produtos/{{produto._id}}/edit" class="btn btn-warning btn-xs btn-round"><span class="glyphicon glyphicon-pencil"></span></a>
+            <button class="btn btn-danger btn-xs btn-round" data-ng-click="delete()"><span class="glyphicon glyphicon-trash"></span></button>
+            <hr>
+            <h2 data-ng-bind="produto.nome"></h2>
+            <h2 data-ng-bind="produto.modelo"></h2>
+            <h3 data-ng-bind="produto.descricao"></h3>
+            <h3 data-ng-bind="produto.custo_usd"></h3>
+            <h3 data-ng-bind="produto.ncm"></h3>
+            <span data-ng-bind="produto.impostos.ii"></span>
+            <p data-ng-bind="produto.medidas.cbm"></p>
+        </div>
     </div>
 </section>
