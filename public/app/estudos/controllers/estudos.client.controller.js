@@ -30,10 +30,19 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 icms: 0,
                 total_dos_tributos: 0
             },
-            total_despesas: 0
+            volume_ocupado: 0,
+            total_despesas: 0,
         };
-        $scope.config = {};
+        $scope.config = {
+            cotacao_dolar: 0,
+            cotacao_dolar_paypal: 0,
+            volume_cntr_20: 0,
+            iof_cartao: 0,
+            taxa_paypal: 0
+        };
 
+        
+        $scope.myValue = true;
 
         $scope.loadData = function() {
             $scope.produtos = Produtos.query();
@@ -45,6 +54,9 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
         
         $scope.adicionaProdutoEstudo = function(item) {
             item.qtd = 0;
+            item.percentual_paypal = 0;
+            item.custo_dentro = item.custo_usd;
+            item.custo_paypal = item.custo_usd * item.percentual_paypal;
             item.estudo = {};
             $scope.produtosDoEstudo.push(item);
         };
@@ -54,14 +66,19 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.iniImport();
         };
 
-
-        function calculaTotalFob(produto) {
-            return Number(produto.custo_usd) * produto.qtd;
-        }
-
-        function calculaTotalPeso(produto) {
-            return Number(produto.medidas.peso) * produto.qtd;
-        }
+        $scope.calculaCustoPaypal = function(item, nomeCampo) {
+            if(nomeCampo === 'percentual_paypal') {
+                item.custo_paypal = item.custo_usd * item.percentual_paypal;
+                item.custo_dentro = item.custo_usd - item.custo_paypal;
+            } else if(nomeCampo === 'custo_paypal') {
+                item.custo_dentro = item.custo_usd - item.custo_paypal;
+                item.percentual_paypal = item.custo_paypal / item.custo_usd;
+            } else {
+                item.custo_paypal = item.custo_usd - item.custo_dentro;
+                item.percentual_paypal = item.custo_paypal / item.custo_usd;
+            }
+            $scope.iniImport();
+        };
 
         function calculaCif() {
             $scope.estudo.cif = $scope.estudo.totalFob + $scope.estudo.frete_maritimo_usd + $scope.estudo.seguro;
@@ -90,9 +107,13 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
 
         function calculaImpostosPorProduto(produto) {
             
-            produto.estudo.fob = produto.custo_usd * produto.qtd;
-            produto.estudo.fob_brl = produto.custo_usd * $scope.estudo.cotacao_dolar * produto.qtd;
+            produto.estudo.fob = produto.custo_dentro * produto.qtd;
+            produto.estudo.fob_brl = produto.custo_dentro * $scope.estudo.cotacao_dolar * produto.qtd;
+            produto.estudo.paypal = produto.custo_paypal * produto.qtd * $scope.config.cotacao_dolar_paypal * (1 + $scope.config.taxa_paypal + $scope.config.iof_cartao);
+
             produto.estudo.peso = produto.medidas.peso * produto.qtd;
+            produto.estudo.volume_ocupado = produto.medidas.cbm * produto.qtd;
+
             produto.estudo.frete_maritimo_proporcional_brl = (produto.estudo.peso / $scope.estudo.totalPeso) * $scope.estudo.frete_maritimo_brl;
             produto.estudo.seguro_frete_maritimo_proporcional_brl = (produto.estudo.peso / $scope.estudo.totalPeso) * $scope.estudo.seguro_brl;
             produto.estudo.cif = produto.estudo.fob_brl + produto.estudo.frete_maritimo_proporcional_brl + produto.estudo.seguro_frete_maritimo_proporcional_brl;
@@ -103,19 +124,25 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             produto.estudo.cofins = produto.estudo.cif * produto.impostos.cofins;
             produto.estudo.icms = ((produto.estudo.cif + produto.estudo.ii + produto.estudo.ipi + produto.estudo.pis + produto.estudo.cofins) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms;
             produto.estudo.total_dos_tributos = (produto.estudo.ii + produto.estudo.ipi + produto.estudo.pis + produto.estudo.cofins + produto.estudo.icms);
-            
+
+            produto.estudo.total_despesas = (produto.estudo.cif / $scope.estudo.cif_brl) * $scope.estudo.total_despesas;
+
             $scope.estudo.tributos.ii += produto.estudo.ii;
             $scope.estudo.tributos.ipi += produto.estudo.ipi;
             $scope.estudo.tributos.pis += produto.estudo.pis;
             $scope.estudo.tributos.cofins += produto.estudo.cofins;
             $scope.estudo.tributos.icms += produto.estudo.icms;
             $scope.estudo.tributos.total_dos_tributos += produto.estudo.total_dos_tributos;
+
+            produto.estudo.preco_custo_final_br = (produto.estudo.cif + produto.estudo.paypal + produto.estudo.total_dos_tributos + produto.estudo.total_despesas) / produto.qtd;
             
         }
 
         function zeraDadosEstudo() {
             $scope.estudo.totalFob = 0;
+            $scope.estudo.totalPaypal = 0;
             $scope.estudo.totalPeso = 0;
+            $scope.estudo.volume_ocupado = 0;
             $scope.estudo.tributos.ii = 0;
             $scope.estudo.tributos.ipi = 0;
             $scope.estudo.tributos.pis = 0;
@@ -125,12 +152,15 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.estudo.cif_brl = 0;
             $scope.estudo.afrmm_brl = 0;
             $scope.estudo.total_despesas = 0;
+            $scope.estudo.volume_ocupado = 0;
         }
 
-        function totalizaFobPeso() {
+        function totalizaFobPesoVolume() {
             $scope.produtosDoEstudo.forEach(function (produto) {
-                $scope.estudo.totalFob += calculaTotalFob(produto);
-                $scope.estudo.totalPeso += calculaTotalPeso(produto);
+                $scope.estudo.totalFob += Number(produto.custo_dentro) * produto.qtd; // Calcula Fob
+                $scope.estudo.totalPaypal += produto.custo_paypal * produto.qtd; // Calcula o total a ser enviado pelo Paypal
+                $scope.estudo.totalPeso += Number(produto.medidas.peso) * produto.qtd; // Calcula peso total
+                $scope.estudo.volume += produto.medidas.cbm * produto.qtd; // Calcula volume ocupado no contêiner
             });
         }
 
@@ -143,7 +173,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
         $scope.iniImport = function() {
             zeraDadosEstudo();
             if($scope.produtosDoEstudo.length > 0) {
-                totalizaFobPeso();
+                totalizaFobPesoVolume();
                 calculaCif();
                 calculaTotalDespesas();
                 calculaImportacaoProdutos();

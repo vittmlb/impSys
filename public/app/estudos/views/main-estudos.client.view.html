@@ -1,25 +1,25 @@
 <section data-ng-controller="EstudosController" data-ng-init="loadData()">
-    <div class="col-xs-4">
-        <h2>Produtos</h2>
-        <p>Selecione os produtos</p>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Custo</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr data-ng-repeat="item in produtos">
-                <td ng-model="item.nome">{{item.nome}}</td>
-                <td data-ng-bind="item.custo_usd | currency: 'U$ '"></td>
-                <td><button class="btn btn-info btn-round btn-xs" ng-click="adicionaProdutoEstudo(item)"><span class="glyphicon glyphicon-plus"></span></button></td>
-            </tr>
-            </tbody>
-        </table>
+    <div id="painel-produtos" class="animate-hide" ng-hide="myValue">
+            <h2>Produtos</h2>
+            <p>Selecione os produtos</p>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Custo</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="item in produtos">
+                    <td ng-model="item.nome">{{item.nome}}</td>
+                    <td data-ng-bind="item.custo_usd | currency: 'U$ '"></td>
+                    <td><button class="btn btn-info btn-round btn-xs" ng-click="adicionaProdutoEstudo(item)"><span class="glyphicon glyphicon-plus"></span></button></td>
+                </tr>
+                </tbody>
+            </table>
     </div>
-    <div class="col-xs-5">
+    <div class="col-xs-9">
         <h2>Produtos do Estudo</h2>
         <p>Resutados do Estudo</p>
         <div class="panel panel-default">
@@ -45,6 +45,8 @@
                             </div>
                         </div>
                     </div>
+                    <button class="btn btn-warning" ng-click="myValue=false">Mostrar</button>
+                    <button class="btn btn-warning" ng-click="myValue=true">Fechar</button>
                 </div>
             </div>
         </div>
@@ -52,15 +54,31 @@
             <thead>
             <tr>
                 <th>Produto</th>
+                <th>Custo</th>
+                <th>% Paypal</th>
+                <th>Custo Paypal</th>
+                <th>Custo Dentro</th>
                 <th>Qtd</th>
                 <th>Fob</th>
+                <th>Preço Final</th>
             </tr>
             </thead>
             <tbody>
             <tr data-ng-repeat="itemEstudo in produtosDoEstudo">
                 <td data-ng-bind="itemEstudo.nome"></td>
-                <td><input type="text" class="form-control input-sm teste" placeholder="qtd" data-ng-model="itemEstudo.qtd" ng-change="iniImport()"></td>
+                <td data-ng-bind="itemEstudo.custo_usd | currency: 'U$ '"></td>
+                <td>
+                    <input type="text" class="form-control input-transparente text-center" placeholder="%" name="percentual_paypal" ng-model="itemEstudo.percentual_paypal" ng-change="calculaCustoPaypal(itemEstudo, 'percentual_paypal')">
+                </td>
+                <td>
+                    <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_paypal" ng-model="itemEstudo.custo_paypal" ng-change="calculaCustoPaypal(itemEstudo, 'custo_paypal')">
+                </td>
+                <td>
+                    <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_dentro" ng-model="itemEstudo.custo_dentro" ng-change="calculaCustoPaypal(itemEstudo, 'custo_dentro')">
+                </td>
+                <td><input type="text" class="form-control input-transparente" placeholder="qtd" data-ng-model="itemEstudo.qtd" ng-change="iniImport()"></td>
                 <td data-ng-bind="itemEstudo.qtd * itemEstudo.custo_usd | currency: 'U$ '" data-ng-show="itemEstudo.qtd"></td>
+                <td data-ng-bind="itemEstudo.estudo.preco_custo_final_br | currency: 'R$ '"></td>
             </tr>
             </tbody>
         </table>
@@ -77,10 +95,40 @@
                     </h4>
                 </div>
                 <div id="collapse1" class="panel-collapse collapse in">
-                    <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                        minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat.</div>
+                    <div class="panel-body">
+                        <h2>Estudo</h2>
+                        <p>Resutados do Estudo</p>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Principal</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Fob</td>
+                                <td data-ng-bind="estudo.totalFob | currency: 'U$ '"></td>
+                            </tr>
+                            <tr>
+                                <td>CIF</td>
+                                <td data-ng-bind="estudo.cif_brl | currency: 'R$ '"></td>
+                            </tr>
+                            <tr>
+                                <td>Peso Total:</td>
+                                <td data-ng-bind="estudo.totalPeso"></td>
+                            </tr>
+                            <tr>
+                                <td>AFRMM</td>
+                                <td data-ng-bind="estudo.afrmm_brl | currency: 'R$ '"></td>
+                            </tr>
+                            <tr>
+                                <td>Despesas</td>
+                                <td data-ng-bind="estudo.total_despesas | currency: 'R$ '"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="panel panel-default">
@@ -138,38 +186,7 @@
                 </div>
                 <div id="collapse3" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <h2>Estudo</h2>
-                        <p>Resutados do Estudo</p>
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>Principal</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>Fob</td>
-                                <td data-ng-bind="estudo.totalFob | currency: 'U$ '"></td>
-                            </tr>
-                            <tr>
-                                <td>CIF</td>
-                                <td data-ng-bind="estudo.cif_brl | currency: 'R$ '"></td>
-                            </tr>
-                            <tr>
-                                <td>Peso Total:</td>
-                                <td data-ng-bind="estudo.totalPeso"></td>
-                            </tr>
-                            <tr>
-                                <td>AFRMM</td>
-                                <td data-ng-bind="estudo.afrmm_brl | currency: 'R$ '"></td>
-                            </tr>
-                            <tr>
-                                <td>Despesas</td>
-                                <td data-ng-bind="estudo.total_despesas | currency: 'R$ '"></td>
-                            </tr>
-                            </tbody>
-                        </table>
+
                     </div>
                 </div>
             </div>
