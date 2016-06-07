@@ -8,11 +8,20 @@
                 <div class="form-group">
                     <input type="text" class="form-control" id="inputNomeDespesa" ng-model="nome">
                 </div>
-                <label for="inputTipoDespesa">Tipo da Despesa:</label>
-                <div class="form-group">
-                    <select class="form-control" name="inputTipoDespesa" id="inputTipoDespesa" ng-model="tipo">
-                        <option class="form-control" ng-repeat="tipoDespesa in enumTiposDespesas" value="{{tipoDespesa}}">{{tipoDespesa}}</option>
-                    </select>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <label for="inputTipoDespesa">Tipo da Despesa:</label>
+                        <div class="form-group">
+                            <select class="form-control" name="inputTipoDespesa" id="inputTipoDespesa" ng-model="tipo">
+                                <option class="form-control" ng-repeat="tipoDespesa in enumTiposDespesas" value="{{tipoDespesa}}">{{tipoDespesa}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <label for="inputAtiva" class="checkbox  checkbox-inline">
+                            <input type="checkbox" id="inputAtiva" class="checkbox" ng-model="ativa">Despesa Ativa?
+                        </label>
+                    </div>
                 </div>
                 <label for="inputTipoMoeda">Moeda: </label>
                 <div class="form-group">

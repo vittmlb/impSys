@@ -35,6 +35,7 @@ exports.update = function(req, res) {
     despesa.moeda = req.body.moeda;
     despesa.valor = req.body.valor;
     despesa.aliquota = req.body.aliquota;
+    despesa.ativa = req.body.ativa;
     despesa.save(function (err, despesa) {
         if(err) {
             return res.status(400).send({

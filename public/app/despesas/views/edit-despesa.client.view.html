@@ -8,12 +8,27 @@
                 <div class="form-group">
                     <input type="text" class="form-control" id="inputNomeDespesa" data-ng-model="despesa.nome">
                 </div>
-                <label for="inputTipoDespesa">Tipo da Despesa:</label>
-                <div class="form-group">
-                    <select class="form-control" name="inputTipoDespesa" id="inputTipoDespesa" data-ng-model="despesa.tipo">
-                        <option class="form-control" ng-repeat="tipoDespesa in enumTiposDespesas" value="{{tipoDespesa}}">{{tipoDespesa}}</option>
-                    </select>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <label for="inputTipoDespesa">Tipo da Despesa:</label>
+                        <div class="form-group">
+                            <select class="form-control" name="inputTipoDespesa" id="inputTipoDespesa" data-ng-model="despesa.tipo">
+                                <option class="form-control" ng-repeat="tipoDespesa in enumTiposDespesas" value="{{tipoDespesa}}">{{tipoDespesa}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <label for="inputAtiva" class="checkbox  checkbox-inline">
+                            <input type="checkbox" id="inputAtiva" class="checkbox" data-ng-model="despesa.ativa">Despesa Ativa?
+                        </label>
+                    </div>
                 </div>
+                <!--<label for="inputTipoDespesa">Tipo da Despesa:</label>-->
+                <!--<div class="form-group">-->
+                    <!--<select class="form-control" name="inputTipoDespesa" id="inputTipoDespesa" data-ng-model="despesa.tipo">-->
+                        <!--<option class="form-control" ng-repeat="tipoDespesa in enumTiposDespesas" value="{{tipoDespesa}}">{{tipoDespesa}}</option>-->
+                    <!--</select>-->
+                <!--</div>-->
                 <label for="inputTipoMoeda">Moeda: </label>
                 <div class="form-group">
                     <select name="inputTipoMoeda" id="inputTipoMoeda" class="form-control" data-ng-model="despesa.moeda">

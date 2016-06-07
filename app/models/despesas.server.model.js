@@ -29,6 +29,10 @@ var DespesasSchema = new Schema({
     },
     aliquota: {
         type: Number
+    },
+    ativa: {
+        type: Boolean,
+        default: true
     }
 });
 

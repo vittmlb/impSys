@@ -10,6 +10,7 @@
                         <th>Nome</th>
                         <th>Tipo</th>
                         <th>Valor/Alíquota</th>
+                        <th>Ativa</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -18,6 +19,8 @@
                         <td data-ng-bind="item.tipo"></td>
                         <td data-ng-bind="item.valor | currency: item.moeda + ' '" data-ng-show="item.valor"></td>
                         <td data-ng-bind="item.aliquota | percentage: 2" data-ng-show="item.aliquota"></td>
+                        <td ng-show="item.ativa"><span class="glyphicon glyphicon-ok"></span></td>
+                        <td ng-show="!item.ativa"><span class="glyphicon glyphicon-remove"></span></td>
                     </tr>
                     </tbody>
                 </table>

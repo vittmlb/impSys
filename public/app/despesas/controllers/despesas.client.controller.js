@@ -13,7 +13,8 @@ angular.module('despesas').controller('DespesasController', ['$scope', '$routePa
                 tipo: this.tipo,
                 moeda: this.moeda,
                 valor: this.valor,
-                aliquota: this.aliquota
+                aliquota: this.aliquota,
+                ativa: this.ativa
             });
             despesa.$save(function(response) {
                 $location.path('/despesas/' + response._id);

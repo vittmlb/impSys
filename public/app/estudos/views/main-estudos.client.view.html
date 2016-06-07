@@ -68,17 +68,17 @@
                 <td data-ng-bind="itemEstudo.nome"></td>
                 <td data-ng-bind="itemEstudo.custo_usd | currency: 'U$ '"></td>
                 <td>
-                    <input type="text" class="form-control input-transparente text-center" placeholder="%" name="percentual_paypal" ng-model="itemEstudo.percentual_paypal" ng-change="calculaCustoPaypal(itemEstudo, 'percentual_paypal')">
+                    <input type="text" class="form-control input-transparente text-center" placeholder="%" name="percentual_paypal" ng-model="itemEstudo.estudo_do_produto.percentual_paypal" ng-change="calculaCustoPaypal(itemEstudo, 'percentual_paypal')">
                 </td>
                 <td>
-                    <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_paypal" ng-model="itemEstudo.custo_paypal" ng-change="calculaCustoPaypal(itemEstudo, 'custo_paypal')">
+                    <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_paypal" ng-model="itemEstudo.estudo_do_produto.custo_paypal_usd" ng-change="calculaCustoPaypal(itemEstudo, 'custo_paypal')">
                 </td>
                 <td>
-                    <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_dentro" ng-model="itemEstudo.custo_dentro" ng-change="calculaCustoPaypal(itemEstudo, 'custo_dentro')">
+                    <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_dentro" ng-model="itemEstudo.estudo_do_produto.custo_dentro_usd" ng-change="calculaCustoPaypal(itemEstudo, 'custo_dentro')">
                 </td>
-                <td><input type="text" class="form-control input-transparente" placeholder="qtd" data-ng-model="itemEstudo.qtd" ng-change="iniImport()"></td>
-                <td data-ng-bind="itemEstudo.qtd * itemEstudo.custo_usd | currency: 'U$ '" data-ng-show="itemEstudo.qtd"></td>
-                <td data-ng-bind="itemEstudo.estudo.preco_custo_final_br | currency: 'R$ '"></td>
+                <td><input type="text" class="form-control input-transparente" placeholder="qtd" data-ng-model="itemEstudo.estudo_do_produto.qtd" ng-change="iniImport()"></td>
+                <td data-ng-bind="itemEstudo.estudo_do_produto.qtd * itemEstudo.custo_usd | currency: 'U$ '" data-ng-show="itemEstudo.estudo_do_produto.qtd"></td>
+                <td><span data-ng-bind="itemEstudo.estudo_do_produto.preco_custo_final_brl | currency: 'R$ '"></span></td>
             </tr>
             </tbody>
         </table>
@@ -107,8 +107,16 @@
                             </thead>
                             <tbody>
                             <tr>
+                                <td>Investimento</td>
+                                <td data-ng-bind="estudo.investimento_brl | currency: 'R$ '"></td>
+                            </tr>
+                            <tr>
+                                <td>Invest. Integral</td>
+                                <td data-ng-bind="estudo.investimento_integral_brl | currency: 'R$ '"></td>
+                            </tr>
+                            <tr>
                                 <td>Fob</td>
-                                <td data-ng-bind="estudo.totalFob | currency: 'U$ '"></td>
+                                <td data-ng-bind="estudo.fob_usd | currency: 'U$ '"></td>
                             </tr>
                             <tr>
                                 <td>CIF</td>
