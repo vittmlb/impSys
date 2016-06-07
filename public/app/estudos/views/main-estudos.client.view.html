@@ -34,16 +34,40 @@
             <div id="collapsez" class="panel-collapse collapse in">
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-xs-3">
+                        <div class="col-xs-2">
                             <label for="inputCotacaoDolar">Dólar: </label>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="inputCotacaoDolar" data-ng-model="config.cotacao_dolar" ng-change="iniImport()">
+                            <div class="form-group-sm">
+                                <input type="text" class="form-control input-sm" id="inputCotacaoDolar" data-ng-model="config.cotacao_dolar" ng-change="iniImport()">
                             </div>
                         </div>
-                        <div class="col-xs-3">
-                            <label for="inputVolumeCntr20">CBM 20"</label>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="inputVolumeCntr20" data-ng-model="config.volume_cntr_20" ng-change="iniImport()">
+                        <div class="col-xs-2">
+                            <div class="form-group-sm">
+                                <label for="inputCotacaoDolarPaypal">Dólar Paypal</label>
+                                <input type="text" class="form-control input-sm" id="inputCotacaoDolarPaypal" data-ng-model="config.cotacao_dolar_paypal" ng-change="iniImport()">
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="form-group-sm">
+                                <label class="" for="inputVolumeCntr20">CBM 20"</label>
+                                <input type="text" class="form-control input-sm" id="inputVolumeCntr20" data-ng-model="config.volume_cntr_20" ng-change="iniImport()">
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="form-group-sm">
+                                <label for="inputIofCartao">IOF Cartão</label>
+                                <input type="text" class="form-control input-sm" id="inputIofCartao" data-ng-model="config.iof_cartao" ng-change="iniImport()">
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="form-group-sm">
+                                <label for="inputTaxaPaypal">Taxa Paypal</label>
+                                <input type="text" class="form-control input-sm" id="inputTaxaPaypal" data-ng-model="config.taxa_paypal" ng-change="iniImport()">
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="form-group-sm">
+                                <label for="inputFreteMaritimoUsd">Frete Marítimo (usd)</label>
+                                <input type="text" class="form-control input-sm" id="inputFreteMaritimoUsd" data-ng-model="config.frete_maritimo_usd" ng-change="iniImport()">
                             </div>
                         </div>
                     </div>
