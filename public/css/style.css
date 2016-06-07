@@ -1,3 +1,54 @@
+/* Put your css in here */
+.icon-search:before {
+    content:"\f002";
+}
+.drawer {
+    background: white;
+    opacity: 1;
+    border-left: 1px solid lightslategray;
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+    position: absolute;
+    top: 0;
+    /*left: 0;*/
+    right: 0;
+    z-index: 999;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 100%;
+    height: 100%;
+    width: 0;
+}
+.drawer-right {
+    /*left: auto;*/
+    right: 0;
+}
+.drawer.collapsed {
+    /*width: 0;*/
+    /*border: none;*/
+    /*-moz-transition: all .15s ease-in-out;*/
+    /*-o-transition: all .15s ease-in-out;*/
+    /*-webkit-transition: all .15s ease-in-out;*/
+    /*transition: all .15s ease-in-out;*/
+    right: -100%;
+    opacity:0;
+    padding:0 10px;
+}
+.drawer.expanded {
+    visibility: visible;
+    width: 30%;
+    -moz-transition: all .15s ease-in-out;
+    -o-transition: all .15s ease-in-out;
+    -webkit-transition: all .15s ease-in-out;
+    transition: all .15s ease-in-out;
+}
+.handle {
+
+}
+.handle-right {
+
+}
+
 .input-transparente {
     width: 70px;
     border: none;
@@ -18,10 +69,10 @@
 }
 
 .animate-hide {
-    -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
-    -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
-    -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
-    transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+    -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.1s;
+    -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.1s;
+    -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.1s;
+    transition:all linear 0.1s;
     line-height: 20px;
     opacity: 1;
     padding: 10px;
@@ -29,6 +80,7 @@
     background: white;
     position: absolute;
     right: 0;
+
 }
 
 .animate-hide.ng-hide {
