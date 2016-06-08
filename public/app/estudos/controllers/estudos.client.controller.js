@@ -4,6 +4,7 @@
 angular.module('estudos').controller('EstudosController', ['$scope', '$routeParams', '$location', 'Produtos', 'Despesas', '$http', '$window', '$stateParams', '$state',
     function($scope, $routeParams, $location, Produtos, Despesas, $http, $window, $stateParams, $state) {
 
+        //region Controles
         $scope.$window = $window;
         $scope.open = false;
         $scope.toggleSearch = function () {
@@ -36,6 +37,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             }
 
         }
+        //endregion
 
         $scope.quantidades = [];
         $scope.produtosDoEstudo = [];
@@ -85,7 +87,11 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 icms: 0,
                 total_dos_tributos: 0
             },
-            volume_ocupado: 0,
+            volume: {
+                contratado: 0, // todo: Volume do Cntr escolhido para fazer o transporte da carga. Encontrar uma solução melhor para quando for trabalhar com outros volumes.
+                ocupado: 0,
+                ocupado_percentual: 0
+            },
             total_despesas: 0,
             investimento_brl: 0,
             lucro_brl: 0
@@ -331,13 +337,13 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
         function zeraDadosEstudoDoProduto(produto) {
             produto.estudo_do_produto = {
                 qtd: 0,
-                // percentual_paypal: 0,
-                // custo_dentro_usd: produto.custo_usd,
-                // custo_dentro_brl: 0,
-                // custo_paypal_usd: 0,
-                // custo_paypal_brl: 0,
-                // custo_integral_usd: produto.custo_usd,
-                // custo_integral_brl: 0,
+                percentual_paypal: produto.estudo_do_produto.percentual_paypal,
+                custo_dentro_usd: produto.estudo_do_produto.custo_dentro_usd,
+                custo_dentro_brl: produto.estudo_do_produto.custo_dentro_brl,
+                custo_paypal_usd: produto.estudo_do_produto.custo_paypal_usd,
+                custo_paypal_brl: produto.estudo_do_produto.custo_paypal_brl,
+                custo_integral_usd: produto.estudo_do_produto.custo_integral_usd,
+                custo_integral_brl: produto.estudo.custo_integral_brl,
                 fob_usd: 0,
                 fob_brl: 0,
                 fob_paypal_usd: 0,
@@ -425,7 +431,13 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.estudo.tributos._integraltotal_dos_tributos = 0;
             $scope.estudo.afrmm_brl = 0;
             $scope.estudo.total_despesas = 0;
-            $scope.estudo.volume_ocupado = 0;
+
+            // $scope.estudo.volume = {contratado: 0, ocupado: 0, ocupado_percentual: 0}; // todo: Testar esta notação.
+
+            $scope.estudo.volume.contratado = 0;
+            $scope.estudo.volume.ocupado = 0;
+            $scope.estudo.volume.ocupado_percentual = 0;
+
             $scope.estudo.investimento_brl = 0;
             $scope.estudo.investimento_integral_brl = 0;
             $scope.estudo.lucro_brl = 0;
@@ -451,6 +463,8 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.estudo.seguro_frete_maritimo.usd = Number($scope.config.seguro_frete_maritimo_usd);
             $scope.estudo.seguro_frete_maritimo.brl = $scope.estudo.seguro_frete_maritimo.usd * $scope.estudo.cotacao_dolar;
 
+            $scope.estudo.volume.contratado = Number($scope.config.volume_cntr_20);
+
         }
 
         // 3
@@ -462,7 +476,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.produtosDoEstudo.forEach(function (produto) {
 
                 if (produto.estudo_do_produto.qtd <= 0) {
-                    zeraDadosEstudoDoProduto(); // Zera os campos totalizadores do objeto <produto.estudo_do_produto>.
+                    zeraDadosEstudoDoProduto(produto); // Zera os campos totalizadores do objeto <produto.estudo_do_produto>.
                 }
                 else
                 {
@@ -502,7 +516,9 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     $scope.estudo.totalPaypal += produto.estudo_do_produto.custo_paypal_usd * produto.estudo_do_produto.qtd; // todo: Ajustar a nomenclatura (totalPaypal não está em acordo com os demais nomes que usam '_').
 
                     $scope.estudo.totalPeso += produto.medidas.peso * produto.estudo_do_produto.qtd; // Calcula peso total
-                    $scope.estudo.volume += produto.medidas.cbm * produto.estudo_do_produto.qtd; // Calcula volume ocupado no contêiner
+                    $scope.estudo.volume.ocupado += produto.medidas.cbm * produto.estudo_do_produto.qtd; // Calcula volume ocupado no contêiner
+                    $scope.estudo.volume.ocupado_percentual = ($scope.estudo.volume.ocupado / $scope.estudo.volume.contratado) * 100; // todo: Ajustar o controle para exibir o percentual correto pois aqui estou tendo que multiplicar por 100.
+                    
                 }
 
             });
