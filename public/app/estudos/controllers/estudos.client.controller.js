@@ -59,20 +59,16 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     brl: 0
                 }
             },
-            // fob: {
-            //     declarado: {
-            //         usd: 0,
-            //         brl: 0
-            //     },
-            //     real: {
-            //         usd: 0,
-            //         brl: 0
-            //     }
-            // },
-            fob_usd: 0,
-            fob_brl: 0,
-            fob_integral_usd: 0,
-            fob_integral_brl: 0,
+            fob: {
+                declarado: {
+                    usd: 0,
+                    brl: 0
+                },
+                real: {
+                    usd: 0,
+                    brl: 0
+                }
+            },
 
             cif_usd: 0,
             cif_brl: 0,
@@ -425,10 +421,8 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
          * Zera os valores de todos os acumuladores do objeto <$scope.estudo>
          */
         function zeraDadosEstudo() {
-            $scope.estudo.fob_usd = 0;
-            $scope.estudo.fob_brl = 0;
-            $scope.estudo.fob_integral_usd = 0;
-            $scope.estudo.fob_integral_brl = 0;
+
+            $scope.estudo.fob = {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}};
             $scope.estudo.cif_usd = 0;
             $scope.estudo.cif_brl = 0;
             $scope.estudo.cif_integral_usd = 0;
@@ -524,11 +518,12 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 }
                 else
                 {
-                    $scope.estudo.fob_usd += produto.estudo_do_produto.custo_dentro_usd * produto.estudo_do_produto.qtd; // Calcula Fob
-                    $scope.estudo.fob_brl += $scope.estudo.fob_usd * $scope.estudo.cotacao_dolar;
 
-                    $scope.estudo.fob_integral_usd += produto.estudo_do_produto.custo_integral_usd * produto.estudo_do_produto.qtd;
-                    $scope.estudo.fob_integral_brl += $scope.estudo.fob_integral_usd * $scope.estudo.cotacao_dolar;
+                    $scope.estudo.fob.declarado.usd += produto.estudo_do_produto.custo_dentro_usd * produto.estudo_do_produto.qtd; // Calcula Fob
+                    $scope.estudo.fob.declarado.brl += $scope.estudo.fob.declarado.usd * $scope.estudo.cotacao_dolar;
+
+                    $scope.estudo.fob.real.usd += produto.estudo_do_produto.custo_integral_usd * produto.estudo_do_produto.qtd;
+                    $scope.estudo.fob.real.brl += $scope.estudo.fob.real.usd * $scope.estudo.cotacao_dolar;
 
                     $scope.estudo.totalPaypal += produto.estudo_do_produto.custo_paypal_usd * produto.estudo_do_produto.qtd; // todo: Ajustar a nomenclatura (totalPaypal não está em acordo com os demais nomes que usam '_').
 
@@ -546,10 +541,13 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
          * Seta os Valores CIF (usd/brl/integral) do objeto <$scope.estudo>
          */
         function setCifEstudo() {
-            $scope.estudo.cif_usd = $scope.estudo.fob_usd + $scope.estudo.frete_maritimo_usd + $scope.estudo.seguro_frete_maritimo.usd;
+
+            $scope.estudo.cif_usd = $scope.estudo.fob.declarado.usd + $scope.estudo.frete_maritimo_usd + $scope.estudo.seguro_frete_maritimo.usd;
             $scope.estudo.cif_brl = $scope.estudo.cif_usd * $scope.estudo.cotacao_dolar;
-            $scope.estudo.cif_integral_usd = $scope.estudo.fob_integral_usd + $scope.estudo.frete_maritimo_usd + $scope.estudo.seguro_frete_maritimo.usd;
+
+            $scope.estudo.cif_integral_usd = $scope.estudo.fob.real.usd + $scope.estudo.frete_maritimo_usd + $scope.estudo.seguro_frete_maritimo.usd;
             $scope.estudo.cif_integral_brl = $scope.estudo.cif_integral_usd * $scope.estudo.cotacao_dolar;
+
         }
 
         // 6
