@@ -20,7 +20,7 @@
             </tr>
             </tbody>
         </table>
-    </div>
+    </div> <!-- Painel com todos os Produtos -->
     <div class="col-xs-9">
         <h2>Produtos do Estudo</h2>
         <p>Resutados do Estudo</p>
@@ -71,6 +71,27 @@
                             </div>
                         </div>
                     </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <label for="inputComissaoML">Comissão ML: </label>
+                            <div class="form-group-sm">
+                                <input type="text" class="form-control input-sm" id="inputComissaoML" data-ng-model="config.comissao_ml" ng-change="iniImport()">
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <label for="inputAliquotaSimples">Alíquota Simples: </label>
+                            <div class="form-group-sm">
+                                <input type="text" class="form-control input-sm" id="inputAliquotaSimples" data-ng-model="config.aliquota_simples" ng-change="iniImport()">
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="form-group-sm">
+                                <label for="inputSeguroFreteMaritimoUsd">Seguro Frete Mar. USD</label>
+                                <input type="text" class="form-control input-sm" id="inputSeguroFreteMaritimoUsd" data-ng-model="config.seguro_frete_maritimo_usd" ng-change="iniImport()">
+                            </div>
+                        </div>
+                    </div>
                     <!--<button class="btn btn-warning" ng-click="myValue=true">Fechar</button>-->
                 </div>
             </div>
@@ -81,11 +102,12 @@
                 <th>Produto</th>
                 <th>Custo</th>
                 <th>% Paypal</th>
-                <th>Custo Paypal</th>
-                <th>Custo Dentro</th>
+                <th>C.Paypal</th>
+                <th>C.Dentro</th>
                 <th>Qtd</th>
                 <th>Fob</th>
-                <th>Preço Final</th>
+                <th>C.Final</th>
+                <th>P.Venda</th>
             </tr>
             </thead>
             <tbody>
@@ -104,10 +126,11 @@
                 <td><input type="text" class="form-control input-transparente" placeholder="qtd" data-ng-model="itemEstudo.estudo_do_produto.qtd" ng-change="iniImport()"></td>
                 <td data-ng-bind="itemEstudo.estudo_do_produto.qtd * itemEstudo.custo_usd | currency: 'U$ '" data-ng-show="itemEstudo.estudo_do_produto.qtd"></td>
                 <td><span data-ng-bind="itemEstudo.estudo_do_produto.preco_custo_final_brl | currency: 'R$ '"></span></td>
+                <td><input type="text" class="form-control input-transparente" placeholder="P.Venda (R$)" data-ng-model="itemEstudo.estudo_do_produto.preco_venda_brl" ng-change="iniImport()"></td>
             </tr>
             </tbody>
         </table>
-    </div>
+    </div> <!-- Tabela com Produtos do Estudo -->
     <div class="col-xs-3">
         <h2>Dados do Estudo</h2>
         <p>Resutados do Estudo</p>
@@ -131,6 +154,10 @@
                             </tr>
                             </thead>
                             <tbody>
+                            <tr>
+                                <td>Lucro Operação</td>
+                                <td data-ng-bind="estudo.lucro_brl | currency: 'R$ '"></td>
+                            </tr>
                             <tr>
                                 <td>Investimento</td>
                                 <td data-ng-bind="estudo.investimento_brl | currency: 'R$ '"></td>
@@ -163,7 +190,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            </div> <!-- Painel Principal -->
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -209,7 +236,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            </div> <!-- Painel Impostos -->
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -224,5 +251,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> <!-- Dados do Estudo -->
 </section>
