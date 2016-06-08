@@ -53,12 +53,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             },
             total_comissao_conny_usd: 0,
             total_comissao_conny_brl: 0,
-            total: {
-                comissao_conny: {
-                    usd: 0,
-                    brl: 0
-                }
-            },
             fob: {
                 declarado: {
                     usd: 0,
@@ -69,7 +63,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     brl: 0
                 }
             },
-
             cif: {
                 declarado: {
                     usd: 0,
@@ -80,12 +73,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     brl: 0
                 }
             },
-
-            // cif_usd: 0,
-            // cif_brl: 0,
-            // cif_integral_usd: 0,
-            // cif_integral_brl: 0,
-
             totalPeso: 0,
             frete_maritimo_usd: 0,
             frete_maritimo_brl: 0,
@@ -98,26 +85,75 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             afrmm: 0,
             afrmm_brl: 0,
             tributos: {
-                ii: 0,
-                ipi: 0,
-                pis: 0,
-                cofins: 0,
-                icms: 0,
-                total_dos_tributos: 0
+                delarado: {
+                    ii: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    ipi: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    pis: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    cofins: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    icms: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    total: {
+                        usd: 0,
+                        brl: 0
+                    }
+                },
+                real: {
+                    ii: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    ipi: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    pis: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    cofins: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    icms: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    total: {
+                        usd: 0,
+                        brl: 0
+                    }
+                }
             },
-            tributos_integral: {
-                ii: 0,
-                ipi: 0,
-                pis: 0,
-                cofins: 0,
-                icms: 0,
-                total_dos_tributos: 0
-            },
+
+            // tributos_integral: {
+            //     ii: 0,
+            //     ipi: 0,
+            //     pis: 0,
+            //     cofins: 0,
+            //     icms: 0,
+            //     total_dos_tributos: 0
+            // },
+            
             volume: {
                 contratado: 0, // todo: Volume do Cntr escolhido para fazer o transporte da carga. Encontrar uma solução melhor para quando for trabalhar com outros volumes.
                 ocupado: 0,
                 ocupado_percentual: 0
             },
+
             total_despesas: 0,
             investimento_brl: 0,
             lucro_brl: 0
@@ -333,19 +369,20 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
         function tempUpdateImpostosEstudo(produto) {
 
             // Update (soma) dos valores dos impostos ao Estudo Geral.
-            $scope.estudo.tributos.ii += produto.estudo_do_produto.ii_brl;
-            $scope.estudo.tributos.ipi += produto.estudo_do_produto.ipi_brl;
-            $scope.estudo.tributos.pis += produto.estudo_do_produto.pis_brl;
-            $scope.estudo.tributos.cofins += produto.estudo_do_produto.cofins_brl;
-            $scope.estudo.tributos.icms += produto.estudo_do_produto.icms_brl;
-            $scope.estudo.tributos.total_dos_tributos += produto.estudo_do_produto.total_tributos_brl;
 
-            $scope.estudo.tributos_integral.ii += produto.estudo_do_produto.ii_integral_brl;
-            $scope.estudo.tributos_integral.ipi += produto.estudo_do_produto.ipi_integral_brl;
-            $scope.estudo.tributos_integral.pis += produto.estudo_do_produto.pis_integral_brl;
-            $scope.estudo.tributos_integral.cofins += produto.estudo_do_produto.cofins_integral_brl;
-            $scope.estudo.tributos_integral.icms += produto.estudo_do_produto.icms_integral_brl;
-            $scope.estudo.tributos_integral.total_dos_tributos += produto.estudo_do_produto.total_tributos_integral_brl;
+            $scope.estudo.tributos.declarado.ii.brl += produto.estudo_do_produto.ii_brl;
+            $scope.estudo.tributos.declarado.ipi.brl += produto.estudo_do_produto.ipi_brl;
+            $scope.estudo.tributos.declarado.pis.brl += produto.estudo_do_produto.pis_brl;
+            $scope.estudo.tributos.declarado.cofins.brl += produto.estudo_do_produto.cofins_brl;
+            $scope.estudo.tributos.declarado.icms.brl += produto.estudo_do_produto.icms_brl;
+            $scope.estudo.tributos.declarado.total.brl += produto.estudo_do_produto.total_tributos_brl;
+
+            $scope.estudo.tributos.real.ii.brl += produto.estudo_do_produto.ii_integral_brl;
+            $scope.estudo.tributos.real.ipi.brl += produto.estudo_do_produto.ipi_integral_brl;
+            $scope.estudo.tributos.real.pis.brl += produto.estudo_do_produto.pis_integral_brl;
+            $scope.estudo.tributos.real.cofins.brl += produto.estudo_do_produto.cofins_integral_brl;
+            $scope.estudo.tributos.real.icms.brl += produto.estudo_do_produto.icms_integral_brl;
+            $scope.estudo.tributos.real.total.brl += produto.estudo_do_produto.total_tributos_integral_brl;
 
         }
 
@@ -440,18 +477,23 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.estudo.totalPaypal = 0;
             $scope.estudo.totalPeso = 0;
             $scope.estudo.volume_ocupado = 0;
-            $scope.estudo.tributos.ii = 0;
-            $scope.estudo.tributos.ipi = 0;
-            $scope.estudo.tributos.pis = 0;
-            $scope.estudo.tributos.cofins = 0;
-            $scope.estudo.tributos.icms = 0;
-            $scope.estudo.tributos.total_dos_tributos = 0;
-            $scope.estudo.tributos_integral.ii = 0;
-            $scope.estudo.tributos_integral.ipi = 0;
-            $scope.estudo.tributos_integral.pis = 0;
-            $scope.estudo.tributos_integral.cofins = 0;
-            $scope.estudo.tributos_integral.icms = 0;
-            $scope.estudo.tributos._integraltotal_dos_tributos = 0;
+
+            $scope.estudo.tributos.declarado = {ii: {usd: 0, brl: 0}, ipi: {usd: 0, brl: 0}, pis: {usd: 0, brl: 0}, cofins: {usd: 0, brl: 0}, icms: {usd: 0, brl: 0}, total: {usd: 0, brl: 0}};
+            $scope.estudo.tributos.real = {ii: {usd: 0, brl: 0}, ipi: {usd: 0, brl: 0}, pis: {usd: 0, brl: 0}, cofins: {usd: 0, brl: 0}, icms: {usd: 0, brl: 0}, total: {usd: 0, brl: 0}};
+
+            // $scope.estudo.tributos.ii = 0;
+            // $scope.estudo.tributos.ipi = 0;
+            // $scope.estudo.tributos.pis = 0;
+            // $scope.estudo.tributos.cofins = 0;
+            // $scope.estudo.tributos.icms = 0;
+            // $scope.estudo.tributos.total_dos_tributos = 0;
+            // $scope.estudo.tributos_integral.ii = 0;
+            // $scope.estudo.tributos_integral.ipi = 0;
+            // $scope.estudo.tributos_integral.pis = 0;
+            // $scope.estudo.tributos_integral.cofins = 0;
+            // $scope.estudo.tributos_integral.icms = 0;
+            // $scope.estudo.tributos._integraltotal_dos_tributos = 0;
+
             $scope.estudo.afrmm_brl = 0;
             $scope.estudo.total_despesas = 0;
 
