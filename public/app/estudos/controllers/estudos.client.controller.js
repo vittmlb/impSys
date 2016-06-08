@@ -73,15 +73,23 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     brl: 0
                 }
             },
-            totalPeso: 0,
-            frete_maritimo_usd: 0,
-            frete_maritimo_brl: 0,
-            seguro_frete_maritimo: {
-                usd: 0,
-                brl: 0
+            medidas: {
+                peso_total: 0,
             },
+
+            totalPeso: 0,
+            frete_maritimo: {
+                valor: {
+                    usd: 0,
+                    brl: 0
+                },
+                seguro: {
+                    usd: 0,
+                    brl: 0
+                }
+            },
+
             aliq_icms: 0.16, // todo: Carregar esta informação à partir do objeto despesas.
-            seguro: 100,
             afrmm: 0,
             afrmm_brl: 0,
             tributos: {
@@ -138,16 +146,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     }
                 }
             },
-
-            // tributos_integral: {
-            //     ii: 0,
-            //     ipi: 0,
-            //     pis: 0,
-            //     cofins: 0,
-            //     icms: 0,
-            //     total_dos_tributos: 0
-            // },
-            
             volume: {
                 contratado: 0, // todo: Volume do Cntr escolhido para fazer o transporte da carga. Encontrar uma solução melhor para quando for trabalhar com outros volumes.
                 ocupado: 0,
@@ -186,7 +184,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
          * Adiciona objeto <estudo_do_produto> ao objeto <produto> e depois faz um push para adicionar <produto> no array $scope.produtosDoEstudo.
          * @param produto
          */
-        $scope.adicionaProdutoEstudo = function(produto) {
+        $scope.adicionaProdutoEstudo = function(produto) { // todo: Renomear > Este nome não faz o menor sentido !!!!
             produto.estudo_do_produto = {
                 qtd: 0,
                 percentual_paypal: 0,
@@ -481,19 +479,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.estudo.tributos.declarado = {ii: {usd: 0, brl: 0}, ipi: {usd: 0, brl: 0}, pis: {usd: 0, brl: 0}, cofins: {usd: 0, brl: 0}, icms: {usd: 0, brl: 0}, total: {usd: 0, brl: 0}};
             $scope.estudo.tributos.real = {ii: {usd: 0, brl: 0}, ipi: {usd: 0, brl: 0}, pis: {usd: 0, brl: 0}, cofins: {usd: 0, brl: 0}, icms: {usd: 0, brl: 0}, total: {usd: 0, brl: 0}};
 
-            // $scope.estudo.tributos.ii = 0;
-            // $scope.estudo.tributos.ipi = 0;
-            // $scope.estudo.tributos.pis = 0;
-            // $scope.estudo.tributos.cofins = 0;
-            // $scope.estudo.tributos.icms = 0;
-            // $scope.estudo.tributos.total_dos_tributos = 0;
-            // $scope.estudo.tributos_integral.ii = 0;
-            // $scope.estudo.tributos_integral.ipi = 0;
-            // $scope.estudo.tributos_integral.pis = 0;
-            // $scope.estudo.tributos_integral.cofins = 0;
-            // $scope.estudo.tributos_integral.icms = 0;
-            // $scope.estudo.tributos._integraltotal_dos_tributos = 0;
-
             $scope.estudo.afrmm_brl = 0;
             $scope.estudo.total_despesas = 0;
 
@@ -513,16 +498,16 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.estudo.cotacao_dolar = Number($scope.config.cotacao_dolar);
             $scope.estudo.cotacao_dolar_paypal = Number($scope.config.cotacao_dolar_paypal);
 
-            $scope.estudo.frete_maritimo_usd = Number($scope.config.frete_maritimo_usd);
-            $scope.estudo.frete_maritimo_brl = Number($scope.estudo.frete_maritimo_usd * $scope.estudo.cotacao_dolar);
+            $scope.estudo.frete_maritimo.valor.usd = Number($scope.config.frete_maritimo_usd);
+            $scope.estudo.frete_maritimo.valor.brl = Number($scope.estudo.frete_maritimo.valor.usd * $scope.estudo.cotacao_dolar);
 
             $scope.estudo.config.taxa_paypal = Number($scope.config.taxa_paypal);
             $scope.estudo.config.iof_cartao = Number($scope.config.iof_cartao);
             $scope.estudo.config.comissao_ml = Number($scope.config.comissao_ml);
             $scope.estudo.config.aliquota_simples = Number($scope.config.aliquota_simples);
 
-            $scope.estudo.seguro_frete_maritimo.usd = Number($scope.config.seguro_frete_maritimo_usd);
-            $scope.estudo.seguro_frete_maritimo.brl = $scope.estudo.seguro_frete_maritimo.usd * $scope.estudo.cotacao_dolar;
+            $scope.estudo.frete_maritimo.seguro.usd = Number($scope.config.seguro_frete_maritimo_usd);
+            $scope.estudo.frete_maritimo.seguro.brl = $scope.estudo.frete_maritimo.seguro.usd * $scope.estudo.cotacao_dolar;
 
             $scope.estudo.volume.contratado = Number($scope.config.volume_cntr_20);
 
@@ -594,10 +579,10 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
          */
         function setCifEstudo() {
 
-            $scope.estudo.cif.declarado.usd = $scope.estudo.fob.declarado.usd + $scope.estudo.frete_maritimo_usd + $scope.estudo.seguro_frete_maritimo.usd;
+            $scope.estudo.cif.declarado.usd = $scope.estudo.fob.declarado.usd + $scope.estudo.frete_maritimo.valor.usd + $scope.estudo.frete_maritimo.seguro.usd;
             $scope.estudo.cif.declarado.brl = $scope.estudo.cif.declarado.usd * $scope.estudo.cotacao_dolar;
 
-            $scope.estudo.cif.real.usd = $scope.estudo.fob.real.usd + $scope.estudo.frete_maritimo_usd + $scope.estudo.seguro_frete_maritimo.usd;
+            $scope.estudo.cif.real.usd = $scope.estudo.fob.real.usd + $scope.estudo.frete_maritimo.valor.usd + $scope.estudo.frete_maritimo.seguro.usd;
             $scope.estudo.cif.real.brl = $scope.estudo.cif.real.usd * $scope.estudo.cotacao_dolar;
 
         }
@@ -611,7 +596,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             var aliqAfrmm = $scope.despesas.filter(function(item) {
                 return item.nome === 'Taxa AFRMM'; // todo: Criar mecanismo de Erro quando não encontrar a taxa.
             });
-            $scope.estudo.afrmm_brl = $scope.estudo.frete_maritimo_brl * aliqAfrmm[0].aliquota; //todo: Confirmar sobre a incidência do imposto (taxa de desembarque???)
+            $scope.estudo.afrmm_brl = $scope.estudo.frete_maritimo.valor.brl * aliqAfrmm[0].aliquota; //todo: Confirmar sobre a incidência do imposto (taxa de desembarque???)
             $scope.estudo.total_despesas = $scope.estudo.afrmm_brl; // Ao invés de iniciar as despesas com zero, já inicializo com o afrmm.
             $scope.despesas.forEach(function (item) {
                 if(item.tipo === 'despesa aduaneira' && item.ativa === true) {
@@ -642,11 +627,11 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     auxCalculaMedidasDeCadaProduto(produto);
 
                     // Cálculo de Frete Marítimo proporcional.
-                    produto.estudo_do_produto.frete_maritimo_usd = produto.estudo_do_produto.peso_percentual * $scope.estudo.frete_maritimo_usd;
+                    produto.estudo_do_produto.frete_maritimo_usd = produto.estudo_do_produto.peso_percentual * $scope.estudo.frete_maritimo.valor.usd;
                     produto.estudo_do_produto.frete_maritimo_brl = produto.estudo_do_produto.frete_maritimo_usd * $scope.estudo.cotacao_dolar;
 
-                    // Cálculo de Seguro de Frete Marítimo proporcional.
-                    produto.estudo_do_produto.seguro_frete_maritimo_usd = produto.estudo_do_produto.peso_percentual * $scope.estudo.seguro_frete_maritimo.usd;
+                    // Cálculo de SEGURO de Frete Marítimo proporcional.
+                    produto.estudo_do_produto.seguro_frete_maritimo_usd = produto.estudo_do_produto.peso_percentual * $scope.estudo.frete_maritimo.seguro.usd;
                     produto.estudo_do_produto.seguro_frete_maritimo_brl = produto.estudo_do_produto.seguro_frete_maritimo_usd * $scope.estudo.cotacao_dolar;
 
                     // Cálculo CIFs (que é o mesmo que Valor Aduaneiro).
