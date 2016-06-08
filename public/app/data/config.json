@@ -7,5 +7,6 @@
   "frete_maritimo_usd": 573,
   "comissao_ml": 0.10,
   "aliquota_simples": 0.06,
-  "seguro_frete_maritimo_usd": 100
+  "seguro_frete_maritimo_usd": 100,
+  "comissao_conny": 0.05
 }

@@ -49,11 +49,31 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 iof_cartao: 0,
                 comissao_ml: 0,
                 aliquota_simples: 0,
+                percentual_comissao_conny: 0
             },
+            total_comissao_conny_usd: 0,
+            total_comissao_conny_brl: 0,
+            total: {
+                comissao_conny: {
+                    usd: 0,
+                    brl: 0
+                }
+            },
+            // fob: {
+            //     declarado: {
+            //         usd: 0,
+            //         brl: 0
+            //     },
+            //     real: {
+            //         usd: 0,
+            //         brl: 0
+            //     }
+            // },
             fob_usd: 0,
             fob_brl: 0,
             fob_integral_usd: 0,
             fob_integral_brl: 0,
+
             cif_usd: 0,
             cif_brl: 0,
             cif_integral_usd: 0,
@@ -65,8 +85,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 usd: 0,
                 brl: 0
             },
-            // seguro_usd: 0, // todo: Retirar depois de testar.
-            // seguro_brl: 0,
             aliq_icms: 0.16, // todo: Carregar esta informação à partir do objeto despesas.
             seguro: 100,
             afrmm: 0,
@@ -103,7 +121,8 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             iof_cartao: 0,
             taxa_paypal: 0,
             frete_maritimo_usd: 0,
-            seguro_frete_maritimo_usd: 0
+            seguro_frete_maritimo_usd: 0,
+            comissao_conny: 0
         };
 
         $scope.myValue = true;
@@ -432,11 +451,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.estudo.afrmm_brl = 0;
             $scope.estudo.total_despesas = 0;
 
-            // $scope.estudo.volume = {contratado: 0, ocupado: 0, ocupado_percentual: 0}; // todo: Testar esta notação.
-
-            $scope.estudo.volume.contratado = 0;
-            $scope.estudo.volume.ocupado = 0;
-            $scope.estudo.volume.ocupado_percentual = 0;
+            $scope.estudo.volume = {contratado: 0, ocupado: 0, ocupado_percentual: 0};
 
             $scope.estudo.investimento_brl = 0;
             $scope.estudo.investimento_integral_brl = 0;
@@ -464,6 +479,8 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.estudo.seguro_frete_maritimo.brl = $scope.estudo.seguro_frete_maritimo.usd * $scope.estudo.cotacao_dolar;
 
             $scope.estudo.volume.contratado = Number($scope.config.volume_cntr_20);
+
+            $scope.estudo.config.percentual_comissao_conny = Number($scope.config.percentual_comissao_conny);
 
         }
 
@@ -670,6 +687,9 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
 
         //endregion
 
+        $scope.comparaDados = function() {
+
+        };
 
     }
 ]);
