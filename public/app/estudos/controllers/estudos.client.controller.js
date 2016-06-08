@@ -70,10 +70,22 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 }
             },
 
-            cif_usd: 0,
-            cif_brl: 0,
-            cif_integral_usd: 0,
-            cif_integral_brl: 0,
+            cif: {
+                declarado: {
+                    usd: 0,
+                    brl: 0
+                },
+                real: {
+                    usd: 0,
+                    brl: 0
+                }
+            },
+
+            // cif_usd: 0,
+            // cif_brl: 0,
+            // cif_integral_usd: 0,
+            // cif_integral_brl: 0,
+
             totalPeso: 0,
             frete_maritimo_usd: 0,
             frete_maritimo_brl: 0,
@@ -423,10 +435,8 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
         function zeraDadosEstudo() {
 
             $scope.estudo.fob = {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}};
-            $scope.estudo.cif_usd = 0;
-            $scope.estudo.cif_brl = 0;
-            $scope.estudo.cif_integral_usd = 0;
-            $scope.estudo.cif_integral_brl = 0;
+            $scope.estudo.cif = {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}};
+
             $scope.estudo.totalPaypal = 0;
             $scope.estudo.totalPeso = 0;
             $scope.estudo.volume_ocupado = 0;
@@ -542,11 +552,11 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
          */
         function setCifEstudo() {
 
-            $scope.estudo.cif_usd = $scope.estudo.fob.declarado.usd + $scope.estudo.frete_maritimo_usd + $scope.estudo.seguro_frete_maritimo.usd;
-            $scope.estudo.cif_brl = $scope.estudo.cif_usd * $scope.estudo.cotacao_dolar;
+            $scope.estudo.cif.declarado.usd = $scope.estudo.fob.declarado.usd + $scope.estudo.frete_maritimo_usd + $scope.estudo.seguro_frete_maritimo.usd;
+            $scope.estudo.cif.declarado.brl = $scope.estudo.cif.declarado.usd * $scope.estudo.cotacao_dolar;
 
-            $scope.estudo.cif_integral_usd = $scope.estudo.fob.real.usd + $scope.estudo.frete_maritimo_usd + $scope.estudo.seguro_frete_maritimo.usd;
-            $scope.estudo.cif_integral_brl = $scope.estudo.cif_integral_usd * $scope.estudo.cotacao_dolar;
+            $scope.estudo.cif.real.usd = $scope.estudo.fob.real.usd + $scope.estudo.frete_maritimo_usd + $scope.estudo.seguro_frete_maritimo.usd;
+            $scope.estudo.cif.real.brl = $scope.estudo.cif.real.usd * $scope.estudo.cotacao_dolar;
 
         }
 
@@ -597,8 +607,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     produto.estudo_do_produto.seguro_frete_maritimo_usd = produto.estudo_do_produto.peso_percentual * $scope.estudo.seguro_frete_maritimo.usd;
                     produto.estudo_do_produto.seguro_frete_maritimo_brl = produto.estudo_do_produto.seguro_frete_maritimo_usd * $scope.estudo.cotacao_dolar;
 
-                    // produto.estudo.cif = produto.estudo.fob_brl + produto.estudo.frete_maritimo_proporcional_brl + produto.estudo.seguro_frete_maritimo_proporcional_brl;
-
                     // Cálculo CIFs (que é o mesmo que Valor Aduaneiro).
                     produto.estudo_do_produto.cif_usd = produto.estudo_do_produto.fob_usd + produto.estudo_do_produto.frete_maritimo_usd + produto.estudo_do_produto.seguro_frete_maritimo_usd;
                     produto.estudo_do_produto.cif_brl = produto.estudo_do_produto.cif_usd * $scope.estudo.cotacao_dolar;
@@ -608,9 +616,11 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     tempCalculaImpostos(produto);
 
                     // Cálculo do total de despesas proporcional do produto.
-                    produto.estudo_do_produto.total_despesas_brl = (produto.estudo_do_produto.cif_brl / $scope.estudo.cif_brl) * $scope.estudo.total_despesas;
+                    produto.estudo_do_produto.total_despesas_brl = (produto.estudo_do_produto.cif_brl / $scope.estudo.cif.declarado.brl) * $scope.estudo.total_despesas;
                     produto.estudo_do_produto.total_despesas_usd = produto.estudo_do_produto.total_despesas_brl / $scope.estudo.cotacao_dolar; // todo: Definir se esta é a melhor forma de calcular este valor.
-                    produto.estudo_do_produto.total_despesas_integral_brl = (produto.estudo_do_produto.cif_integral_brl / $scope.estudo.cif_integral_brl) * $scope.estudo.total_despesas;
+                    produto.estudo_do_produto.total_despesas_integral_brl = (produto.estudo_do_produto.cif_integral_brl / $scope.estudo.cif.real.brl) * $scope.estudo.total_despesas;
+
+                    // todo: URGENTE !!! Criar mecanismo para impedir divisões por zero.
                     produto.estudo_do_produto.total_despesas_integral_usd = produto.estudo_do_produto.total_despesas_integral_brl / $scope.estudo.cotacao_dolar; // todo: Definir se esta é a melhor forma de calcular este valor.
 
 
