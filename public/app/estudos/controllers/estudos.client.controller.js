@@ -210,26 +210,23 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     }
                 },
                 percentual_paypal: 0,
-                // custo_dentro_usd: produto.custo_usd,
-                // custo_dentro_brl: 0,
-                // custo_paypal_usd: 0,
-                // custo_paypal_brl: 0,
-                // custo_integral_usd: produto.custo_usd,
-                // custo_integral_brl: 0,
-                fob_usd: 0,
-                fob_brl: 0,
-                fob_paypal_usd: 0,
-                fob_paypal_brl: 0,
-                fob_integral_usd: 0,
-                fob_integral_brl: 0,
-                peso_total: 0,
-                peso_percentual: 0, // Percentual do peso total do produto em relação ao peso de toda a carga.
-                volume_ocupado: 0,
-                volume_ocupado_percentual: 0, // Percentual do volume total ocupado pelo produto em relação ao volume total ocupado do contêiner.
-                frete_maritimo_usd: 0,
-                frete_maritimo_brl: 0,
-                seguro_frete_maritimo_usd: 0,
-                seguro_frete_maritimo_brl: 0,
+                
+
+                fob: {
+                    declarado: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    real: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    paypal: {
+                        usd: 0,
+                        brl: 0
+                    }
+                },
+                
                 cif: {
                     declarado: {
                         usd: 0,
@@ -240,6 +237,21 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                         brl: 0
                     }
                 },
+                // fob_usd: 0,
+                // fob_brl: 0,
+                // fob_paypal_usd: 0,
+                // fob_paypal_brl: 0,
+                // fob_integral_usd: 0,
+                // fob_integral_brl: 0,
+                peso_total: 0,
+                peso_percentual: 0, // Percentual do peso total do produto em relação ao peso de toda a carga.
+                volume_ocupado: 0,
+                volume_ocupado_percentual: 0, // Percentual do volume total ocupado pelo produto em relação ao volume total ocupado do contêiner.
+                frete_maritimo_usd: 0,
+                frete_maritimo_brl: 0,
+                seguro_frete_maritimo_usd: 0,
+                seguro_frete_maritimo_brl: 0,
+                
                 ii_usd: 0,
                 ii_brl: 0,
                 ii_integral_usd: 0,
@@ -428,22 +440,15 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             produto.estudo_do_produto = {
                 qtd: 0,
                 percentual_paypal: produto.estudo_do_produto.percentual_paypal,
-
                 custo_unitario: produto.estudo_do_produto.custo_unitario,
-
-                // custo_dentro_usd: produto.estudo_do_produto.custo_dentro_usd,
-                // custo_dentro_brl: produto.estudo_do_produto.custo_dentro_brl,
-                // custo_paypal_usd: produto.estudo_do_produto.custo_paypal_usd,
-                // custo_paypal_brl: produto.estudo_do_produto.custo_paypal_brl,
-                // custo_integral_usd: produto.estudo_do_produto.custo_integral_usd,
-                // custo_integral_brl: produto.estudo.custo_integral_brl,
-
-                fob_usd: 0,
-                fob_brl: 0,
-                fob_paypal_usd: 0,
-                fob_paypal_brl: 0,
-                fob_integral_usd: 0,
-                fob_integral_brl: 0,
+                fob: {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}, paypal: {usd: 0, brl: 0}},
+                cif: {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}},
+                // fob_usd: 0,
+                // fob_brl: 0,
+                // fob_paypal_usd: 0,
+                // fob_paypal_brl: 0,
+                // fob_integral_usd: 0,
+                // fob_integral_brl: 0,
                 peso_total: 0,
                 peso_percentual: 0, // Percentual do peso total do produto em relação ao peso de toda a carga.
                 volume_ocupado: 0,
@@ -452,16 +457,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 frete_maritimo_brl: 0,
                 seguro_frete_maritimo_usd: 0,
                 seguro_frete_maritimo_brl: 0,
-                cif: {
-                    declarado: {
-                        usd: 0,
-                        brl: 0
-                    },
-                    real: {
-                        usd: 0,
-                        brl: 0
-                    }
-                },
+                
                 ii_usd: 0,
                 ii_brl: 0,
                 ii_integral_usd: 0,
@@ -570,14 +566,14 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 }
                 else
                 {
-                    produto.estudo_do_produto.fob_usd = produto.estudo_do_produto.custo_unitario.declarado.usd * produto.estudo_do_produto.qtd;
-                    produto.estudo_do_produto.fob_brl = produto.estudo_do_produto.fob_usd * $scope.estudo.cotacao_dolar;
+                    produto.estudo_do_produto.fob.declarado.usd = produto.estudo_do_produto.custo_unitario.declarado.usd * produto.estudo_do_produto.qtd;
+                    produto.estudo_do_produto.fob.declarado.brl = produto.estudo_do_produto.fob.declarado.usd * $scope.estudo.cotacao_dolar;
 
-                    produto.estudo_do_produto.fob_paypal_usd = produto.estudo_do_produto.custo_unitario.paypal.usd * produto.estudo_do_produto.qtd * (1 + $scope.estudo.config.taxa_paypal + $scope.estudo.config.iof_cartao);
-                    produto.estudo_do_produto.fob_paypal_brl = produto.estudo_do_produto.fob_paypal_usd * $scope.estudo.cotacao_dolar_paypal;
+                    produto.estudo_do_produto.fob.paypal.usd = produto.estudo_do_produto.custo_unitario.paypal.usd * produto.estudo_do_produto.qtd * (1 + $scope.estudo.config.taxa_paypal + $scope.estudo.config.iof_cartao);
+                    produto.estudo_do_produto.fob.paypal.brl = produto.estudo_do_produto.fob.paypal.usd * $scope.estudo.cotacao_dolar_paypal;
 
-                    produto.estudo_do_produto.fob_integral_usd = produto.estudo_do_produto.custo_unitario.real.usd * produto.estudo_do_produto.qtd;
-                    produto.estudo_do_produto.fob_integral_brl = produto.estudo_do_produto.fob_integral_usd * $scope.estudo.cotacao_dolar;
+                    produto.estudo_do_produto.fob.real.usd = produto.estudo_do_produto.custo_unitario.real.usd * produto.estudo_do_produto.qtd;
+                    produto.estudo_do_produto.fob.real.brl = produto.estudo_do_produto.fob.real.usd * $scope.estudo.cotacao_dolar;
                 }
 
             });
@@ -677,9 +673,9 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     produto.estudo_do_produto.seguro_frete_maritimo_brl = produto.estudo_do_produto.seguro_frete_maritimo_usd * $scope.estudo.cotacao_dolar;
 
                     // Cálculo CIFs (que é o mesmo que Valor Aduaneiro).
-                    produto.estudo_do_produto.cif.declarado.usd = produto.estudo_do_produto.fob_usd + produto.estudo_do_produto.frete_maritimo_usd + produto.estudo_do_produto.seguro_frete_maritimo_usd;
+                    produto.estudo_do_produto.cif.declarado.usd = produto.estudo_do_produto.fob.declarado.usd + produto.estudo_do_produto.frete_maritimo_usd + produto.estudo_do_produto.seguro_frete_maritimo_usd;
                     produto.estudo_do_produto.cif.declarado.brl = produto.estudo_do_produto.cif.declarado.usd * $scope.estudo.cotacao_dolar;
-                    produto.estudo_do_produto.cif.real.usd = produto.estudo_do_produto.fob_integral_usd + produto.estudo_do_produto.frete_maritimo_usd + produto.estudo_do_produto.seguro_frete_maritimo_usd;
+                    produto.estudo_do_produto.cif.real.usd = produto.estudo_do_produto.fob.real.usd + produto.estudo_do_produto.frete_maritimo_usd + produto.estudo_do_produto.seguro_frete_maritimo_usd;
                     produto.estudo_do_produto.cif.real.brl = produto.estudo_do_produto.cif.real.usd * $scope.estudo.cotacao_dolar;
 
                     tempCalculaImpostos(produto);
@@ -699,7 +695,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     // Cálculo do Investimento (total) a ser feito no produto.
                     produto.estudo_do_produto.investimento_brl = (
                         produto.estudo_do_produto.cif.declarado.brl +
-                        produto.estudo_do_produto.fob_paypal_brl + // já considerando a taxa paypal e o IOF sobre compras internacionais do cartão
+                        produto.estudo_do_produto.fob.paypal.brl + // já considerando a taxa paypal e o IOF sobre compras internacionais do cartão
                         produto.estudo_do_produto.total_tributos_brl +
                         produto.estudo_do_produto.total_despesas_brl
                     );
