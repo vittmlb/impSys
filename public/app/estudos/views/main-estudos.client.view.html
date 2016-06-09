@@ -113,6 +113,7 @@
                 <th>Fob</th>
                 <th>C.Final</th>
                 <th>P.Venda</th>
+                <th>Opções</th>
             </tr>
             </thead>
             <tbody>
@@ -128,10 +129,22 @@
                 <td>
                     <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_dentro" ng-model="itemEstudo.estudo_do_produto.custo_unitario.declarado.usd" ng-change="calculaCustoPaypal(itemEstudo, 'custo_dentro')">
                 </td>
-                <td><input type="text" class="form-control input-transparente" placeholder="qtd" data-ng-model="itemEstudo.estudo_do_produto.qtd" ng-change="iniImport()"></td>
-                <td data-ng-bind="itemEstudo.estudo_do_produto.qtd * itemEstudo.custo_usd | currency: 'U$ '" data-ng-show="itemEstudo.estudo_do_produto.qtd"></td>
-                <td><span data-ng-bind="itemEstudo.estudo_do_produto.preco_custo_final_brl | currency: 'R$ '"></span></td>
-                <td><input type="text" class="form-control input-transparente" placeholder="P.Venda (R$)" data-ng-model="itemEstudo.estudo_do_produto.preco_venda_brl" ng-change="iniImport()"></td>
+                <td>
+                    <input type="text" class="form-control input-transparente" placeholder="qtd" data-ng-model="itemEstudo.estudo_do_produto.qtd" ng-change="iniImport()">
+                </td>
+                <td data-ng-bind="itemEstudo.estudo_do_produto.qtd * itemEstudo.custo_usd | currency: 'U$ '" data-ng-show="itemEstudo.estudo_do_produto.qtd">
+
+                </td>
+                <td>
+                    <span data-ng-bind="itemEstudo.estudo_do_produto.preco_custo_final_brl | currency: 'R$ '"></span>
+                </td>
+                <td>
+                    <input type="text" class="form-control input-transparente" placeholder="P.Venda (R$)" data-ng-model="itemEstudo.estudo_do_produto.preco_venda_brl" ng-change="iniImport()">
+                </td>
+                <td>
+                    <button class="btn btn-default btn-sm" type="button" data-toggle="tbcollapse" data-target="#extproduto" aria-expanded="false" aria-controls="extproduto"><i class="glyphicon glyphicon-chevron-down"></i></button>
+                </td>
+
             </tr>
             </tbody>
         </table>
