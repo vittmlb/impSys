@@ -244,137 +244,139 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
          * @param produto
          */
         $scope.adicionaProdutoEstudo = function(produto) { // todo: Renomear > Este nome não faz o menor sentido !!!!
-            produto.estudo_do_produto = {
-                qtd: 0,
-                custo_unitario: {
-                    declarado: {
-                        usd: produto.custo_usd,
-                        brl: 0
-                    },
-                    paypal: {
-                        usd: 0,
-                        brl: 0
-                    },
-                    real: {
-                        usd: produto.custo_usd,
-                        brl: 0
-                    }
-                },
-                fob: {
-                    declarado: {
-                        usd: 0,
-                        brl: 0
-                    },
-                    real: {
-                        usd: 0,
-                        brl: 0
-                    },
-                    paypal: {
-                        usd: 0,
-                        brl: 0
-                    }
-                },
-                cif: {
-                    declarado: {
-                        usd: 0,
-                        brl: 0
-                    },
-                    real: {
-                        usd: 0,
-                        brl: 0
-                    }
-                },
-                medidas: {
-                    peso: {
-                        contratado: 0, // Por enquanto não vou usar esse valor > Só será usado quando importar um produto muito pesado.
-                        ocupado: 0,
-                        ocupado_percentual: 0 // Por enquanto não vou usar esse valor > Só será usado quando importar um produto muito pesado.
-                    },
-                    volume: {
-                        contratado: 0, // todo: Volume do Cntr escolhido para fazer o transporte da carga. Encontrar uma solução melhor para quando for trabalhar com outros volumes.
-                        ocupado: 0,
-                        ocupado_percentual: 0
-                    }
-                },
-                frete_maritimo: {
-                    valor: {
-                        usd: 0,
-                        brl: 0
-                    },
-                    seguro: {
-                        usd: 0,
-                        brl: 0
-                    }
-                },
-                tributos: {
-                    declarado: {
-                        ii: {
+            if ($scope.produtosDoEstudo.indexOf(produto) === -1){
+                produto.estudo_do_produto = {
+                    qtd: 0,
+                    custo_unitario: {
+                        declarado: {
+                            usd: produto.custo_usd,
+                            brl: 0
+                        },
+                        paypal: {
                             usd: 0,
                             brl: 0
                         },
-                        ipi: {
+                        real: {
+                            usd: produto.custo_usd,
+                            brl: 0
+                        }
+                    },
+                    fob: {
+                        declarado: {
                             usd: 0,
                             brl: 0
                         },
-                        pis: {
+                        real: {
                             usd: 0,
                             brl: 0
                         },
-                        cofins: {
+                        paypal: {
+                            usd: 0,
+                            brl: 0
+                        }
+                    },
+                    cif: {
+                        declarado: {
                             usd: 0,
                             brl: 0
                         },
-                        icms: {
+                        real: {
+                            usd: 0,
+                            brl: 0
+                        }
+                    },
+                    medidas: {
+                        peso: {
+                            contratado: 0, // Por enquanto não vou usar esse valor > Só será usado quando importar um produto muito pesado.
+                            ocupado: 0,
+                            ocupado_percentual: 0 // Por enquanto não vou usar esse valor > Só será usado quando importar um produto muito pesado.
+                        },
+                        volume: {
+                            contratado: 0, // todo: Volume do Cntr escolhido para fazer o transporte da carga. Encontrar uma solução melhor para quando for trabalhar com outros volumes.
+                            ocupado: 0,
+                            ocupado_percentual: 0
+                        }
+                    },
+                    frete_maritimo: {
+                        valor: {
                             usd: 0,
                             brl: 0
                         },
+                        seguro: {
+                            usd: 0,
+                            brl: 0
+                        }
+                    },
+                    tributos: {
+                        declarado: {
+                            ii: {
+                                usd: 0,
+                                brl: 0
+                            },
+                            ipi: {
+                                usd: 0,
+                                brl: 0
+                            },
+                            pis: {
+                                usd: 0,
+                                brl: 0
+                            },
+                            cofins: {
+                                usd: 0,
+                                brl: 0
+                            },
+                            icms: {
+                                usd: 0,
+                                brl: 0
+                            },
+                            total: {
+                                usd: 0,
+                                brl: 0
+                            }
+                        },
+                        real: {
+                            ii: {
+                                usd: 0,
+                                brl: 0
+                            },
+                            ipi: {
+                                usd: 0,
+                                brl: 0
+                            },
+                            pis: {
+                                usd: 0,
+                                brl: 0
+                            },
+                            cofins: {
+                                usd: 0,
+                                brl: 0
+                            },
+                            icms: {
+                                usd: 0,
+                                brl: 0
+                            },
+                            total: {
+                                usd: 0,
+                                brl: 0
+                            }
+                        }
+                    },
+                    despesas: {
                         total: {
                             usd: 0,
                             brl: 0
                         }
                     },
-                    real: {
-                        ii: {
-                            usd: 0,
-                            brl: 0
-                        },
-                        ipi: {
-                            usd: 0,
-                            brl: 0
-                        },
-                        pis: {
-                            usd: 0,
-                            brl: 0
-                        },
-                        cofins: {
-                            usd: 0,
-                            brl: 0
-                        },
-                        icms: {
-                            usd: 0,
-                            brl: 0
-                        },
-                        total: {
-                            usd: 0,
-                            brl: 0
-                        }
-                    }
-                },
-                despesas: {
-                    total: {
-                        usd: 0,
-                        brl: 0
-                    }
-                },
-                investimento_brl: 0,
-                investimento_integral_brl: 0,
-                preco_custo_final_brl: 0,
-                preco_custo_final_integral_brl: 0,
-                preco_venda_brl: 0,
-                lucro_unitario_brl: 0,
-                lucro_total_brl: 0
-            };
-            $scope.produtosDoEstudo.push(produto);
+                    investimento_brl: 0,
+                    investimento_integral_brl: 0,
+                    preco_custo_final_brl: 0,
+                    preco_custo_final_integral_brl: 0,
+                    preco_venda_brl: 0,
+                    lucro_unitario_brl: 0,
+                    lucro_total_brl: 0
+                };
+                $scope.produtosDoEstudo.push(produto);
+            }
         };
 
         $scope.removeProdutoEstudo = function(item) {

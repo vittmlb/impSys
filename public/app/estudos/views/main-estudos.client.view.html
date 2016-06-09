@@ -16,7 +16,7 @@
             <tr data-ng-repeat="item in produtos">
                 <td data-ng-model="item.nome">{{item.nome}}</td>
                 <td data-ng-bind="item.custo_usd | currency: 'U$ '"></td>
-                <td><button class="btn btn-info btn-round btn-xs" ng-click="adicionaProdutoEstudo(item)"><span class="glyphicon glyphicon-plus"></span></button></td>
+                <td><a ng-click="adicionaProdutoEstudo(item)"><i class="fa fa-plus clickable" aria-hidden="true"></i></i></a></td>
             </tr>
             </tbody>
         </table>
@@ -112,6 +112,7 @@
                 <th>Fob</th>
                 <th>C.Final</th>
                 <th>P.Venda</th>
+                <th>Opções</th>
             </tr>
             </thead>
             <tbody>
@@ -135,6 +136,9 @@
                 </td>
                 <td>
                     <input type="text" class="form-control input-transparente" placeholder="P.Venda (R$)" data-ng-model="itemEstudo.estudo_do_produto.preco_venda_brl" ng-change="iniImport()">
+                </td>
+                <td>
+                    <i ng-click="removeProdutoEstudo(itemEstudo)" class="fa fa-times clickable"  aria-hidden="true"></i>
                 </td>
 
             </tr>
