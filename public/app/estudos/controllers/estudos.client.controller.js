@@ -195,13 +195,27 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
         $scope.adicionaProdutoEstudo = function(produto) { // todo: Renomear > Este nome não faz o menor sentido !!!!
             produto.estudo_do_produto = {
                 qtd: 0,
+                custo_unitario: {
+                    declarado: {
+                        usd: produto.custo_usd,
+                        brl: 0
+                    },
+                    paypal: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    real: {
+                        usd: produto.custo_usd,
+                        brl: 0
+                    }
+                },
                 percentual_paypal: 0,
-                custo_dentro_usd: produto.custo_usd,
-                custo_dentro_brl: 0,
-                custo_paypal_usd: 0,
-                custo_paypal_brl: 0,
-                custo_integral_usd: produto.custo_usd,
-                custo_integral_brl: 0,
+                // custo_dentro_usd: produto.custo_usd,
+                // custo_dentro_brl: 0,
+                // custo_paypal_usd: 0,
+                // custo_paypal_brl: 0,
+                // custo_integral_usd: produto.custo_usd,
+                // custo_integral_brl: 0,
                 fob_usd: 0,
                 fob_brl: 0,
                 fob_paypal_usd: 0,
@@ -226,11 +240,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                         brl: 0
                     }
                 },
-
-                // cif_usd: 0,
-                // cif_brl: 0,
-                // cif_integral_usd: 0,
-                // cif_integral_brl: 0,
                 ii_usd: 0,
                 ii_brl: 0,
                 ii_integral_usd: 0,
@@ -277,14 +286,14 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
 
         $scope.calculaCustoPaypal = function(produto, nomeCampo) {
             if(nomeCampo === 'percentual_paypal') {
-                produto.estudo_do_produto.custo_paypal_usd = produto.custo_usd * produto.estudo_do_produto.percentual_paypal;
-                produto.estudo_do_produto.custo_dentro_usd = produto.custo_usd - produto.estudo_do_produto.custo_paypal_usd;
+                produto.estudo_do_produto.custo_unitario.paypal.usd = produto.custo_usd * produto.estudo_do_produto.percentual_paypal;
+                produto.estudo_do_produto.custo_unitario.declarado.usd = produto.custo_usd - produto.estudo_do_produto.custo_unitario.paypal.usd;
             } else if(nomeCampo === 'custo_paypal') {
-                produto.estudo_do_produto.custo_dentro_usd = produto.custo_usd - produto.estudo_do_produto.custo_paypal_usd;
-                produto.estudo_do_produto.percentual_paypal = produto.estudo_do_produto.custo_paypal_usd / produto.custo_usd;
+                produto.estudo_do_produto.custo_unitario.declarado.usd = produto.custo_usd - produto.estudo_do_produto.custo_unitario.paypal.usd;
+                produto.estudo_do_produto.percentual_paypal = produto.estudo_do_produto.custo_unitario.paypal.usd / produto.custo_usd;
             } else {
-                produto.estudo_do_produto.custo_paypal_usd = produto.custo_usd - produto.estudo_do_produto.custo_dentro_usd;
-                produto.estudo_do_produto.percentual_paypal = produto.estudo_do_produto.custo_paypal_usd / produto.custo_usd;
+                produto.estudo_do_produto.custo_unitario.paypal.usd = produto.custo_usd - produto.estudo_do_produto.custo_unitario.declarado.usd;
+                produto.estudo_do_produto.percentual_paypal = produto.estudo_do_produto.custo_unitario.paypal.usd / produto.custo_usd;
             }
             $scope.iniImport();
         };
@@ -419,12 +428,16 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             produto.estudo_do_produto = {
                 qtd: 0,
                 percentual_paypal: produto.estudo_do_produto.percentual_paypal,
-                custo_dentro_usd: produto.estudo_do_produto.custo_dentro_usd,
-                custo_dentro_brl: produto.estudo_do_produto.custo_dentro_brl,
-                custo_paypal_usd: produto.estudo_do_produto.custo_paypal_usd,
-                custo_paypal_brl: produto.estudo_do_produto.custo_paypal_brl,
-                custo_integral_usd: produto.estudo_do_produto.custo_integral_usd,
-                custo_integral_brl: produto.estudo.custo_integral_brl,
+
+                custo_unitario: produto.estudo_do_produto.custo_unitario,
+
+                // custo_dentro_usd: produto.estudo_do_produto.custo_dentro_usd,
+                // custo_dentro_brl: produto.estudo_do_produto.custo_dentro_brl,
+                // custo_paypal_usd: produto.estudo_do_produto.custo_paypal_usd,
+                // custo_paypal_brl: produto.estudo_do_produto.custo_paypal_brl,
+                // custo_integral_usd: produto.estudo_do_produto.custo_integral_usd,
+                // custo_integral_brl: produto.estudo.custo_integral_brl,
+
                 fob_usd: 0,
                 fob_brl: 0,
                 fob_paypal_usd: 0,
@@ -557,13 +570,13 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 }
                 else
                 {
-                    produto.estudo_do_produto.fob_usd = produto.estudo_do_produto.custo_dentro_usd * produto.estudo_do_produto.qtd;
-                    produto.estudo_do_produto.fob_brl = produto.estudo_do_produto.custo_dentro_usd * $scope.estudo.cotacao_dolar * produto.estudo_do_produto.qtd;
+                    produto.estudo_do_produto.fob_usd = produto.estudo_do_produto.custo_unitario.declarado.usd * produto.estudo_do_produto.qtd;
+                    produto.estudo_do_produto.fob_brl = produto.estudo_do_produto.fob_usd * $scope.estudo.cotacao_dolar;
 
-                    produto.estudo_do_produto.fob_paypal_usd = produto.estudo_do_produto.custo_paypal_usd * produto.estudo_do_produto.qtd * (1 + $scope.estudo.config.taxa_paypal + $scope.estudo.config.iof_cartao);
+                    produto.estudo_do_produto.fob_paypal_usd = produto.estudo_do_produto.custo_unitario.paypal.usd * produto.estudo_do_produto.qtd * (1 + $scope.estudo.config.taxa_paypal + $scope.estudo.config.iof_cartao);
                     produto.estudo_do_produto.fob_paypal_brl = produto.estudo_do_produto.fob_paypal_usd * $scope.estudo.cotacao_dolar_paypal;
 
-                    produto.estudo_do_produto.fob_integral_usd = produto.estudo_do_produto.custo_integral_usd * produto.estudo_do_produto.qtd;
+                    produto.estudo_do_produto.fob_integral_usd = produto.estudo_do_produto.custo_unitario.real.usd * produto.estudo_do_produto.qtd;
                     produto.estudo_do_produto.fob_integral_brl = produto.estudo_do_produto.fob_integral_usd * $scope.estudo.cotacao_dolar;
                 }
 
@@ -585,13 +598,13 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 else
                 {
 
-                    $scope.estudo.fob.declarado.usd += produto.estudo_do_produto.custo_dentro_usd * produto.estudo_do_produto.qtd; // Calcula Fob
+                    $scope.estudo.fob.declarado.usd += produto.estudo_do_produto.custo_unitario.declarado.usd * produto.estudo_do_produto.qtd; // Calcula Fob
                     $scope.estudo.fob.declarado.brl += $scope.estudo.fob.declarado.usd * $scope.estudo.cotacao_dolar;
 
-                    $scope.estudo.fob.real.usd += produto.estudo_do_produto.custo_integral_usd * produto.estudo_do_produto.qtd;
+                    $scope.estudo.fob.real.usd += produto.estudo_do_produto.custo_unitario.real.usd * produto.estudo_do_produto.qtd;
                     $scope.estudo.fob.real.brl += $scope.estudo.fob.real.usd * $scope.estudo.cotacao_dolar;
 
-                    $scope.estudo.totalPaypal += produto.estudo_do_produto.custo_paypal_usd * produto.estudo_do_produto.qtd; // todo: Ajustar a nomenclatura (totalPaypal não está em acordo com os demais nomes que usam '_').
+                    $scope.estudo.totalPaypal += produto.estudo_do_produto.custo_unitario.paypal.usd * produto.estudo_do_produto.qtd; // todo: Ajustar a nomenclatura (totalPaypal não está em acordo com os demais nomes que usam '_').
 
                     $scope.estudo.medidas.peso.ocupado += produto.medidas.peso * produto.estudo_do_produto.qtd; // Calcula peso total
                     $scope.estudo.medidas.volume.ocupado += produto.medidas.cbm * produto.estudo_do_produto.qtd; // Calcula volume ocupado no contêiner
