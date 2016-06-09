@@ -73,6 +73,16 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     brl: 0
                 }
             },
+            frete_maritimo: {
+                valor: {
+                    usd: 0,
+                    brl: 0
+                },
+                seguro: {
+                    usd: 0,
+                    brl: 0
+                }
+            },
             medidas: {
                 peso: {
                     contratado: 0, // Por enquanto não vou usar esse valor > Só será usado quando importar um produto muito pesado.
@@ -85,23 +95,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     ocupado_percentual: 0
                 }
             },
-
-            // totalPeso: 0,
-
-            frete_maritimo: {
-                valor: {
-                    usd: 0,
-                    brl: 0
-                },
-                seguro: {
-                    usd: 0,
-                    brl: 0
-                }
-            },
-
             aliq_icms: 0.16, // todo: Carregar esta informação à partir do objeto despesas.
-            afrmm: 0,
-            afrmm_brl: 0,
             tributos: {
                 delarado: {
                     ii: {
@@ -156,9 +150,18 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     }
                 }
             },
+            despesas: {
+                afrmm: {
+                    usd: 0,
+                    brl: 0
+                }, // todo: Não tem qualquer utilidade. Serve apenas para comparar se os cálculos estão corretos. Encontrar nova forma de fazer isso e elimitar isso daqui.
+                total: {
+                    usd: 0,
+                    brl: 0
+                }
+            },
 
 
-            total_despesas: 0,
             investimento_brl: 0,
             lucro_brl: 0
         };
@@ -213,10 +216,21 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 frete_maritimo_brl: 0,
                 seguro_frete_maritimo_usd: 0,
                 seguro_frete_maritimo_brl: 0,
-                cif_usd: 0,
-                cif_brl: 0,
-                cif_integral_usd: 0,
-                cif_integral_brl: 0,
+                cif: {
+                    declarado: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    real: {
+                        usd: 0,
+                        brl: 0
+                    }
+                },
+
+                // cif_usd: 0,
+                // cif_brl: 0,
+                // cif_integral_usd: 0,
+                // cif_integral_brl: 0,
                 ii_usd: 0,
                 ii_brl: 0,
                 ii_integral_usd: 0,
@@ -484,8 +498,11 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.estudo.tributos.declarado = {ii: {usd: 0, brl: 0}, ipi: {usd: 0, brl: 0}, pis: {usd: 0, brl: 0}, cofins: {usd: 0, brl: 0}, icms: {usd: 0, brl: 0}, total: {usd: 0, brl: 0}};
             $scope.estudo.tributos.real = {ii: {usd: 0, brl: 0}, ipi: {usd: 0, brl: 0}, pis: {usd: 0, brl: 0}, cofins: {usd: 0, brl: 0}, icms: {usd: 0, brl: 0}, total: {usd: 0, brl: 0}};
 
-            $scope.estudo.afrmm_brl = 0;
-            $scope.estudo.total_despesas = 0;
+            $scope.estudo.despesas.total.brl = 0;
+            $scope.estudo.despesas.afrmm.brl = 0;
+
+            // $scope.estudo.afrmm_brl = 0;
+            // $scope.estudo.total_despesas = 0;
 
             $scope.estudo.medidas.peso = {contratado: 0, ocupado: 0, ocupado_percentual: 0};
             $scope.estudo.medidas.volume = {contratado: 0, ocupado: 0, ocupado_percentual: 0};
@@ -602,14 +619,14 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             var aliqAfrmm = $scope.despesas.filter(function(item) {
                 return item.nome === 'Taxa AFRMM'; // todo: Criar mecanismo de Erro quando não encontrar a taxa.
             });
-            $scope.estudo.afrmm_brl = $scope.estudo.frete_maritimo.valor.brl * aliqAfrmm[0].aliquota; //todo: Confirmar sobre a incidência do imposto (taxa de desembarque???)
-            $scope.estudo.total_despesas = $scope.estudo.afrmm_brl; // Ao invés de iniciar as despesas com zero, já inicializo com o afrmm.
+            $scope.estudo.despesas.afrmm.brl = $scope.estudo.frete_maritimo.valor.brl * aliqAfrmm[0].aliquota; //todo: Confirmar sobre a incidência do imposto (taxa de desembarque???)
+            $scope.estudo.despesas.total.brl = $scope.estudo.despesas.afrmm.brl; // Ao invés de iniciar as despesas com zero, já inicializo com o afrmm.
             $scope.despesas.forEach(function (item) {
                 if(item.tipo === 'despesa aduaneira' && item.ativa === true) {
                     if(item.moeda === 'U$') {
-                        $scope.estudo.total_despesas += (item.valor * $scope.estudo.cotacao_dolar);
+                        $scope.estudo.despesas.total.brl += (item.valor * $scope.estudo.cotacao_dolar);
                     } else {
-                        $scope.estudo.total_despesas += item.valor;
+                        $scope.estudo.despesas.total.brl += item.valor;
                     }
                 }
             });
@@ -649,9 +666,9 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     tempCalculaImpostos(produto);
 
                     // Cálculo do total de despesas proporcional do produto.
-                    produto.estudo_do_produto.total_despesas_brl = (produto.estudo_do_produto.cif_brl / $scope.estudo.cif.declarado.brl) * $scope.estudo.total_despesas;
+                    produto.estudo_do_produto.total_despesas_brl = (produto.estudo_do_produto.cif_brl / $scope.estudo.cif.declarado.brl) * $scope.estudo.despesas.total.brl;
                     produto.estudo_do_produto.total_despesas_usd = produto.estudo_do_produto.total_despesas_brl / $scope.estudo.cotacao_dolar; // todo: Definir se esta é a melhor forma de calcular este valor.
-                    produto.estudo_do_produto.total_despesas_integral_brl = (produto.estudo_do_produto.cif_integral_brl / $scope.estudo.cif.real.brl) * $scope.estudo.total_despesas;
+                    produto.estudo_do_produto.total_despesas_integral_brl = (produto.estudo_do_produto.cif_integral_brl / $scope.estudo.cif.real.brl) * $scope.estudo.despesas.total.brl;
 
                     // todo: URGENTE !!! Criar mecanismo para impedir divisões por zero.
                     produto.estudo_do_produto.total_despesas_integral_usd = produto.estudo_do_produto.total_despesas_integral_brl / $scope.estudo.cotacao_dolar; // todo: Definir se esta é a melhor forma de calcular este valor.
