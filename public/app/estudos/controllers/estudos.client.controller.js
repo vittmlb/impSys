@@ -292,32 +292,32 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
         function tempCalculaImpostos(produto) {
 
             // Cálculo dos Impostos - II.
-            produto.estudo_do_produto.ii_usd = produto.estudo_do_produto.cif_usd * produto.impostos.ii;
-            produto.estudo_do_produto.ii_brl = produto.estudo_do_produto.cif_brl * produto.impostos.ii;
-            produto.estudo_do_produto.ii_integral_usd = produto.estudo_do_produto.cif_integral_usd * produto.impostos.ii;
-            produto.estudo_do_produto.ii_integral_brl = produto.estudo_do_produto.cif_integral_brl * produto.impostos.ii;
+            produto.estudo_do_produto.ii_usd = produto.estudo_do_produto.cif.declarado.usd * produto.impostos.ii;
+            produto.estudo_do_produto.ii_brl = produto.estudo_do_produto.cif.declarado.brl * produto.impostos.ii;
+            produto.estudo_do_produto.ii_integral_usd = produto.estudo_do_produto.cif.real.usd * produto.impostos.ii;
+            produto.estudo_do_produto.ii_integral_brl = produto.estudo_do_produto.cif.real.brl * produto.impostos.ii;
 
             // Cálculo dos Impostos - IPI.
-            produto.estudo_do_produto.ipi_usd = (produto.estudo_do_produto.cif_usd + produto.estudo_do_produto.ii_usd) * produto.impostos.ipi;
-            produto.estudo_do_produto.ipi_brl = (produto.estudo_do_produto.cif_brl + produto.estudo_do_produto.ii_brl) * produto.impostos.ipi;
-            produto.estudo_do_produto.ipi_integral_usd = (produto.estudo_do_produto.cif_integral_usd + produto.estudo_do_produto.ii_integral_usd) * produto.impostos.ipi;
-            produto.estudo_do_produto.ipi_integral_brl = (produto.estudo_do_produto.cif_integral_brl + produto.estudo_do_produto.ii_integral_brl) * produto.impostos.ipi;
+            produto.estudo_do_produto.ipi_usd = (produto.estudo_do_produto.cif.declarado.usd + produto.estudo_do_produto.ii_usd) * produto.impostos.ipi;
+            produto.estudo_do_produto.ipi_brl = (produto.estudo_do_produto.cif.declarado.brl + produto.estudo_do_produto.ii_brl) * produto.impostos.ipi;
+            produto.estudo_do_produto.ipi_integral_usd = (produto.estudo_do_produto.cif.real.usd + produto.estudo_do_produto.ii_integral_usd) * produto.impostos.ipi;
+            produto.estudo_do_produto.ipi_integral_brl = (produto.estudo_do_produto.cif.real.brl + produto.estudo_do_produto.ii_integral_brl) * produto.impostos.ipi;
 
             // Cálculo dos Impostos - PIS.
-            produto.estudo_do_produto.pis_usd = produto.estudo_do_produto.cif_usd * produto.impostos.pis;
-            produto.estudo_do_produto.pis_brl = produto.estudo_do_produto.cif_brl * produto.impostos.pis;
-            produto.estudo_do_produto.pis_integral_usd = produto.estudo_do_produto.cif_integral_usd * produto.impostos.pis;
-            produto.estudo_do_produto.pis_integral_brl = produto.estudo_do_produto.cif_integral_brl * produto.impostos.pis;
+            produto.estudo_do_produto.pis_usd = produto.estudo_do_produto.cif.declarado.usd * produto.impostos.pis;
+            produto.estudo_do_produto.pis_brl = produto.estudo_do_produto.cif.declarado.brl * produto.impostos.pis;
+            produto.estudo_do_produto.pis_integral_usd = produto.estudo_do_produto.cif.real.usd * produto.impostos.pis;
+            produto.estudo_do_produto.pis_integral_brl = produto.estudo_do_produto.cif.real.brl * produto.impostos.pis;
 
             // Cálculo dos Impostos - Cofins.
-            produto.estudo_do_produto.cofins_usd = produto.estudo_do_produto.cif_usd * produto.impostos.cofins;
-            produto.estudo_do_produto.cofins_brl = produto.estudo_do_produto.cif_brl * produto.impostos.cofins;
-            produto.estudo_do_produto.cofins_integral_usd = produto.estudo_do_produto.cif_integral_usd * produto.impostos.cofins;
-            produto.estudo_do_produto.cofins_integral_brl = produto.estudo_do_produto.cif_integral_brl * produto.impostos.cofins;
+            produto.estudo_do_produto.cofins_usd = produto.estudo_do_produto.cif.declarado.usd * produto.impostos.cofins;
+            produto.estudo_do_produto.cofins_brl = produto.estudo_do_produto.cif.declarado.brl * produto.impostos.cofins;
+            produto.estudo_do_produto.cofins_integral_usd = produto.estudo_do_produto.cif.real.usd * produto.impostos.cofins;
+            produto.estudo_do_produto.cofins_integral_brl = produto.estudo_do_produto.cif.real.brl * produto.impostos.cofins;
 
             // Cálculo dos Impostos - ICMS.
             produto.estudo_do_produto.icms_usd = (((
-                produto.estudo_do_produto.cif_usd +
+                produto.estudo_do_produto.cif.declarado.usd +
                 produto.estudo_do_produto.ii_usd +
                 produto.estudo_do_produto.ipi_usd +
                 produto.estudo_do_produto.pis_usd +
@@ -325,7 +325,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             );
 
             produto.estudo_do_produto.icms_brl = (((
-                produto.estudo_do_produto.cif_brl +
+                produto.estudo_do_produto.cif.declarado.brl +
                 produto.estudo_do_produto.ii_brl +
                 produto.estudo_do_produto.ipi_brl +
                 produto.estudo_do_produto.pis_brl +
@@ -333,7 +333,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             );
 
             produto.estudo_do_produto.icms_integral_usd = (((
-                produto.estudo_do_produto.cif_integral_usd +
+                produto.estudo_do_produto.cif.real.usd +
                 produto.estudo_do_produto.ii_integral_usd +
                 produto.estudo_do_produto.ipi_integral_usd +
                 produto.estudo_do_produto.pis_integral_usd +
@@ -341,7 +341,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             );
 
             produto.estudo_do_produto.icms_integral_brl = (((
-                produto.estudo_do_produto.cif_integral_brl +
+                produto.estudo_do_produto.cif.real.brl +
                 produto.estudo_do_produto.ii_integral_brl +
                 produto.estudo_do_produto.ipi_integral_brl +
                 produto.estudo_do_produto.pis_integral_brl +
@@ -439,10 +439,16 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 frete_maritimo_brl: 0,
                 seguro_frete_maritimo_usd: 0,
                 seguro_frete_maritimo_brl: 0,
-                cif_usd: 0,
-                cif_brl: 0,
-                cif_integral_usd: 0,
-                cif_integral_brl: 0,
+                cif: {
+                    declarado: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    real: {
+                        usd: 0,
+                        brl: 0
+                    }
+                },
                 ii_usd: 0,
                 ii_brl: 0,
                 ii_integral_usd: 0,
@@ -658,17 +664,17 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     produto.estudo_do_produto.seguro_frete_maritimo_brl = produto.estudo_do_produto.seguro_frete_maritimo_usd * $scope.estudo.cotacao_dolar;
 
                     // Cálculo CIFs (que é o mesmo que Valor Aduaneiro).
-                    produto.estudo_do_produto.cif_usd = produto.estudo_do_produto.fob_usd + produto.estudo_do_produto.frete_maritimo_usd + produto.estudo_do_produto.seguro_frete_maritimo_usd;
-                    produto.estudo_do_produto.cif_brl = produto.estudo_do_produto.cif_usd * $scope.estudo.cotacao_dolar;
-                    produto.estudo_do_produto.cif_integral_usd = produto.estudo_do_produto.fob_integral_usd + produto.estudo_do_produto.frete_maritimo_usd + produto.estudo_do_produto.seguro_frete_maritimo_usd;
-                    produto.estudo_do_produto.cif_integral_brl = produto.estudo_do_produto.cif_integral_usd * $scope.estudo.cotacao_dolar;
+                    produto.estudo_do_produto.cif.declarado.usd = produto.estudo_do_produto.fob_usd + produto.estudo_do_produto.frete_maritimo_usd + produto.estudo_do_produto.seguro_frete_maritimo_usd;
+                    produto.estudo_do_produto.cif.declarado.brl = produto.estudo_do_produto.cif.declarado.usd * $scope.estudo.cotacao_dolar;
+                    produto.estudo_do_produto.cif.real.usd = produto.estudo_do_produto.fob_integral_usd + produto.estudo_do_produto.frete_maritimo_usd + produto.estudo_do_produto.seguro_frete_maritimo_usd;
+                    produto.estudo_do_produto.cif.real.brl = produto.estudo_do_produto.cif.real.usd * $scope.estudo.cotacao_dolar;
 
                     tempCalculaImpostos(produto);
 
                     // Cálculo do total de despesas proporcional do produto.
-                    produto.estudo_do_produto.total_despesas_brl = (produto.estudo_do_produto.cif_brl / $scope.estudo.cif.declarado.brl) * $scope.estudo.despesas.total.brl;
+                    produto.estudo_do_produto.total_despesas_brl = (produto.estudo_do_produto.cif.declarado.brl / $scope.estudo.cif.declarado.brl) * $scope.estudo.despesas.total.brl;
                     produto.estudo_do_produto.total_despesas_usd = produto.estudo_do_produto.total_despesas_brl / $scope.estudo.cotacao_dolar; // todo: Definir se esta é a melhor forma de calcular este valor.
-                    produto.estudo_do_produto.total_despesas_integral_brl = (produto.estudo_do_produto.cif_integral_brl / $scope.estudo.cif.real.brl) * $scope.estudo.despesas.total.brl;
+                    produto.estudo_do_produto.total_despesas_integral_brl = (produto.estudo_do_produto.cif.real.brl / $scope.estudo.cif.real.brl) * $scope.estudo.despesas.total.brl;
 
                     // todo: URGENTE !!! Criar mecanismo para impedir divisões por zero.
                     produto.estudo_do_produto.total_despesas_integral_usd = produto.estudo_do_produto.total_despesas_integral_brl / $scope.estudo.cotacao_dolar; // todo: Definir se esta é a melhor forma de calcular este valor.
@@ -679,14 +685,14 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
 
                     // Cálculo do Investimento (total) a ser feito no produto.
                     produto.estudo_do_produto.investimento_brl = (
-                        produto.estudo_do_produto.cif_brl +
+                        produto.estudo_do_produto.cif.declarado.brl +
                         produto.estudo_do_produto.fob_paypal_brl + // já considerando a taxa paypal e o IOF sobre compras internacionais do cartão
                         produto.estudo_do_produto.total_tributos_brl +
                         produto.estudo_do_produto.total_despesas_brl
                     );
 
                     produto.estudo_do_produto.investimento_integral_brl = (
-                        produto.estudo_do_produto.cif_integral_brl +
+                        produto.estudo_do_produto.cif.real.brl +
                         produto.estudo_do_produto.total_tributos_integral_brl +
                         produto.estudo_do_produto.total_despesas_integral_brl
                     );
