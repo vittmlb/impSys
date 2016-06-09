@@ -97,7 +97,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             },
             aliq_icms: 0.16, // todo: Carregar esta informação à partir do objeto despesas.
             tributos: {
-                delarado: {
+                declarado: {
                     ii: {
                         usd: 0,
                         brl: 0
@@ -210,8 +210,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     }
                 },
                 percentual_paypal: 0,
-                
-
                 fob: {
                     declarado: {
                         usd: 0,
@@ -226,7 +224,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                         brl: 0
                     }
                 },
-                
                 cif: {
                     declarado: {
                         usd: 0,
@@ -237,49 +234,84 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                         brl: 0
                     }
                 },
-                // fob_usd: 0,
-                // fob_brl: 0,
-                // fob_paypal_usd: 0,
-                // fob_paypal_brl: 0,
-                // fob_integral_usd: 0,
-                // fob_integral_brl: 0,
                 peso_total: 0,
                 peso_percentual: 0, // Percentual do peso total do produto em relação ao peso de toda a carga.
                 volume_ocupado: 0,
                 volume_ocupado_percentual: 0, // Percentual do volume total ocupado pelo produto em relação ao volume total ocupado do contêiner.
-                frete_maritimo_usd: 0,
-                frete_maritimo_brl: 0,
-                seguro_frete_maritimo_usd: 0,
-                seguro_frete_maritimo_brl: 0,
-                
-                ii_usd: 0,
-                ii_brl: 0,
-                ii_integral_usd: 0,
-                ii_integral_brl: 0,
-                ipi_usd: 0,
-                ipi_brl: 0,
-                ipi_integral_usd: 0,
-                ipi_integral_brl: 0,
-                pis_usd: 0,
-                pis_brl: 0,
-                pis_integral_usd: 0,
-                pis_integral_brl: 0,
-                cofins_usd: 0,
-                cofins_brl: 0,
-                cofins_integral_usd: 0,
-                cofins_integral_brl: 0,
-                icms_usd: 0,
-                icms_brl: 0,
-                icms_integral_usd: 0,
-                icms_integral_brl: 0,
-                total_tributos_usd: 0,
-                total_tributos_brl: 0,
-                total_tributos_integral_usd: 0,
-                total_tributos_integral_brl: 0,
-                total_despesas_usd: 0,
-                total_despesas_brl: 0,
-                total_despesas_integral_usd: 0,
-                total_despesas_integral_brl: 0,
+                frete_maritimo: {
+                    valor: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    seguro: {
+                        usd: 0,
+                        brl: 0
+                    }
+                },
+                tributos: {
+                    declarado: {
+                        ii: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        ipi: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        pis: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        cofins: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        icms: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        total: {
+                            usd: 0,
+                            brl: 0
+                        }
+                    },
+                    real: {
+                        ii: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        ipi: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        pis: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        cofins: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        icms: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        total: {
+                            usd: 0,
+                            brl: 0
+                        }
+                    }
+                },
+                despesas: {
+                    total: {
+                        usd: 0,
+                        brl: 0
+                    }
+                },
+                // total_despesas_usd: 0,
+                // total_despesas_brl: 0,
+                // total_despesas_integral_usd: 0,
+                // total_despesas_integral_brl: 0,
                 investimento_brl: 0,
                 investimento_integral_brl: 0,
                 preco_custo_final_brl: 0,
@@ -313,93 +345,93 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
         function tempCalculaImpostos(produto) {
 
             // Cálculo dos Impostos - II.
-            produto.estudo_do_produto.ii_usd = produto.estudo_do_produto.cif.declarado.usd * produto.impostos.ii;
-            produto.estudo_do_produto.ii_brl = produto.estudo_do_produto.cif.declarado.brl * produto.impostos.ii;
-            produto.estudo_do_produto.ii_integral_usd = produto.estudo_do_produto.cif.real.usd * produto.impostos.ii;
-            produto.estudo_do_produto.ii_integral_brl = produto.estudo_do_produto.cif.real.brl * produto.impostos.ii;
+            produto.estudo_do_produto.tributos.declarado.ii.usd = produto.estudo_do_produto.cif.declarado.usd * produto.impostos.ii;
+            produto.estudo_do_produto.tributos.declarado.ii.brl = produto.estudo_do_produto.cif.declarado.brl * produto.impostos.ii;
+            produto.estudo_do_produto.tributos.real.ii.usd = produto.estudo_do_produto.cif.real.usd * produto.impostos.ii;
+            produto.estudo_do_produto.tributos.real.ii.brl = produto.estudo_do_produto.cif.real.brl * produto.impostos.ii;
 
             // Cálculo dos Impostos - IPI.
-            produto.estudo_do_produto.ipi_usd = (produto.estudo_do_produto.cif.declarado.usd + produto.estudo_do_produto.ii_usd) * produto.impostos.ipi;
-            produto.estudo_do_produto.ipi_brl = (produto.estudo_do_produto.cif.declarado.brl + produto.estudo_do_produto.ii_brl) * produto.impostos.ipi;
-            produto.estudo_do_produto.ipi_integral_usd = (produto.estudo_do_produto.cif.real.usd + produto.estudo_do_produto.ii_integral_usd) * produto.impostos.ipi;
-            produto.estudo_do_produto.ipi_integral_brl = (produto.estudo_do_produto.cif.real.brl + produto.estudo_do_produto.ii_integral_brl) * produto.impostos.ipi;
+            produto.estudo_do_produto.tributos.declarado.ipi.usd = (produto.estudo_do_produto.cif.declarado.usd + produto.estudo_do_produto.tributos.declarado.ii.usd) * produto.impostos.ipi;
+            produto.estudo_do_produto.tributos.declarado.ipi.brl = (produto.estudo_do_produto.cif.declarado.brl + produto.estudo_do_produto.tributos.declarado.ii.brl) * produto.impostos.ipi;
+            produto.estudo_do_produto.tributos.real.ipi.usd = (produto.estudo_do_produto.cif.real.usd + produto.estudo_do_produto.tributos.real.ii.usd) * produto.impostos.ipi;
+            produto.estudo_do_produto.tributos.real.ipi.brl = (produto.estudo_do_produto.cif.real.brl + produto.estudo_do_produto.tributos.real.ii.brl) * produto.impostos.ipi;
 
             // Cálculo dos Impostos - PIS.
-            produto.estudo_do_produto.pis_usd = produto.estudo_do_produto.cif.declarado.usd * produto.impostos.pis;
-            produto.estudo_do_produto.pis_brl = produto.estudo_do_produto.cif.declarado.brl * produto.impostos.pis;
-            produto.estudo_do_produto.pis_integral_usd = produto.estudo_do_produto.cif.real.usd * produto.impostos.pis;
-            produto.estudo_do_produto.pis_integral_brl = produto.estudo_do_produto.cif.real.brl * produto.impostos.pis;
+            produto.estudo_do_produto.tributos.declarado.pis.usd = produto.estudo_do_produto.cif.declarado.usd * produto.impostos.pis;
+            produto.estudo_do_produto.tributos.declarado.pis.brl = produto.estudo_do_produto.cif.declarado.brl * produto.impostos.pis;
+            produto.estudo_do_produto.tributos.real.pis.usd = produto.estudo_do_produto.cif.real.usd * produto.impostos.pis;
+            produto.estudo_do_produto.tributos.real.pis.brl = produto.estudo_do_produto.cif.real.brl * produto.impostos.pis;
 
             // Cálculo dos Impostos - Cofins.
-            produto.estudo_do_produto.cofins_usd = produto.estudo_do_produto.cif.declarado.usd * produto.impostos.cofins;
-            produto.estudo_do_produto.cofins_brl = produto.estudo_do_produto.cif.declarado.brl * produto.impostos.cofins;
-            produto.estudo_do_produto.cofins_integral_usd = produto.estudo_do_produto.cif.real.usd * produto.impostos.cofins;
-            produto.estudo_do_produto.cofins_integral_brl = produto.estudo_do_produto.cif.real.brl * produto.impostos.cofins;
+            produto.estudo_do_produto.tributos.declarado.cofins.usd = produto.estudo_do_produto.cif.declarado.usd * produto.impostos.cofins;
+            produto.estudo_do_produto.tributos.declarado.cofins.brl = produto.estudo_do_produto.cif.declarado.brl * produto.impostos.cofins;
+            produto.estudo_do_produto.tributos.real.cofins.usd = produto.estudo_do_produto.cif.real.usd * produto.impostos.cofins;
+            produto.estudo_do_produto.tributos.real.cofins.brl = produto.estudo_do_produto.cif.real.brl * produto.impostos.cofins;
 
             // Cálculo dos Impostos - ICMS.
-            produto.estudo_do_produto.icms_usd = (((
+            produto.estudo_do_produto.tributos.declarado.icms.usd = (((
                 produto.estudo_do_produto.cif.declarado.usd +
-                produto.estudo_do_produto.ii_usd +
-                produto.estudo_do_produto.ipi_usd +
-                produto.estudo_do_produto.pis_usd +
-                produto.estudo_do_produto.cofins_usd) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
+                produto.estudo_do_produto.tributos.declarado.ii.usd +
+                produto.estudo_do_produto.tributos.declarado.ipi.usd +
+                produto.estudo_do_produto.tributos.declarado.pis.usd +
+                produto.estudo_do_produto.tributos.declarado.cofins.usd) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
             );
 
-            produto.estudo_do_produto.icms_brl = (((
+            produto.estudo_do_produto.tributos.declarado.icms.brl = (((
                 produto.estudo_do_produto.cif.declarado.brl +
-                produto.estudo_do_produto.ii_brl +
-                produto.estudo_do_produto.ipi_brl +
-                produto.estudo_do_produto.pis_brl +
-                produto.estudo_do_produto.cofins_brl) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
+                produto.estudo_do_produto.tributos.declarado.ii.brl +
+                produto.estudo_do_produto.tributos.declarado.ipi.brl +
+                produto.estudo_do_produto.tributos.declarado.pis.brl +
+                produto.estudo_do_produto.tributos.declarado.cofins.brl) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
             );
 
-            produto.estudo_do_produto.icms_integral_usd = (((
+            produto.estudo_do_produto.tributos.real.icms.usd = (((
                 produto.estudo_do_produto.cif.real.usd +
-                produto.estudo_do_produto.ii_integral_usd +
-                produto.estudo_do_produto.ipi_integral_usd +
-                produto.estudo_do_produto.pis_integral_usd +
-                produto.estudo_do_produto.cofins_integral_usd) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
+                produto.estudo_do_produto.tributos.real.ii.usd +
+                produto.estudo_do_produto.tributos.real.ipi.usd +
+                produto.estudo_do_produto.tributos.real.pis.usd +
+                produto.estudo_do_produto.tributos.real.cofins.usd) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
             );
 
-            produto.estudo_do_produto.icms_integral_brl = (((
+            produto.estudo_do_produto.tributos.real.icms.brl = (((
                 produto.estudo_do_produto.cif.real.brl +
-                produto.estudo_do_produto.ii_integral_brl +
-                produto.estudo_do_produto.ipi_integral_brl +
-                produto.estudo_do_produto.pis_integral_brl +
-                produto.estudo_do_produto.cofins_integral_brl) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
+                produto.estudo_do_produto.tributos.real.ii.brl +
+                produto.estudo_do_produto.tributos.real.ipi.brl +
+                produto.estudo_do_produto.tributos.real.pis.brl +
+                produto.estudo_do_produto.tributos.real.cofins.brl) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
             );
 
             // Cálculo do total de tributos.
-            produto.estudo_do_produto.total_tributos_usd = (
-                produto.estudo_do_produto.ii_usd +
-                produto.estudo_do_produto.ipi_usd +
-                produto.estudo_do_produto.pis_usd +
-                produto.estudo_do_produto.cofins_usd +
-                produto.estudo_do_produto.icms_usd
+            produto.estudo_do_produto.tributos.declarado.total.usd = (
+                produto.estudo_do_produto.tributos.declarado.ii.usd +
+                produto.estudo_do_produto.tributos.declarado.ipi.usd +
+                produto.estudo_do_produto.tributos.declarado.pis.usd +
+                produto.estudo_do_produto.tributos.declarado.cofins.usd +
+                produto.estudo_do_produto.tributos.declarado.icms.usd
             );
 
-            produto.estudo_do_produto.total_tributos_brl = (
-                produto.estudo_do_produto.ii_brl +
-                produto.estudo_do_produto.ipi_brl +
-                produto.estudo_do_produto.pis_brl +
-                produto.estudo_do_produto.cofins_brl +
-                produto.estudo_do_produto.icms_brl
+            produto.estudo_do_produto.tributos.declarado.total.brl = (
+                produto.estudo_do_produto.tributos.declarado.ii.brl +
+                produto.estudo_do_produto.tributos.declarado.ipi.brl +
+                produto.estudo_do_produto.tributos.declarado.pis.brl +
+                produto.estudo_do_produto.tributos.declarado.cofins.brl +
+                produto.estudo_do_produto.tributos.declarado.icms.brl
             );
 
-            produto.estudo_do_produto.total_tributos_integral_usd = (
-                produto.estudo_do_produto.ii_integral_usd +
-                produto.estudo_do_produto.ipi_integral_usd +
-                produto.estudo_do_produto.pis_integral_usd +
-                produto.estudo_do_produto.cofins_integral_usd +
-                produto.estudo_do_produto.icms_integral_usd
+            produto.estudo_do_produto.tributos.real.total.usd = (
+                produto.estudo_do_produto.tributos.real.ii.usd +
+                produto.estudo_do_produto.tributos.real.ipi.usd +
+                produto.estudo_do_produto.tributos.real.pis.usd +
+                produto.estudo_do_produto.tributos.real.cofins.usd +
+                produto.estudo_do_produto.tributos.real.icms.usd
             );
 
-            produto.estudo_do_produto.total_tributos_integral_brl = (
-                produto.estudo_do_produto.ii_integral_brl +
-                produto.estudo_do_produto.ipi_integral_brl +
-                produto.estudo_do_produto.pis_integral_brl +
-                produto.estudo_do_produto.cofins_integral_brl +
-                produto.estudo_do_produto.icms_integral_brl
+            produto.estudo_do_produto.tributos.real.total.brl = (
+                produto.estudo_do_produto.tributos.real.ii.brl +
+                produto.estudo_do_produto.tributos.real.ipi.brl +
+                produto.estudo_do_produto.tributos.real.pis.brl +
+                produto.estudo_do_produto.tributos.real.cofins.brl +
+                produto.estudo_do_produto.tributos.real.icms.brl
             );
 
         }
@@ -408,19 +440,19 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
 
             // Update (soma) dos valores dos impostos ao Estudo Geral.
 
-            $scope.estudo.tributos.declarado.ii.brl += produto.estudo_do_produto.ii_brl;
-            $scope.estudo.tributos.declarado.ipi.brl += produto.estudo_do_produto.ipi_brl;
-            $scope.estudo.tributos.declarado.pis.brl += produto.estudo_do_produto.pis_brl;
-            $scope.estudo.tributos.declarado.cofins.brl += produto.estudo_do_produto.cofins_brl;
-            $scope.estudo.tributos.declarado.icms.brl += produto.estudo_do_produto.icms_brl;
-            $scope.estudo.tributos.declarado.total.brl += produto.estudo_do_produto.total_tributos_brl;
+            $scope.estudo.tributos.declarado.ii.brl += produto.estudo_do_produto.tributos.declarado.ii.brl;
+            $scope.estudo.tributos.declarado.ipi.brl += produto.estudo_do_produto.tributos.declarado.ipi.brl;
+            $scope.estudo.tributos.declarado.pis.brl += produto.estudo_do_produto.tributos.declarado.pis.brl;
+            $scope.estudo.tributos.declarado.cofins.brl += produto.estudo_do_produto.tributos.declarado.cofins.brl;
+            $scope.estudo.tributos.declarado.icms.brl += produto.estudo_do_produto.tributos.declarado.icms.brl;
+            $scope.estudo.tributos.declarado.total.brl += produto.estudo_do_produto.tributos.declarado.total.brl;
 
-            $scope.estudo.tributos.real.ii.brl += produto.estudo_do_produto.ii_integral_brl;
-            $scope.estudo.tributos.real.ipi.brl += produto.estudo_do_produto.ipi_integral_brl;
-            $scope.estudo.tributos.real.pis.brl += produto.estudo_do_produto.pis_integral_brl;
-            $scope.estudo.tributos.real.cofins.brl += produto.estudo_do_produto.cofins_integral_brl;
-            $scope.estudo.tributos.real.icms.brl += produto.estudo_do_produto.icms_integral_brl;
-            $scope.estudo.tributos.real.total.brl += produto.estudo_do_produto.total_tributos_integral_brl;
+            $scope.estudo.tributos.real.ii.brl += produto.estudo_do_produto.tributos.real.ii.brl;
+            $scope.estudo.tributos.real.ipi.brl += produto.estudo_do_produto.tributos.real.ipi.brl;
+            $scope.estudo.tributos.real.pis.brl += produto.estudo_do_produto.tributos.real.pis.brl;
+            $scope.estudo.tributos.real.cofins.brl += produto.estudo_do_produto.tributos.real.cofins.brl;
+            $scope.estudo.tributos.real.icms.brl += produto.estudo_do_produto.tributos.real.icms.brl;
+            $scope.estudo.tributos.real.total.brl += produto.estudo_do_produto.tributos.real.total.brl;
 
         }
 
@@ -443,49 +475,81 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 custo_unitario: produto.estudo_do_produto.custo_unitario,
                 fob: {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}, paypal: {usd: 0, brl: 0}},
                 cif: {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}},
-                // fob_usd: 0,
-                // fob_brl: 0,
-                // fob_paypal_usd: 0,
-                // fob_paypal_brl: 0,
-                // fob_integral_usd: 0,
-                // fob_integral_brl: 0,
                 peso_total: 0,
                 peso_percentual: 0, // Percentual do peso total do produto em relação ao peso de toda a carga.
                 volume_ocupado: 0,
                 volume_ocupado_percentual: 0, // Percentual do volume total ocupado pelo produto em relação ao volume total ocupado do contêiner.
-                frete_maritimo_usd: 0,
-                frete_maritimo_brl: 0,
-                seguro_frete_maritimo_usd: 0,
-                seguro_frete_maritimo_brl: 0,
-                
-                ii_usd: 0,
-                ii_brl: 0,
-                ii_integral_usd: 0,
-                ii_integral_brl: 0,
-                ipi_usd: 0,
-                ipi_brl: 0,
-                ipi_integral_usd: 0,
-                ipi_integral_brl: 0,
-                pis_usd: 0,
-                pis_brl: 0,
-                pis_integral_usd: 0,
-                pis_integral_brl: 0,
-                cofins_usd: 0,
-                cofins_brl: 0,
-                cofins_integral_usd: 0,
-                cofins_integral_brl: 0,
-                icms_usd: 0,
-                icms_brl: 0,
-                icms_integral_usd: 0,
-                icms_integral_brl: 0,
-                total_tributos_usd: 0,
-                total_tributos_brl: 0,
-                total_tributos_integral_usd: 0,
-                total_tributos_integral_brl: 0,
-                total_despesas_usd: 0,
-                total_despesas_brl: 0,
-                total_despesas_integral_usd: 0,
-                total_despesas_integral_brl: 0,
+                frete_maritimo: {
+                    valor: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    seguro: {
+                        usd: 0,
+                        brl: 0
+                    }
+                },
+                tributos: {
+                    declarado: {
+                        ii: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        ipi: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        pis: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        cofins: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        icms: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        total: {
+                            usd: 0,
+                            brl: 0
+                        }
+                    },
+                    real: {
+                        ii: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        ipi: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        pis: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        cofins: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        icms: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        total: {
+                            usd: 0,
+                            brl: 0
+                        }
+                    }
+                },
+                despesas: {
+                    total: {
+                        usd: 0,
+                        brl: 0
+                    }
+                },
+
                 investimento_brl: 0,
                 investimento_integral_brl: 0,
                 preco_custo_final_brl: 0,
@@ -665,29 +729,24 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     auxCalculaMedidasDeCadaProduto(produto);
 
                     // Cálculo de Frete Marítimo proporcional.
-                    produto.estudo_do_produto.frete_maritimo_usd = produto.estudo_do_produto.peso_percentual * $scope.estudo.frete_maritimo.valor.usd;
-                    produto.estudo_do_produto.frete_maritimo_brl = produto.estudo_do_produto.frete_maritimo_usd * $scope.estudo.cotacao_dolar;
+                    produto.estudo_do_produto.frete_maritimo.valor.usd = produto.estudo_do_produto.peso_percentual * $scope.estudo.frete_maritimo.valor.usd;
+                    produto.estudo_do_produto.frete_maritimo.valor.brl = produto.estudo_do_produto.frete_maritimo.valor.usd * $scope.estudo.cotacao_dolar;
 
                     // Cálculo de SEGURO de Frete Marítimo proporcional.
-                    produto.estudo_do_produto.seguro_frete_maritimo_usd = produto.estudo_do_produto.peso_percentual * $scope.estudo.frete_maritimo.seguro.usd;
-                    produto.estudo_do_produto.seguro_frete_maritimo_brl = produto.estudo_do_produto.seguro_frete_maritimo_usd * $scope.estudo.cotacao_dolar;
+                    produto.estudo_do_produto.frete_maritimo.seguro.usd = produto.estudo_do_produto.peso_percentual * $scope.estudo.frete_maritimo.seguro.usd;
+                    produto.estudo_do_produto.frete_maritimo.seguro.brl = produto.estudo_do_produto.frete_maritimo.seguro.usd * $scope.estudo.cotacao_dolar;
 
                     // Cálculo CIFs (que é o mesmo que Valor Aduaneiro).
-                    produto.estudo_do_produto.cif.declarado.usd = produto.estudo_do_produto.fob.declarado.usd + produto.estudo_do_produto.frete_maritimo_usd + produto.estudo_do_produto.seguro_frete_maritimo_usd;
+                    produto.estudo_do_produto.cif.declarado.usd = produto.estudo_do_produto.fob.declarado.usd + produto.estudo_do_produto.frete_maritimo.valor.usd + produto.estudo_do_produto.frete_maritimo.seguro.usd;
                     produto.estudo_do_produto.cif.declarado.brl = produto.estudo_do_produto.cif.declarado.usd * $scope.estudo.cotacao_dolar;
-                    produto.estudo_do_produto.cif.real.usd = produto.estudo_do_produto.fob.real.usd + produto.estudo_do_produto.frete_maritimo_usd + produto.estudo_do_produto.seguro_frete_maritimo_usd;
+                    produto.estudo_do_produto.cif.real.usd = produto.estudo_do_produto.fob.real.usd + produto.estudo_do_produto.frete_maritimo.valor.usd + produto.estudo_do_produto.frete_maritimo.seguro.usd;
                     produto.estudo_do_produto.cif.real.brl = produto.estudo_do_produto.cif.real.usd * $scope.estudo.cotacao_dolar;
 
                     tempCalculaImpostos(produto);
 
                     // Cálculo do total de despesas proporcional do produto.
-                    produto.estudo_do_produto.total_despesas_brl = (produto.estudo_do_produto.cif.declarado.brl / $scope.estudo.cif.declarado.brl) * $scope.estudo.despesas.total.brl;
-                    produto.estudo_do_produto.total_despesas_usd = produto.estudo_do_produto.total_despesas_brl / $scope.estudo.cotacao_dolar; // todo: Definir se esta é a melhor forma de calcular este valor.
-                    produto.estudo_do_produto.total_despesas_integral_brl = (produto.estudo_do_produto.cif.real.brl / $scope.estudo.cif.real.brl) * $scope.estudo.despesas.total.brl;
-
-                    // todo: URGENTE !!! Criar mecanismo para impedir divisões por zero.
-                    produto.estudo_do_produto.total_despesas_integral_usd = produto.estudo_do_produto.total_despesas_integral_brl / $scope.estudo.cotacao_dolar; // todo: Definir se esta é a melhor forma de calcular este valor.
-
+                    produto.estudo_do_produto.despesas.total.brl = (produto.estudo_do_produto.cif.declarado.brl / $scope.estudo.cif.declarado.brl) * $scope.estudo.despesas.total.brl;
+                    produto.estudo_do_produto.despesas.total.usd = produto.estudo_do_produto.despesas.total.brl / $scope.estudo.cotacao_dolar; // todo: Definir se esta é a melhor forma de calcular este valor.
 
                     tempUpdateImpostosEstudo(produto);
 
@@ -696,14 +755,14 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     produto.estudo_do_produto.investimento_brl = (
                         produto.estudo_do_produto.cif.declarado.brl +
                         produto.estudo_do_produto.fob.paypal.brl + // já considerando a taxa paypal e o IOF sobre compras internacionais do cartão
-                        produto.estudo_do_produto.total_tributos_brl +
-                        produto.estudo_do_produto.total_despesas_brl
+                        produto.estudo_do_produto.tributos.declarado.total.brl +
+                        produto.estudo_do_produto.despesas.total.brl
                     );
 
                     produto.estudo_do_produto.investimento_integral_brl = (
                         produto.estudo_do_produto.cif.real.brl +
-                        produto.estudo_do_produto.total_tributos_integral_brl +
-                        produto.estudo_do_produto.total_despesas_integral_brl
+                        produto.estudo_do_produto.tributos.real.total.brl +
+                        produto.estudo_do_produto.despesas.total.brl
                     );
 
                     // Update (soma) do total de investimento do Estudo Geral.
