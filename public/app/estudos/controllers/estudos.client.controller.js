@@ -155,11 +155,64 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     usd: 0,
                     brl: 0
                 }, // todo: Não tem qualquer utilidade. Serve apenas para comparar se os cálculos estão corretos. Encontrar nova forma de fazer isso e elimitar isso daqui.
+                aduaneiras: {
+                    usd: 0,
+                    brl: 0
+                },
+                internacionais: { // Despesas originadas no exterior.
+                    compartilhadas: { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
+                        usd: 0,
+                        brl: 0
+                    },
+                    individualizadas: { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
+                        usd: 0,
+                        brl: 0
+                    }
+                },
+                nacionais: {
+                    compartilhadas: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    individualizadas: {
+                        usd: 0,
+                        brl: 0
+                    }
+                },
                 total: {
                     usd: 0,
                     brl: 0
                 }
             },
+            consolidado: {
+                cif: {
+                    declarado: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    real: {
+                        usd: 0,
+                        brl: 0
+                    }
+                },
+                despesas: {
+                    total: {
+                        usd: 0,
+                        brl: 0
+                    }
+                },
+                tributos: {
+                    declarado: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    real: {
+                        usd: 0,
+                        brl: 0
+                    }
+                }
+            },
+
             investimento_brl: 0,
             lucro_brl: 0
         };
