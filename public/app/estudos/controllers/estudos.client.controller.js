@@ -362,6 +362,14 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                         }
                     },
                     despesas: {
+                        aduaneiras: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        internacionais: {
+                            usd: 0,
+                            brl: 0
+                        },
                         total: {
                             usd: 0,
                             brl: 0

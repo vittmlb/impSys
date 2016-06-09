@@ -1,5 +1,4 @@
 <section data-ng-controller="EstudosController" data-ng-init="loadData()">
-    <button class="btn btn-warning handle handle-right" ng-click="toggleSearch()">Mostrar</button>
     <div ng-click="toggleSearch()"></div>
     <div class="drawer drawer-right container" ng-class="{expanded: open, collapsed: !open}">
         <h2>Produtos</h2>
@@ -22,7 +21,14 @@
         </table>
     </div> <!-- Painel com todos os Produtos -->
     <div class="col-xs-9">
-        <h2>Produtos do Estudo</h2>
+        <div class="row">
+            <div class="col-xs-4">
+                <h2>Produtos do Estudo</h2>
+            </div>
+            <div class="col-xs-8">
+                <button style="top: 23px; position: relative" class="btn btn-success handle handle-right" ng-click="toggleSearch()">Adicionar Produto</button>
+            </div>
+        </div>
         <p>Resutados do Estudo</p>
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -35,38 +41,38 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-2">
-                            <label for="inputCotacaoDolar">Dólar: </label>
+                            <label style="font-size: 0.85em" for="inputCotacaoDolar">Dólar: </label>
                             <div class="form-group-sm">
                                 <input type="text" class="form-control input-sm" id="inputCotacaoDolar" data-ng-model="config.cotacao_dolar" ng-change="iniImport()">
                             </div>
                         </div>
                         <div class="col-xs-2">
                             <div class="form-group-sm">
-                                <label for="inputCotacaoDolarPaypal">Dólar Paypal</label>
+                                <label style="font-size: 0.85em" for="inputCotacaoDolarPaypal">Dólar Paypal</label>
                                 <input type="text" class="form-control input-sm" id="inputCotacaoDolarPaypal" data-ng-model="config.cotacao_dolar_paypal" ng-change="iniImport()">
                             </div>
                         </div>
                         <div class="col-xs-2">
                             <div class="form-group-sm">
-                                <label class="" for="inputVolumeCntr20">CBM 20"</label>
+                                <label style="font-size: 0.85em" class="" for="inputVolumeCntr20">CBM 20"</label>
                                 <input type="text" class="form-control input-sm" id="inputVolumeCntr20" data-ng-model="config.volume_cntr_20" ng-change="iniImport()">
                             </div>
                         </div>
                         <div class="col-xs-2">
                             <div class="form-group-sm">
-                                <label for="inputIofCartao">IOF Cartão</label>
+                                <label style="font-size: 0.85em" for="inputIofCartao">IOF Cartão</label>
                                 <input type="text" class="form-control input-sm" id="inputIofCartao" data-ng-model="config.iof_cartao" ng-change="iniImport()">
                             </div>
                         </div>
                         <div class="col-xs-2">
                             <div class="form-group-sm">
-                                <label for="inputTaxaPaypal">Taxa Paypal</label>
+                                <label style="font-size: 0.85em" for="inputTaxaPaypal">Taxa Paypal</label>
                                 <input type="text" class="form-control input-sm" id="inputTaxaPaypal" data-ng-model="config.taxa_paypal" ng-change="iniImport()">
                             </div>
                         </div>
                         <div class="col-xs-2">
                             <div class="form-group-sm">
-                                <label for="inputFreteMaritimoUsd">Frete Marítimo (usd)</label>
+                                <label style="font-size: 0.85em" for="inputFreteMaritimoUsd">Frete Marítimo (usd)</label>
                                 <input type="text" class="form-control input-sm" id="inputFreteMaritimoUsd" data-ng-model="config.frete_maritimo_usd" ng-change="iniImport()">
                             </div>
                         </div>
@@ -74,26 +80,26 @@
                     <br>
                     <div class="row">
                         <div class="col-xs-2">
-                            <label for="inputComissaoML">Comissão ML: </label>
-                            <div class="form-group-sm">
+                            <div class="form-group form-group-sm">
+                                <label style="font-size: 0.85em" class="control-label" for="inputComissaoML">Comissão ML: </label>
                                 <input type="text" class="form-control input-sm" id="inputComissaoML" data-ng-model="config.comissao_ml" ng-change="iniImport()">
                             </div>
                         </div>
                         <div class="col-xs-2">
-                            <label for="inputAliquotaSimples">Alíquota Simples: </label>
                             <div class="form-group-sm">
+                                <label style="font-size: 0.85em" for="inputAliquotaSimples">Alíquota Simples: </label>
                                 <input type="text" class="form-control input-sm" id="inputAliquotaSimples" data-ng-model="config.aliquota_simples" ng-change="iniImport()">
                             </div>
                         </div>
                         <div class="col-xs-2">
                             <div class="form-group-sm">
-                                <label for="inputSeguroFreteMaritimoUsd">Seg. Frete. Mar. USD:</label>
+                                <label style="font-size: 0.85em" for="inputSeguroFreteMaritimoUsd">Seg. Frete. Mar. USD:</label>
                                 <input type="text" class="form-control input-sm" id="inputSeguroFreteMaritimoUsd" data-ng-model="config.seguro_frete_maritimo_usd" ng-change="iniImport()">
                             </div>
                         </div>
                         <div class="col-xs-2">
                             <div class="form-group-sm">
-                                <label for="inputPercentualComissaoConny">% Comissão Conny:</label>
+                                <label style="font-size: 0.85em" for="inputPercentualComissaoConny">% Comissão Conny:</label>
                                 <input type="text" class="form-control input-sm" id="inputPercentualComissaoConny" data-ng-model="config.percentual_comissao_conny" ng-change="iniImport()">
                             </div>
                         </div>
@@ -101,7 +107,7 @@
                 </div>
             </div>
         </div>
-        <table class="table table-striped">
+        <table class="table table-striped" id="tabelaProdutosDoEstudo">
             <thead>
             <tr>
                 <th>Produto</th>
@@ -117,7 +123,7 @@
             </thead>
             <tbody>
             <tr data-ng-repeat="itemEstudo in produtosDoEstudo">
-                <td data-ng-bind="itemEstudo.nome"></td>
+                <td><span>{{itemEstudo.nome}}</span>&nbsp&nbsp&nbsp&nbsp<span><i class="fa fa-file-text clickable" aria-hidden="true"></i></span></td>
                 <td data-ng-bind="itemEstudo.custo_usd | currency: 'U$ '"></td>
                 <td>
                     <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_paypal" ng-model="itemEstudo.estudo_do_produto.custo_unitario.paypal.usd" ng-change="calculaCustoPaypal(itemEstudo, 'custo_paypal')">
@@ -138,7 +144,7 @@
                     <input type="text" class="form-control input-transparente" placeholder="P.Venda (R$)" data-ng-model="itemEstudo.estudo_do_produto.preco_venda_brl" ng-change="iniImport()">
                 </td>
                 <td>
-                    <i ng-click="removeProdutoEstudo(itemEstudo)" class="fa fa-times clickable"  aria-hidden="true"></i>
+                    <i data-toggle="tooltip" data-placement="right" title="Remover produto"  ng-click="removeProdutoEstudo(itemEstudo)" class="fa fa-times clickable"  aria-hidden="true"></i>
                 </td>
 
             </tr>
