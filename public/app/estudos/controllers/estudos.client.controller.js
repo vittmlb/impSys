@@ -160,8 +160,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     brl: 0
                 }
             },
-
-
             investimento_brl: 0,
             lucro_brl: 0
         };
@@ -234,10 +232,18 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                         brl: 0
                     }
                 },
-                peso_total: 0,
-                peso_percentual: 0, // Percentual do peso total do produto em relação ao peso de toda a carga.
-                volume_ocupado: 0,
-                volume_ocupado_percentual: 0, // Percentual do volume total ocupado pelo produto em relação ao volume total ocupado do contêiner.
+                medidas: {
+                    peso: {
+                        contratado: 0, // Por enquanto não vou usar esse valor > Só será usado quando importar um produto muito pesado.
+                        ocupado: 0,
+                        ocupado_percentual: 0 // Por enquanto não vou usar esse valor > Só será usado quando importar um produto muito pesado.
+                    },
+                    volume: {
+                        contratado: 0, // todo: Volume do Cntr escolhido para fazer o transporte da carga. Encontrar uma solução melhor para quando for trabalhar com outros volumes.
+                        ocupado: 0,
+                        ocupado_percentual: 0
+                    }
+                },
                 frete_maritimo: {
                     valor: {
                         usd: 0,
@@ -308,10 +314,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                         brl: 0
                     }
                 },
-                // total_despesas_usd: 0,
-                // total_despesas_brl: 0,
-                // total_despesas_integral_usd: 0,
-                // total_despesas_integral_brl: 0,
                 investimento_brl: 0,
                 investimento_integral_brl: 0,
                 preco_custo_final_brl: 0,
@@ -475,10 +477,19 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 custo_unitario: produto.estudo_do_produto.custo_unitario,
                 fob: {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}, paypal: {usd: 0, brl: 0}},
                 cif: {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}},
-                peso_total: 0,
-                peso_percentual: 0, // Percentual do peso total do produto em relação ao peso de toda a carga.
-                volume_ocupado: 0,
-                volume_ocupado_percentual: 0, // Percentual do volume total ocupado pelo produto em relação ao volume total ocupado do contêiner.
+                medidas: {
+                    peso: {
+                        contratado: 0, // Por enquanto não vou usar esse valor > Só será usado quando importar um produto muito pesado.
+                        ocupado: 0,
+                        ocupado_percentual: 0 // Por enquanto não vou usar esse valor > Só será usado quando importar um produto muito pesado.
+                    },
+                    volume: {
+                        contratado: 0, // todo: Volume do Cntr escolhido para fazer o transporte da carga. Encontrar uma solução melhor para quando for trabalhar com outros volumes.
+                        ocupado: 0,
+                        ocupado_percentual: 0
+                    }
+                },
+
                 frete_maritimo: {
                     valor: {
                         usd: 0,
@@ -729,11 +740,11 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     auxCalculaMedidasDeCadaProduto(produto);
 
                     // Cálculo de Frete Marítimo proporcional.
-                    produto.estudo_do_produto.frete_maritimo.valor.usd = produto.estudo_do_produto.peso_percentual * $scope.estudo.frete_maritimo.valor.usd;
+                    produto.estudo_do_produto.frete_maritimo.valor.usd = produto.estudo_do_produto.medidas.peso.ocupado_percentual * $scope.estudo.frete_maritimo.valor.usd;
                     produto.estudo_do_produto.frete_maritimo.valor.brl = produto.estudo_do_produto.frete_maritimo.valor.usd * $scope.estudo.cotacao_dolar;
 
                     // Cálculo de SEGURO de Frete Marítimo proporcional.
-                    produto.estudo_do_produto.frete_maritimo.seguro.usd = produto.estudo_do_produto.peso_percentual * $scope.estudo.frete_maritimo.seguro.usd;
+                    produto.estudo_do_produto.frete_maritimo.seguro.usd = produto.estudo_do_produto.medidas.peso.ocupado_percentual * $scope.estudo.frete_maritimo.seguro.usd;
                     produto.estudo_do_produto.frete_maritimo.seguro.brl = produto.estudo_do_produto.frete_maritimo.seguro.usd * $scope.estudo.cotacao_dolar;
 
                     // Cálculo CIFs (que é o mesmo que Valor Aduaneiro).
@@ -792,12 +803,12 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             else
             {
                 // Cálculo das medidas > Peso e Volume totais do produto.
-                produto.estudo_do_produto.peso_total = produto.medidas.peso * produto.estudo_do_produto.qtd;
-                produto.estudo_do_produto.volume_ocupado = produto.medidas.cbm * produto.estudo_do_produto.qtd;
+                produto.estudo_do_produto.medidas.peso.ocupado = produto.medidas.peso * produto.estudo_do_produto.qtd;
+                produto.estudo_do_produto.medidas.volume.ocupado = produto.medidas.cbm * produto.estudo_do_produto.qtd;
 
                 // Cálculo dos percentuais > Peso e Volume proporcionais do produto
-                produto.estudo_do_produto.peso_percentual = produto.estudo_do_produto.peso_total / $scope.estudo.medidas.peso.ocupado;
-                produto.estudo_do_produto.volume_ocupado_percentual = produto.estudo_do_produto.volume_ocupado / $scope.estudo.medidas.volume.ocupado;
+                produto.estudo_do_produto.medidas.peso.ocupado_percentual = produto.estudo_do_produto.medidas.peso.ocupado / $scope.estudo.medidas.peso.ocupado;
+                produto.estudo_do_produto.medidas.volume.ocupado_percentual = produto.estudo_do_produto.medidas.volume.ocupado / $scope.estudo.medidas.volume.ocupado;
             }
 
         }
