@@ -106,23 +106,18 @@
             <tr>
                 <th>Produto</th>
                 <th>Custo</th>
-                <th>% Paypal</th>
                 <th>C.Paypal</th>
                 <th>C.Dentro</th>
                 <th>Qtd</th>
                 <th>Fob</th>
                 <th>C.Final</th>
                 <th>P.Venda</th>
-                <th>Opções</th>
             </tr>
             </thead>
             <tbody>
             <tr data-ng-repeat="itemEstudo in produtosDoEstudo">
                 <td data-ng-bind="itemEstudo.nome"></td>
                 <td data-ng-bind="itemEstudo.custo_usd | currency: 'U$ '"></td>
-                <td>
-                    <input type="text" class="form-control input-transparente text-center" placeholder="%" name="percentual_paypal" ng-model="itemEstudo.estudo_do_produto.percentual_paypal" ng-change="calculaCustoPaypal(itemEstudo, 'percentual_paypal')">
-                </td>
                 <td>
                     <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_paypal" ng-model="itemEstudo.estudo_do_produto.custo_unitario.paypal.usd" ng-change="calculaCustoPaypal(itemEstudo, 'custo_paypal')">
                 </td>
@@ -140,9 +135,6 @@
                 </td>
                 <td>
                     <input type="text" class="form-control input-transparente" placeholder="P.Venda (R$)" data-ng-model="itemEstudo.estudo_do_produto.preco_venda_brl" ng-change="iniImport()">
-                </td>
-                <td>
-                    <button class="btn btn-default btn-sm" type="button" data-toggle="tbcollapse" data-target="#extproduto" aria-expanded="false" aria-controls="extproduto"><i class="glyphicon glyphicon-chevron-down"></i></button>
                 </td>
 
             </tr>

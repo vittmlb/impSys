@@ -260,7 +260,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                         brl: 0
                     }
                 },
-                percentual_paypal: 0,
                 fob: {
                     declarado: {
                         usd: 0,
@@ -384,15 +383,10 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
         };
 
         $scope.calculaCustoPaypal = function(produto, nomeCampo) {
-            if(nomeCampo === 'percentual_paypal') {
-                produto.estudo_do_produto.custo_unitario.paypal.usd = produto.custo_usd * produto.estudo_do_produto.percentual_paypal;
+            if(nomeCampo === 'custo_paypal') {
                 produto.estudo_do_produto.custo_unitario.declarado.usd = produto.custo_usd - produto.estudo_do_produto.custo_unitario.paypal.usd;
-            } else if(nomeCampo === 'custo_paypal') {
-                produto.estudo_do_produto.custo_unitario.declarado.usd = produto.custo_usd - produto.estudo_do_produto.custo_unitario.paypal.usd;
-                produto.estudo_do_produto.percentual_paypal = produto.estudo_do_produto.custo_unitario.paypal.usd / produto.custo_usd;
             } else {
                 produto.estudo_do_produto.custo_unitario.paypal.usd = produto.custo_usd - produto.estudo_do_produto.custo_unitario.declarado.usd;
-                produto.estudo_do_produto.percentual_paypal = produto.estudo_do_produto.custo_unitario.paypal.usd / produto.custo_usd;
             }
             $scope.iniImport();
         };
@@ -526,7 +520,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
         function zeraDadosEstudoDoProduto(produto) {
             produto.estudo_do_produto = {
                 qtd: 0,
-                percentual_paypal: produto.estudo_do_produto.percentual_paypal,
                 custo_unitario: produto.estudo_do_produto.custo_unitario,
                 fob: {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}, paypal: {usd: 0, brl: 0}},
                 cif: {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}},
