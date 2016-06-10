@@ -54,6 +54,8 @@ exports.update = function(req, res) {
     produto.ncm = req.body.ncm;
     produto.impostos = req.body.impostos;
     produto.medidas = req.body.medidas;
+    produto.website = req.body.website;
+    produto.notas = req.body.notas;
     produto.save(function (err, produto) {
         if(err) {
             return res.status(400).send({

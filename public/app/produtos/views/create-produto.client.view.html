@@ -8,6 +8,7 @@
                 <li class="active"><a data-toggle="tab" href="#principal">Principal</a></li>
                 <li><a data-toggle="tab" href="#impostos">Impostos</a></li>
                 <li><a data-toggle="tab" href="#medidas">Medidas</a></li>
+                <li><a data-toggle="tab" href="#notas">Notas</a></li>
             </ul>
 
             <div class="tab-content">
@@ -18,9 +19,19 @@
                             <div class="form-group">
                                 <input type="text" class="form-control" id="inputNome" data-ng-model="nome">
                             </div>
-                            <label for="inputModelo">Modelo:</label>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="inputModelo" data-ng-model="modelo">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label for="inputModelo">Modelo:</label>
+                                        <input type="text" class="form-control" id="inputModelo" data-ng-model="modelo">
+                                    </div>
+                                </div>
+                                <div class="col-xs-9">
+                                    <div class="form-group">
+                                        <label for="inputWebsite">Website:</label>
+                                        <input type="text" class="form-control" id="inputWebsite" data-ng-model="website">
+                                    </div>
+                                </div>
                             </div>
                             <label for="inputDescricao">Descrição:</label>
                             <div class="form-group">
@@ -33,7 +44,7 @@
                         </div>
                 </div>
                 <div id="impostos" class="tab-pane fade">
-                    <h3>Dados sobre Impostos</h3>
+                    <h3>Dados sobre Impostos</h3><br/>
                     <div class="">
                         <label for="inputNcm">N.C.M:</label>
                         <div class="form-group">
@@ -58,7 +69,7 @@
                     </div>
                 </div>
                 <div id="medidas" class="tab-pane fade">
-                    <h3>Medidas</h3>
+                    <h3>Medidas</h3><br/>
                     <label for="inputCbm">CBM</label>
                     <div class="form-group">
                         <input type="text" class="form-control" id="inputCbm" data-ng-model="medidas.cbm">
@@ -66,6 +77,13 @@
                     <label for="inputPeso">Peso</label>
                     <div class="form-group">
                         <input type="text" class="form-control" id="inputPeso" data-ng-model="medidas.peso">
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="notas">
+                    <h3>Notas</h3><br>
+                    <div class="form-group">
+                        <textarea class="form-control" name="inputNotas" id="inputNotas" cols="30" rows="10"
+                                  placeholder="Dados e observações sobre o produto" data-ng-model="notas"></textarea>
                     </div>
                 </div>
             </div>

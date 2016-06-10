@@ -45,6 +45,15 @@ var ProdutoSchema = new Schema({
     medidas: {
         cbm: Number,
         peso: Number
+    },
+    website: {
+        type: String,
+        default: '',
+        trim: true
+    },
+    notas: {
+        type: String,
+        default: ''
     }
 });
 
@@ -55,15 +64,3 @@ ProdutoSchema.set('toJSON', {
 
 mongoose.model('Produto', ProdutoSchema);
 
-// imposto_importacao: {
-//     type: Number
-// },
-// imposto_ipi: {
-//     type: Number
-// },
-// imposto_pis: {
-//     type: Number
-// },
-// imposto_cofins: {
-//     type: Number
-// },

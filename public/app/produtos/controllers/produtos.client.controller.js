@@ -19,7 +19,9 @@ angular.module('produtos').controller('ProdutosController', ['$scope', '$routePa
                 medidas: {
                     cbm: this.medidas.cbm,
                     peso: this.medidas.peso
-                }
+                },
+                website: this.website,
+                notas: this.notas
             });
             produto.$save(function (response) {
                 $location.path('/produtos/' + response._id); // todo: Tentar usar o $state.go()
