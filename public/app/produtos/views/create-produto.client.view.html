@@ -5,14 +5,14 @@
         <form data-ng-submit="create()" novalidate>
         <div class="container">
             <ul class="nav nav-tabs">
-                <li><a data-toggle="tab" href="#principal">Principal</a></li>
+                <li class="active"><a data-toggle="tab" href="#principal">Principal</a></li>
                 <li><a data-toggle="tab" href="#impostos">Impostos</a></li>
-                <li class="active"><a data-toggle="tab" href="#medidas">Medidas</a></li>
+                <li><a data-toggle="tab" href="#medidas">Medidas</a></li>
                 <li><a data-toggle="tab" href="#notas">Notas</a></li>
             </ul>
 
             <div class="tab-content">
-                <div id="principal" class="tab-pane fade">
+                <div id="principal" class="tab-pane fade in active">
                     <h3>Dados Básicos</h3><br/>
                         <div class="">
                             <label for="inputNome">Nome:</label>
@@ -68,7 +68,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="medidas" class="tab-pane fade in active">
+                <div id="medidas" class="tab-pane fade">
                     <h3>Medidas</h3><br/>
                     <div class="row">
                         <div class="col-xs-3">
