@@ -10,89 +10,79 @@
     <!--<link rel="stylesheet" href="bower_components/bootstrap/dist/css/flatify.css">-->
 </head>
 <body>
+<header>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">impML</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Settings <span class="caret"></span></a>
+                        <!--settings-->
+                        <ul class="dropdown-menu disabled">
+                            <li class="disabled"><a href="#">Settings</a></li>
+                            <li class="disabled"><a href="#">Settings</a></li>
+                        </ul>
+                    </li>
+                    <!-- Despesas -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Despesas <span class="caret"></span></a>
+                        <ul class="dropdown-menu disabled">
+                            <li><a href="#!/despesas">Lista de Despesas</a></li>
+                            <li><a href="#!/despesas/create">Cadastro de Despesas</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Produtos -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Produtos <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#!/produtos">Lista de Produtos</a></li>
+                            <li><a href="#!/produtos/create">Cadastro de Produto</a></li>
+                        </ul>
+                    </li>
+                    <!-- Estudos -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Estudos <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#!/estudos">Estudos</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <!--<nav class="navbar navbar-default">-->
+    <!--<div class="navbar-header">-->
+    <!--<a href="#" class="navbar-brand">impML</a>-->
+    <!--</div>-->
+    <!--<div class="container">-->
+    <!--<ul class="nav navbar-nav">-->
+        <!--{{#if user}}-->
+    <!--<li class="active"><a href="/signout">Sign Out</a></li>-->
+        <!--{{else}}-->
+    <!--<li><a href="/signup">Sign Up</a></li>-->
+    <!--<li><a href="/signin">Sign In</a></li>-->
+    <!--<li><a href="/produtos"></a></li>-->
+        <!--{{/if}}-->
+    <!--</ul>-->
+    <!--</div>-->
+    <!--</nav>-->
+</header>
 <main>
-    <header>
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">impML</a>
-                </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown active">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Settings <span class="caret"></span></a>
-                            <!--settings-->
-                            <ul class="dropdown-menu disabled">
-                                <li class="disabled"><a href="#">Settings</a></li>
-                                <li class="disabled"><a href="#">Settings</a></li>
-                            </ul>
-                        </li>
-                        <!-- Despesas -->
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Despesas <span class="caret"></span></a>
-                            <ul class="dropdown-menu disabled">
-                                <li><a href="#!/despesas">Lista de Despesas</a></li>
-                                <li><a href="#!/despesas/create">Cadastro de Despesas</a></li>
-                            </ul>
-                        </li>
-
-                        <!-- Produtos -->
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Produtos <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#!/produtos">Lista de Produtos</a></li>
-                                <li><a href="#!/produtos/create">Cadastro de Produto</a></li>
-                            </ul>
-                        </li>
-                        <!-- Estudos -->
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Estudos <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#!/estudos">Estudos</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
-        </nav>
-        <!--<nav class="navbar navbar-default">-->
-            <!--<div class="navbar-header">-->
-                <!--<a href="#" class="navbar-brand">impML</a>-->
-            <!--</div>-->
-            <!--<div class="container">-->
-                <!--<ul class="nav navbar-nav">-->
-                    <!--{{#if user}}-->
-                        <!--<li class="active"><a href="/signout">Sign Out</a></li>-->
-                    <!--{{else}}-->
-                        <!--<li><a href="/signup">Sign Up</a></li>-->
-                        <!--<li><a href="/signin">Sign In</a></li>-->
-                        <!--<li><a href="/produtos"></a></li>-->
-                    <!--{{/if}}-->
-                <!--</ul>-->
-            <!--</div>-->
-        <!--</nav>-->
-    </header>
-    {{#each messages}}
-        <div class="alert alert-warning alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            {{this}}
-        </div>
-    {{/each}}
-    {{{body}}}
     <toast></toast>
-    <section>
-        <section ui-view>
-        </section>
-    </section>
+    <section ui-view></section>
 </main>
 
 <footer>
@@ -112,6 +102,10 @@
 
 <!--Plugins-->
 <script src="https://use.fontawesome.com/f474efa969.js"></script>
+
+<!--AngularJS File Upload-->
+<script src="bower_components/ng-file-upload/ng-file-upload-shim.js"></script>
+<script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
 
 
 <!--Scripts - Produtos -->

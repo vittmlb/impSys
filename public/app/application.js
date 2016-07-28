@@ -3,7 +3,19 @@
  */
 
 var mainAppModuleName = 'impsys';
-var mainAppModule = angular.module(mainAppModuleName, ['ngResource', 'ngRoute', 'produtos', 'despesas', 'estudos', 'despesas', 'ngToast', 'ui.router', 'ngAnimate', 'ui.bootstrap']);
+var mainAppModule = angular.module(mainAppModuleName, [
+    'ngResource',
+    'ngRoute',
+    'produtos',
+    'despesas',
+    'estudos',
+    'despesas',
+    'ngToast',
+    'ui.router',
+    'ngAnimate',
+    'ui.bootstrap',
+    'ngFileUpload'
+]);
 //todo: Ver se dá pra tirar o ui.router daí.
 
 mainAppModule.config(['$locationProvider', function($locationProvider) {

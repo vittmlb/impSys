@@ -2,7 +2,7 @@
     <div class="container">
         <h2>Cadastro de Produto</h2>
         <hr>
-        <form data-ng-submit="create()" novalidate>
+        <form data-ng-submit="create()" novalidate name="form">
         <div class="container">
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#principal">Principal</a></li>
@@ -14,9 +14,31 @@
             <div class="tab-content">
                 <div id="principal" class="tab-pane fade in active">
                     <h3>Dados Básicos</h3><br/>
-                        <div class="">
-                            <label for="inputNome">Nome:</label>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <img ngf-drop ng-model="file" style="width: 150px; margin: 5px 0 25px 0; border: 1px solid lightgray;" ng-show="!!file" ngf-thumbnail="file || 'uploads/images/no-thumb.png'">
                             <div class="form-group">
+                                <input
+                                        type="image"
+                                        ngf-select
+                                        ng-model="file"
+                                        name="file"
+                                        ngf-pattern="'image/*'"
+                                        accept="image/*"
+                                        ngf-max-size="20MB"
+                                />
+                                <i ng-show="form.file.$error.required">*required</i><br>
+                                <i ng-show="form.file.$error.maxSize">File too large
+                                    {{file.size / 1000000|number:1}}MB: max 20M</i>
+                                <!--  Multiple files
+                                 <div class="button" ngf-select ng-model="up.files" ngf-multiple="true">Select</div>
+                                 Drop files: <div ngf-drop ng-model="up.files" class="drop-box">Drop</div> -->
+                                <!--<p>{{up.progress}}</p>-->
+                            </div>
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="form-group">
+                                <label for="inputNome">Nome:</label>
                                 <input type="text" class="form-control" id="inputNome" data-ng-model="nome">
                             </div>
                             <div class="row">
@@ -33,6 +55,10 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                        <div class="">
+
                             <label for="inputDescricao">Descrição:</label>
                             <div class="form-group">
                                 <input type="text" class="form-control" id="inputDescricao" data-ng-model="descricao">
@@ -147,7 +173,7 @@
         </div>
             <div class="container">
                 <br>
-                <input type="submit" class="btn btn-info" value="Cadastrar">
+                <input type="submit" class="btn btn-info pull-right" value="Cadastrar">
             </div>
         </form>
     </div>

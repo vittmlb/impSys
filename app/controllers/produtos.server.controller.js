@@ -2,6 +2,9 @@
  * Created by Vittorio on 30/05/2016.
  */
 var Produtos = require('mongoose').model('Produto');
+var fs = require('fs');
+var gutil = require('gulp-util');
+var path = require('path');
 
 exports.create = function(req, res) {
     var produto = new Produtos(req.body);
@@ -34,12 +37,14 @@ exports.read = function(req, res) {
 
 exports.delete = function(req, res) {
     var produto = req.produto;
+    var img_url = produto.img_url;
     produto.remove(function (err) {
         if(err) {
             return res.status(400).send({
                 message: err
             });
         } else {
+            removeImageFile(img_url);
             res.json(produto);
         }
     });
@@ -56,6 +61,7 @@ exports.update = function(req, res) {
     produto.medidas = req.body.medidas;
     produto.website = req.body.website;
     produto.notas = req.body.notas;
+    produto.img_url = req.body.img_url;
     produto.save(function (err, produto) {
         if(err) {
             return res.status(400).send({
@@ -75,3 +81,19 @@ exports.findById = function(req, res, next, id) {
         next();
     });
 };
+
+function removeImageFile(filePath) {
+    if(path.basename(filePath) !== 'no-thumb.png') { // Testa para não apagar a imagem default - no-thumb
+        filePath = path.join(__dirname, '../', filePath);
+        fs.exists(filePath, function(exists) {
+            if(exists) {
+                //Show in green
+                console.log(gutil.colors.green('Image file exists. Deleting now ...'));
+                fs.unlink(filePath);
+            } else {
+                //Show in red
+                console.log(gutil.colors.red('File not found, so not deleting.'));
+            }
+        });
+    }
+}
