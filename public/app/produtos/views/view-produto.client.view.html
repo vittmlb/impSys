@@ -5,6 +5,9 @@
             <a href="#!/produtos/{{produto._id}}/edit" class="btn btn-warning btn-xs btn-round"><span class="glyphicon glyphicon-pencil"></span></a>
             <button class="btn btn-danger btn-xs btn-round" data-ng-click="delete()"><span class="glyphicon glyphicon-trash"></span></button>
             <hr>
+            <figure>
+                <img ng-src="{{produto.img_url}}" alt="image of {{produto.nome}}" style="width: 100px; height: 100px;">
+            </figure>
             <h2 data-ng-bind="produto.nome"></h2>
             <h2 data-ng-bind="produto.modelo"></h2>
             <h3 data-ng-bind="produto.descricao"></h3>

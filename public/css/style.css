@@ -1,4 +1,12 @@
 /* Put your css in here */
+
+body {
+}
+
+footer {
+    height: 200px;
+}
+
 .icon-search:before {
     content:"\f002";
 }

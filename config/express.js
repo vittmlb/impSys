@@ -39,8 +39,10 @@ module.exports = function() {
     app.set('views', path.join(__dirname, '../app/views'));
     app.set('view engine', 'handlebars');
 
+    // app.set('process.env.uploadsDir', ('/uploads'));
 
     app.use(express.static('./public'));
+    app.use(express.static('./app')); // Abriga as imagens upadas para o servidor.
 
     app.get('/', function (req, res) {
         res.render('teste');
@@ -48,6 +50,7 @@ module.exports = function() {
 
     require('../app/routes/produtos.server.routes.js')(app);
     require('../app/routes/despesas.server.routes.js')(app);
+    require('../app/routes/upload-files.server.routes')(app);
     
     return app;
 

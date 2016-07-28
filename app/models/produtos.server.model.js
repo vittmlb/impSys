@@ -54,6 +54,10 @@ var ProdutoSchema = new Schema({
     notas: {
         type: String,
         default: ''
+    },
+    img_url: {
+        type: String,
+        default: '/uploads/images/no-thumb.png'
     }
 });
 
