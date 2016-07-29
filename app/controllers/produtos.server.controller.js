@@ -52,6 +52,10 @@ exports.delete = function(req, res) {
 
 exports.update = function(req, res) {
     var produto = req.produto;
+    var img_url_deletion = false;
+    if(produto.img_url !== req.body.img_url) {
+        img_url_deletion = produto.img_url;
+    }
     produto.nome = req.body.nome;
     produto.modelo = req.body.modelo;
     produto.descricao = req.body.descricao;
@@ -68,6 +72,9 @@ exports.update = function(req, res) {
                 message: err
             });
         } else {
+            if(img_url_deletion) {
+                removeImageFile(img_url_deletion);
+            }
             res.json(produto);
         }
     });

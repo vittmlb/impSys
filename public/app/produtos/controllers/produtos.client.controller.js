@@ -57,26 +57,26 @@ angular.module('produtos').controller('ProdutosController', ['$scope', '$routePa
         };
 
         $scope.create = function() {
-            // var produto = new Produtos({
-            //     nome: this.nome,
-            //     modelo: this.modelo,
-            //     descricao: this.descricao,
-            //     custo_usd: this.custo_usd,
-            //     ncm: this.ncm,
-            //     impostos: {
-            //         ii: this.impostos.ii,
-            //         ipi: this.impostos.ipi,
-            //         pis: this.impostos.pis,
-            //         cofins: this.impostos.cofins
-            //     },
-            //     medidas: {
-            //         cbm: this.medidas.cbm,
-            //         peso: this.medidas.peso
-            //     },
-            //     website: this.website,
-            //     notas: this.notas
-            // });
-            var produto = $scope.mockProduto;
+            var produto = new Produtos({
+                nome: this.nome,
+                modelo: this.modelo,
+                descricao: this.descricao,
+                custo_usd: this.custo_usd,
+                ncm: this.ncm,
+                impostos: {
+                    ii: this.impostos.ii,
+                    ipi: this.impostos.ipi,
+                    pis: this.impostos.pis,
+                    cofins: this.impostos.cofins
+                },
+                medidas: {
+                    cbm: this.medidas.cbm,
+                    peso: this.medidas.peso
+                },
+                website: this.website,
+                notas: this.notas
+            });
+            // var produto = $scope.mockProduto;
             var p = $scope.validateForm(produto); // Validates form and uploads image.
             p.then(function(newProduto) {
                 newProduto.$save(function (response) {
