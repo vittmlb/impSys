@@ -3,7 +3,7 @@
  */
 
 var mainAppModuleName = 'impsys';
-var mainAppModule = angular.module(mainAppModuleName, [
+var mainAppModule = angular.module('impsys', [
     'ngResource',
     'ngRoute',
     'produtos',

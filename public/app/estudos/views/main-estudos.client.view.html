@@ -15,30 +15,27 @@
             <tr data-ng-repeat="item in produtos">
                 <td data-ng-model="item.nome">{{item.nome}}</td>
                 <td data-ng-bind="item.custo_usd | currency: 'U$ '"></td>
-                <td><a ng-click="adicionaProdutoEstudo(item)"><i class="fa fa-plus clickable" aria-hidden="true"></i></i></a></td>
+                <td><a ng-click="adicionaProdutoEstudo(item)"><i class="fa fa-plus clickable" aria-hidden="true"></i></a></td>
             </tr>
             </tbody>
         </table>
     </div> <!-- Painel com todos os Produtos -->
-    <div class="col-xs-9">
-        <div class="row">
-            <div class="col-xs-4">
-                <h2>Produtos do Estudo</h2>
-            </div>
-            <div class="col-xs-8">
-                <button style="top: 23px; position: relative" class="btn btn-success handle handle-right" ng-click="toggleSearch()">Adicionar Produto</button>
-            </div>
+    <div class="row">
+        <div class="col-xs-4">
+            <h2>Produtos do Estudo</h2>
         </div>
-        <p>Resutados do Estudo</p>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Configurações</h3>
-                <a data-toggle="collapse" href="#collapsez">
-                    <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
-                </a>
-            </div>
-            <div id="collapsez" class="panel-collapse collapse in">
-                <div class="panel-body">
+        <div class="col-xs-8">
+            <button style="top: 23px; position: relative" class="btn btn-success handle handle-right" ng-click="toggleSearch()">Adicionar Produto</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-9">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Configurações</h5>
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content">
                     <div class="row">
                         <div class="col-xs-2">
                             <label style="font-size: 0.85em" for="inputCotacaoDolar">Dólar: </label>
@@ -106,175 +103,190 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <table class="table table-striped" id="tabelaProdutosDoEstudo">
-            <thead>
-            <tr>
-                <th>Produto</th>
-                <th>Custo</th>
-                <th>C.Paypal</th>
-                <th>C.Dentro</th>
-                <th>Qtd</th>
-                <th>Fob</th>
-                <th>C.Final</th>
-                <th>P.Venda</th>
-                <th>Opções</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr data-ng-repeat="itemEstudo in produtosDoEstudo">
-                <td><span>{{itemEstudo.nome}}</span>&nbsp&nbsp&nbsp&nbsp<span><i class="fa fa-file-text clickable" aria-hidden="true"></i></span></td>
-                <td data-ng-bind="itemEstudo.custo_usd | currency: 'U$ '"></td>
-                <td>
-                    <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_paypal" ng-model="itemEstudo.estudo_do_produto.custo_unitario.paypal.usd" ng-change="calculaCustoPaypal(itemEstudo, 'custo_paypal')">
-                </td>
-                <td>
-                    <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_dentro" ng-model="itemEstudo.estudo_do_produto.custo_unitario.declarado.usd" ng-change="calculaCustoPaypal(itemEstudo, 'custo_dentro')">
-                </td>
-                <td>
-                    <input type="text" class="form-control input-transparente" placeholder="qtd" data-ng-model="itemEstudo.estudo_do_produto.qtd" ng-change="iniImport()">
-                </td>
-                <td data-ng-bind="itemEstudo.estudo_do_produto.qtd * itemEstudo.custo_usd | currency: 'U$ '" data-ng-show="itemEstudo.estudo_do_produto.qtd">
-
-                </td>
-                <td>
-                    <span data-ng-bind="itemEstudo.estudo_do_produto.preco_custo_final_brl | currency: 'R$ '"></span>
-                </td>
-                <td>
-                    <input type="text" class="form-control input-transparente" placeholder="P.Venda (R$)" data-ng-model="itemEstudo.estudo_do_produto.preco_venda_brl" ng-change="iniImport()">
-                </td>
-                <td>
-                    <i data-toggle="tooltip" data-placement="right" title="Remover produto"  ng-click="removeProdutoEstudo(itemEstudo)" class="fa fa-times clickable"  aria-hidden="true"></i>
-                </td>
-
-            </tr>
-            </tbody>
-        </table>
-    </div> <!-- Tabela com Produtos do Estudo -->
-    <div class="col-xs-3">
-        <h2>Dados do Estudo</h2>
-        <p>Resutados do Estudo</p>
-        <div class="panel-group" id="accordion">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-                            Principal</a>
-                    </h4>
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Tabela de Produtos</h5>
+                    <div ibox-tools></div>
                 </div>
-                <div id="collapse1" class="panel-collapse collapse in">
-                    <div class="panel-body">
-                        <h2>Estudo</h2>
-                        <p>Resutados do Estudo</p>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <uib-progressbar class="progress-striped" value="estudo.medidas.volume.ocupado_percentual" type="warning">{{estudo.medidas.volume.ocupado_percentual}}</uib-progressbar>
+                <div class="ibox-content">
+                    <table class="table table-striped" id="tabelaProdutosDoEstudo">
+                        <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Custo</th>
+                            <th>C.Paypal</th>
+                            <th>C.Dentro</th>
+                            <th>Qtd</th>
+                            <th>Fob</th>
+                            <th>C.Final</th>
+                            <th>P.Venda</th>
+                            <th>Opções</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="itemEstudo in produtosDoEstudo">
+                            <td><span>{{itemEstudo.nome}}</span>&nbsp&nbsp&nbsp&nbsp<span><i class="fa fa-file-text clickable" aria-hidden="true"></i></span></td>
+                            <td data-ng-bind="itemEstudo.custo_usd | currency: 'U$ '"></td>
+                            <td>
+                                <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_paypal" ng-model="itemEstudo.estudo_do_produto.custo_unitario.paypal.usd" ng-change="calculaCustoPaypal(itemEstudo, 'custo_paypal')">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_dentro" ng-model="itemEstudo.estudo_do_produto.custo_unitario.declarado.usd" ng-change="calculaCustoPaypal(itemEstudo, 'custo_dentro')">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-transparente" placeholder="qtd" data-ng-model="itemEstudo.estudo_do_produto.qtd" ng-change="iniImport()">
+                            </td>
+                            <td data-ng-bind="itemEstudo.estudo_do_produto.qtd * itemEstudo.custo_usd | currency: 'U$ '" data-ng-show="itemEstudo.estudo_do_produto.qtd">
+
+                            </td>
+                            <td>
+                                <span data-ng-bind="itemEstudo.estudo_do_produto.preco_custo_final_brl | currency: 'R$ '"></span>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-transparente" placeholder="P.Venda (R$)" data-ng-model="itemEstudo.estudo_do_produto.preco_venda_brl" ng-change="iniImport()">
+                            </td>
+                            <td>
+                                <i data-toggle="tooltip" data-placement="right" title="Remover produto"  ng-click="removeProdutoEstudo(itemEstudo)" class="fa fa-times clickable"  aria-hidden="true"></i>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> <!-- Tabela com Produtos do Estudo -->
+        <div class="col-xs-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Dados do Estudo</h5>
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content">
+                    <p>Resutados do Estudo</p>
+                    <div class="panel-group" id="accordion">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                                        Principal</a>
+                                </h4>
+                            </div>
+                            <div id="collapse1" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <h2>Estudo</h2>
+                                    <p>Resutados do Estudo</p>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <uib-progressbar class="progress-striped" value="estudo.medidas.volume.ocupado_percentual" type="warning">{{estudo.medidas.volume.ocupado_percentual}}</uib-progressbar>
+                                        </div>
+                                    </div>
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Principal</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>Lucro Operação</td>
+                                            <td data-ng-bind="estudo.lucro_brl | currency: 'R$ '"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Investimento</td>
+                                            <td data-ng-bind="estudo.investimento_brl | currency: 'R$ '"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Invest. Integral</td>
+                                            <td data-ng-bind="estudo.investimento_integral_brl | currency: 'R$ '"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Fob</td>
+                                            <td data-ng-bind="estudo.fob.declarado.usd | currency: 'U$ '"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>CIF</td>
+                                            <td data-ng-bind="estudo.cif.declarado.brl | currency: 'R$ '"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peso Total:</td>
+                                            <td data-ng-bind="estudo.medidas.peso.ocupado"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>AFRMM</td>
+                                            <td data-ng-bind="estudo.despesas.afrmm.brl | currency: 'R$ '"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Despesas</td>
+                                            <td data-ng-bind="estudo.despesas.total.brl | currency: 'R$ '"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div> <!-- Painel Principal -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                                        Impostos</a>
+                                </h4>
+                            </div>
+                            <div id="collapse2" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Impostos</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>II</td>
+                                            <td data-ng-bind="estudo.tributos.real.ii.brl | currency: 'R$ '"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>IPI</td>
+                                            <td data-ng-bind="estudo.tributos.real.ipi.brl | currency: 'R$ '"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>PIS</td>
+                                            <td data-ng-bind="estudo.tributos.real.pis.brl | currency: 'R$ '"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cofins</td>
+                                            <td data-ng-bind="estudo.tributos.real.cofins.brl | currency: 'R$ '"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>ICMS</td>
+                                            <td data-ng-bind="estudo.tributos.real.icms.brl | currency: 'R$ '"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Tributos</td>
+                                            <td data-ng-bind="estudo.tributos.real.total.brl | currency: 'R$ '"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div> <!-- Painel Impostos -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                                        Collapsible Group 3</a>
+                                </h4>
+                            </div>
+                            <div id="collapse3" class="panel-collapse collapse">
+                                <div class="panel-body">
+
+                                </div>
                             </div>
                         </div>
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>Principal</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>Lucro Operação</td>
-                                <td data-ng-bind="estudo.lucro_brl | currency: 'R$ '"></td>
-                            </tr>
-                            <tr>
-                                <td>Investimento</td>
-                                <td data-ng-bind="estudo.investimento_brl | currency: 'R$ '"></td>
-                            </tr>
-                            <tr>
-                                <td>Invest. Integral</td>
-                                <td data-ng-bind="estudo.investimento_integral_brl | currency: 'R$ '"></td>
-                            </tr>
-                            <tr>
-                                <td>Fob</td>
-                                <td data-ng-bind="estudo.fob.declarado.usd | currency: 'U$ '"></td>
-                            </tr>
-                            <tr>
-                                <td>CIF</td>
-                                <td data-ng-bind="estudo.cif.declarado.brl | currency: 'R$ '"></td>
-                            </tr>
-                            <tr>
-                                <td>Peso Total:</td>
-                                <td data-ng-bind="estudo.medidas.peso.ocupado"></td>
-                            </tr>
-                            <tr>
-                                <td>AFRMM</td>
-                                <td data-ng-bind="estudo.despesas.afrmm.brl | currency: 'R$ '"></td>
-                            </tr>
-                            <tr>
-                                <td>Despesas</td>
-                                <td data-ng-bind="estudo.despesas.total.brl | currency: 'R$ '"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div> <!-- Painel Principal -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
-                            Impostos</a>
-                    </h4>
-                </div>
-                <div id="collapse2" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>Impostos</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>II</td>
-                                <td data-ng-bind="estudo.tributos.real.ii.brl | currency: 'R$ '"></td>
-                            </tr>
-                            <tr>
-                                <td>IPI</td>
-                                <td data-ng-bind="estudo.tributos.real.ipi.brl | currency: 'R$ '"></td>
-                            </tr>
-                            <tr>
-                                <td>PIS</td>
-                                <td data-ng-bind="estudo.tributos.real.pis.brl | currency: 'R$ '"></td>
-                            </tr>
-                            <tr>
-                                <td>Cofins</td>
-                                <td data-ng-bind="estudo.tributos.real.cofins.brl | currency: 'R$ '"></td>
-                            </tr>
-                            <tr>
-                                <td>ICMS</td>
-                                <td data-ng-bind="estudo.tributos.real.icms.brl | currency: 'R$ '"></td>
-                            </tr>
-                            <tr>
-                                <td>Total Tributos</td>
-                                <td data-ng-bind="estudo.tributos.real.total.brl | currency: 'R$ '"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div> <!-- Painel Impostos -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
-                            Collapsible Group 3</a>
-                    </h4>
-                </div>
-                <div id="collapse3" class="panel-collapse collapse">
-                    <div class="panel-body">
-
                     </div>
                 </div>
             </div>
-        </div>
-    </div> <!-- Dados do Estudo -->
+        </div> <!-- Dados do Estudo -->
+    </div>
 </section>
