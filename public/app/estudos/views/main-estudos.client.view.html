@@ -154,22 +154,6 @@
             </div> <!-- Tabela de Produtos do Estudo -->
             <div class="row">
                 <div class="col-lg-4">
-                    <div class="ibox">
-                        <div class="ibox-content">
-                            <h5>Resultado Produto</h5>
-                            <table class="table table-stripped small m-t-md">
-                                <tbody>
-                                <tr data-ng-repeat="item in produtosDoEstudo | orderBy: 'estudo_do_produto.lucro_unitario_brl': reverse">
-                                    <td class="no-borders">{{item.nome}}</td>
-                                    <td class="no-borders">{{item.estudo_do_produto.lucro_unitario_brl | currency: 'R$ '}}</td>
-                                </tr>
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div> <!-- Resultados por Produto -->
-                <div class="col-lg-4">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <span class="label label-success pull-right">BRL</span>
@@ -178,11 +162,11 @@
                         <div class="ibox-content">
                             <h1 class="no-margins">{{estudo.lucro_brl | currency: 'R$ '}}</h1>
                             <div class="stat-percent font-bold text-success">{{(estudo.lucro_brl/estudo.investimento_brl) * 100 | percent: 2}} <i class="fa fa-bolt"></i></div>
-                            <small>Investimento: {{estudo.investimento_brl | currency: 'R$ '}}</small>
+                            <small>Investimento: {{estudo.resultados.investimento.real.brl | currency: 'R$ '}}</small>
                         </div>
                     </div>
                 </div> <!-- Lucro -->
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <div class="ibox">
                         <div class="ibox-content">
                             <h5>Contêiner</h5>
@@ -195,17 +179,17 @@
                         </div>
                     </div>
                 </div> <!-- Contêiner -->
-                <div class="col-lg-4">
+                <div class="col-lg-5">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <span class="label label-primary pull-right">Today</span>
-                            <h5>Vistits</h5>
+                            <span class="label label-primary pull-right">paypal x oficial</span>
+                            <h5>Comparaçao</h5>
                         </div>
                         <div class="ibox-content">
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h1 class="no-margins">$ 406,42</h1>
+                                    <h1 class="no-margins">$ 23.281.89</h1>
                                     <div class="font-bold text-navy">44% <i class="fa fa-level-up"></i> <small>Rapid pace</small></div>
                                 </div>
                                 <div class="col-md-6">
@@ -221,6 +205,33 @@
             </div> <!-- Widgets do Estudo -->
         </div> <!-- Tabela com Produtos do Estudo -->
         <div class="col-xs-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Resultados</h5>
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-hover no-margins" ng-show="produtosDoEstudo.length">
+                        <thead>
+                        <tr>
+                            <th>Modelo</th>
+                            <th>User</th>
+                            <th>Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="item in produtosDoEstudo | orderBy: 'estudo_do_produto.lucro_unitario_brl'">
+                            <td>
+                                <small>{{item.modelo}}</small>
+                            </td>
+                            <td>{{item.estudo_do_produto.lucro_unitario_brl | currency: 'R$ '}}</td>
+                            <td class="text-navy"><i class="fa fa-level-up"></i> 24%</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div class="col">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">

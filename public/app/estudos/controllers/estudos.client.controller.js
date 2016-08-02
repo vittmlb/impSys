@@ -184,7 +184,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     brl: 0
                 }
             },
-            consolidado: {
+            consolidado: { // Informações consolidadas do estudo para widgets
                 cif: {
                     declarado: {
                         usd: 0,
@@ -202,6 +202,18 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     }
                 },
                 tributos: {
+                    declarado: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    real: {
+                        usd: 0,
+                        brl: 0
+                    }
+                }
+            },
+            resultados: {
+                investimento: {
                     declarado: {
                         usd: 0,
                         brl: 0
@@ -647,11 +659,10 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.estudo.despesas.total.brl = 0;
             $scope.estudo.despesas.afrmm.brl = 0;
 
-            // $scope.estudo.afrmm_brl = 0;
-            // $scope.estudo.total_despesas = 0;
-
             $scope.estudo.medidas.peso = {contratado: 0, ocupado: 0, ocupado_percentual: 0};
             $scope.estudo.medidas.volume = {contratado: 0, ocupado: 0, ocupado_percentual: 0};
+
+            $scope.estudo.resultados.investimento = {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}};
 
             $scope.estudo.investimento_brl = 0;
             $scope.estudo.investimento_integral_brl = 0;
@@ -835,6 +846,8 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     // Update (soma) do total de investimento do Estudo Geral.
                     $scope.estudo.investimento_brl += produto.estudo_do_produto.investimento_brl;
                     $scope.estudo.investimento_integral_brl += produto.estudo_do_produto.investimento_integral_brl;
+
+                    $scope.estudo.resultados.investimento.real.brl += produto.estudo_do_produto.investimento_brl;
 
                     // Cálculo do preço de Custo final do produto.
                     produto.estudo_do_produto.preco_custo_final_brl = produto.estudo_do_produto.investimento_brl / produto.estudo_do_produto.qtd;
