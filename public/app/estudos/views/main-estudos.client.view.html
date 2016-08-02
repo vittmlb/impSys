@@ -21,11 +21,11 @@
         </table>
     </div> <!-- Painel com todos os Produtos -->
     <div class="row">
-        <div class="col-xs-4">
+        <div class="col-xs-3">
             <h2>Produtos do Estudo</h2>
         </div>
         <div class="col-xs-8">
-            <button style="top: 23px; position: relative" class="btn btn-success handle handle-right" ng-click="toggleSearch()">Adicionar Produto</button>
+            <button style="top: 15px; position: relative" class="btn btn-success handle handle-right pull-left" ng-click="toggleSearch()">Adicionar Produto</button>
         </div>
     </div>
     <div class="row">
@@ -152,6 +152,41 @@
                         </tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <h5>Resultado Produto</h5>
+                            <table class="table table-stripped small m-t-md">
+                                <tbody>
+                                <tr data-ng-repeat="item in produtosDoEstudo | orderBy: 'estudo_do_produto.lucro_unitario_brl': reverse">
+                                    <td class="no-borders">
+                                        <i class="fa fa-circle text-navy"></i>
+                                    </td>
+                                    <td class="no-borders">
+                                        {{item.nome}}
+                                    </td>
+                                    <td class="no-borders">
+                                        {{item.estudo_do_produto.lucro_unitario_brl | currency: 'R$ '}}
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <h5>Lucro</h5>
+                            <h1 class="no-margins">{{estudo.lucro_brl | currency: 'R$ '}}</h1>
+                            <div class="stat-percent font-bold text-navy">98% <i class="fa fa-bolt"></i></div>
+                            <small>Investimento: {{estudo.investimento_brl | currency: 'R$ '}}</small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div> <!-- Tabela com Produtos do Estudo -->
