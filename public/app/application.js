@@ -14,7 +14,8 @@ var mainAppModule = angular.module('impsys', [
     'ui.router',
     'ngAnimate',
     'ui.bootstrap',
-    'ngFileUpload'
+    'ngFileUpload',
+    'ui.footable'
 ]);
 //todo: Ver se dá pra tirar o ui.router daí.
 

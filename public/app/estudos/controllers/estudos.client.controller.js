@@ -51,24 +51,24 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 aliquota_simples: 0,
                 percentual_comissao_conny: 0
             },
-            total_comissao_conny_usd: 0,
+            total_comissao_conny_usd: 0, // todo: Implementar comissão Conny
             total_comissao_conny_brl: 0,
             fob: {
-                declarado: {
+                declarado: { // FOB que constará da Invoice, ou seja, será o total declarado para o governo, mas não contemplará o montante enviado por paypal
                     usd: 0,
                     brl: 0
                 },
-                real: {
+                cheio: { // FOB real, como se o processo fosse feito integralmente por dentro (sem paypal)
                     usd: 0,
                     brl: 0
                 }
             },
             cif: {
-                declarado: {
+                declarado: { // CIF que constará da Invoice, ou seja, será o total declarado para o governo, mas não contemplará o montante enviado por paypal
                     usd: 0,
                     brl: 0
                 },
-                real: {
+                cheio: { // CIF real, como se o processo fosse feito integralmente por dentro (sem paypal)
                     usd: 0,
                     brl: 0
                 }
@@ -97,7 +97,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             },
             aliq_icms: 0.16, // todo: Carregar esta informação à partir do objeto despesas.
             tributos: {
-                declarado: {
+                declarado: { // Tributos que constarão da Invoice, ou seja, será o total declarado para o governo, mas não contemplará o montante enviado por paypal
                     ii: {
                         usd: 0,
                         brl: 0
@@ -123,7 +123,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                         brl: 0
                     }
                 },
-                real: {
+                cheio: { // Tributaçao real, como se o processo fosse feito integralmente por dentro (sem paypal). Seria o total de impostos a pagar se não houvesse sonegação
                     ii: {
                         usd: 0,
                         brl: 0
@@ -184,49 +184,33 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     brl: 0
                 }
             },
-            consolidado: { // Informações consolidadas do estudo para widgets
-                cif: {
-                    declarado: {
-                        usd: 0,
-                        brl: 0
-                    },
-                    real: {
-                        usd: 0,
-                        brl: 0
-                    }
-                },
-                despesas: {
-                    total: {
-                        usd: 0,
-                        brl: 0
-                    }
-                },
-                tributos: {
-                    declarado: {
-                        usd: 0,
-                        brl: 0
-                    },
-                    real: {
-                        usd: 0,
-                        brl: 0
-                    }
-                }
-            },
             resultados: {
                 investimento: {
-                    declarado: {
+                    declarado: { // Investimento que constará da Invoice, ou seja, será o total declarado para o governo, mas não contemplará o montante enviado por paypal
                         usd: 0,
                         brl: 0
                     },
-                    real: {
+                    paypal: { // Investimento feito através do paypal
+                        usd: 0,
+                        brl: 0
+                    },
+                    final: { // Montante EFETIVAMENTE desembolsado para a aquisiçao do produto > declarado + paypal
+                        brl: 0
+                    },
+                    cheio: { // Montante que teria sido investido se o processo fosse feito integralmente por dentro (sem paypal)
+                        brl: 0
+                    }
+                },
+                lucro: {
+                    final: { // Lucro real obtido na operação, contemplando os gastos declarados e o total enviado através do paypal
                         usd: 0,
                         brl: 0
                     }
+                },
+                roi: { // ROI: Retorno Sobre Investimento > Lucro BRL / Investimento BRL
+                    brl: 0
                 }
             },
-
-            investimento_brl: 0,
-            lucro_brl: 0
         };
         $scope.config = {
             cotacao_dolar: 0,
@@ -260,25 +244,25 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 produto.estudo_do_produto = {
                     qtd: 0,
                     custo_unitario: {
-                        declarado: {
+                        declarado: { // Custo que constará da Invoice, ou seja, será o custo declarado para o governo, mas não contemplará o montante enviado por paypal
                             usd: produto.custo_usd,
                             brl: 0
                         },
-                        paypal: {
+                        paypal: { // Montante do Custo do produto pago através do paypal
                             usd: 0,
                             brl: 0
                         },
-                        real: {
+                        cheio: { // Montante que teria sido investido se o processo fosse feito integralmente por dentro (sem paypal)
                             usd: produto.custo_usd,
                             brl: 0
                         }
                     },
                     fob: {
-                        declarado: {
+                        declarado: { // FOB que constará da Invoice, ou seja, será o total declarado para o governo, mas não contemplará o montante enviado por paypal
                             usd: 0,
                             brl: 0
                         },
-                        real: {
+                        cheio: { // FOB real, como se o processo fosse feito integralmente por dentro (sem paypal)
                             usd: 0,
                             brl: 0
                         },
@@ -288,11 +272,21 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                         }
                     },
                     cif: {
-                        declarado: {
+                        declarado: { // CIF que constará da Invoice, ou seja, será o total declarado para o governo, mas não contemplará o montante enviado por paypal
                             usd: 0,
                             brl: 0
                         },
-                        real: {
+                        cheio: { // CIF real, como se o processo fosse feito integralmente por dentro (sem paypal)
+                            usd: 0,
+                            brl: 0
+                        }
+                    },
+                    frete_maritimo: {
+                        valor: {
+                            usd: 0,
+                            brl: 0
+                        },
+                        seguro: {
                             usd: 0,
                             brl: 0
                         }
@@ -309,18 +303,8 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                             ocupado_percentual: 0
                         }
                     },
-                    frete_maritimo: {
-                        valor: {
-                            usd: 0,
-                            brl: 0
-                        },
-                        seguro: {
-                            usd: 0,
-                            brl: 0
-                        }
-                    },
                     tributos: {
-                        declarado: {
+                        declarado: { // Tributos que constarão da Invoice, ou seja, será o total declarado para o governo, mas não contemplará o montante enviado por paypal
                             ii: {
                                 usd: 0,
                                 brl: 0
@@ -346,7 +330,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                                 brl: 0
                             }
                         },
-                        real: {
+                        cheio: { // Tributaçao real, como se o processo fosse feito integralmente por dentro (sem paypal). Seria o total de impostos a pagar se não houvesse sonegação
                             ii: {
                                 usd: 0,
                                 brl: 0
@@ -387,13 +371,56 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                             brl: 0
                         }
                     },
-                    investimento_brl: 0,
-                    investimento_integral_brl: 0,
-                    preco_custo_final_brl: 0,
-                    preco_custo_final_integral_brl: 0,
-                    preco_venda_brl: 0,
-                    lucro_unitario_brl: 0,
-                    lucro_total_brl: 0
+                    resultados: {
+                        investimento: { // Campo que designa o somatório dos custos unitários
+                            declarado: { // Investimento que constará da Invoice, ou seja, será o total declarado para o governo, mas não contemplará o montante enviado por paypal
+                                usd: 0,
+                                brl: 0
+                            },
+                            paypal: { // Investimento feito através do paypal
+                                usd: 0,
+                                brl: 0
+                            },
+                            final: { // Montante EFETIVAMENTE desembolsado para a aquisiçao do produto > declarado + paypal
+                                brl: 0
+                            },
+                            cheio: { // Montante que teria sido investido se o processo fosse feito integralmente por dentro (sem paypal)
+                                brl: 0
+                            }
+                        },
+                        lucro: {
+                            unitario: { // Lucro real obtido na venda de CADA produto
+                                brl: 0
+                            },
+                            total: { // Lucro real obtido na venda de TODOS os produtos
+                                brl: 0
+                            },
+                        },
+                        roi: { // ROI: Retorno Sobre Investimento > Lucro BRL / Investimento BRL
+                            brl: 0
+                        },
+                        precos: {
+                            custo: {
+                                declarado: { // Preço de custo unitário baseado apenas no valor declarado - Não incluirá o montante enviado através do paypal
+                                    usd: 0,
+                                    brl: 0
+                                },
+                                paypal: { // Preço de custo unitário baseado apenas no valor enviado através do paypal, bem como nas taxas correspondentes
+                                    usd: 0,
+                                    brl: 0
+                                },
+                                final: { // Preço de custo unitário REAL (valor que o produto efetivamente custou ao final do processo), incluindo o declarado e paypal
+                                    brl: 0
+                                },
+                                cheio: { // Preço de custo unitário do produto se toda a operação fosse feita "por dentro", sem envio de dinheiro pelo paypal
+                                    brl: 0
+                                }
+                            },
+                            venda: {
+                                brl: 0
+                            }
+                        }
+                    },
                 };
                 $scope.produtosDoEstudo.push(produto);
             }
@@ -418,26 +445,26 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             // Cálculo dos Impostos - II.
             produto.estudo_do_produto.tributos.declarado.ii.usd = produto.estudo_do_produto.cif.declarado.usd * produto.impostos.ii;
             produto.estudo_do_produto.tributos.declarado.ii.brl = produto.estudo_do_produto.cif.declarado.brl * produto.impostos.ii;
-            produto.estudo_do_produto.tributos.real.ii.usd = produto.estudo_do_produto.cif.real.usd * produto.impostos.ii;
-            produto.estudo_do_produto.tributos.real.ii.brl = produto.estudo_do_produto.cif.real.brl * produto.impostos.ii;
+            produto.estudo_do_produto.tributos.cheio.ii.usd = produto.estudo_do_produto.cif.cheio.usd * produto.impostos.ii;
+            produto.estudo_do_produto.tributos.cheio.ii.brl = produto.estudo_do_produto.cif.cheio.brl * produto.impostos.ii;
 
             // Cálculo dos Impostos - IPI.
             produto.estudo_do_produto.tributos.declarado.ipi.usd = (produto.estudo_do_produto.cif.declarado.usd + produto.estudo_do_produto.tributos.declarado.ii.usd) * produto.impostos.ipi;
             produto.estudo_do_produto.tributos.declarado.ipi.brl = (produto.estudo_do_produto.cif.declarado.brl + produto.estudo_do_produto.tributos.declarado.ii.brl) * produto.impostos.ipi;
-            produto.estudo_do_produto.tributos.real.ipi.usd = (produto.estudo_do_produto.cif.real.usd + produto.estudo_do_produto.tributos.real.ii.usd) * produto.impostos.ipi;
-            produto.estudo_do_produto.tributos.real.ipi.brl = (produto.estudo_do_produto.cif.real.brl + produto.estudo_do_produto.tributos.real.ii.brl) * produto.impostos.ipi;
+            produto.estudo_do_produto.tributos.cheio.ipi.usd = (produto.estudo_do_produto.cif.cheio.usd + produto.estudo_do_produto.tributos.cheio.ii.usd) * produto.impostos.ipi;
+            produto.estudo_do_produto.tributos.cheio.ipi.brl = (produto.estudo_do_produto.cif.cheio.brl + produto.estudo_do_produto.tributos.cheio.ii.brl) * produto.impostos.ipi;
 
             // Cálculo dos Impostos - PIS.
             produto.estudo_do_produto.tributos.declarado.pis.usd = produto.estudo_do_produto.cif.declarado.usd * produto.impostos.pis;
             produto.estudo_do_produto.tributos.declarado.pis.brl = produto.estudo_do_produto.cif.declarado.brl * produto.impostos.pis;
-            produto.estudo_do_produto.tributos.real.pis.usd = produto.estudo_do_produto.cif.real.usd * produto.impostos.pis;
-            produto.estudo_do_produto.tributos.real.pis.brl = produto.estudo_do_produto.cif.real.brl * produto.impostos.pis;
+            produto.estudo_do_produto.tributos.cheio.pis.usd = produto.estudo_do_produto.cif.cheio.usd * produto.impostos.pis;
+            produto.estudo_do_produto.tributos.cheio.pis.brl = produto.estudo_do_produto.cif.cheio.brl * produto.impostos.pis;
 
             // Cálculo dos Impostos - Cofins.
             produto.estudo_do_produto.tributos.declarado.cofins.usd = produto.estudo_do_produto.cif.declarado.usd * produto.impostos.cofins;
             produto.estudo_do_produto.tributos.declarado.cofins.brl = produto.estudo_do_produto.cif.declarado.brl * produto.impostos.cofins;
-            produto.estudo_do_produto.tributos.real.cofins.usd = produto.estudo_do_produto.cif.real.usd * produto.impostos.cofins;
-            produto.estudo_do_produto.tributos.real.cofins.brl = produto.estudo_do_produto.cif.real.brl * produto.impostos.cofins;
+            produto.estudo_do_produto.tributos.cheio.cofins.usd = produto.estudo_do_produto.cif.cheio.usd * produto.impostos.cofins;
+            produto.estudo_do_produto.tributos.cheio.cofins.brl = produto.estudo_do_produto.cif.cheio.brl * produto.impostos.cofins;
 
             // Cálculo dos Impostos - ICMS.
             produto.estudo_do_produto.tributos.declarado.icms.usd = (((
@@ -456,20 +483,20 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 produto.estudo_do_produto.tributos.declarado.cofins.brl) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
             );
 
-            produto.estudo_do_produto.tributos.real.icms.usd = (((
-                produto.estudo_do_produto.cif.real.usd +
-                produto.estudo_do_produto.tributos.real.ii.usd +
-                produto.estudo_do_produto.tributos.real.ipi.usd +
-                produto.estudo_do_produto.tributos.real.pis.usd +
-                produto.estudo_do_produto.tributos.real.cofins.usd) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
+            produto.estudo_do_produto.tributos.cheio.icms.usd = (((
+                produto.estudo_do_produto.cif.cheio.usd +
+                produto.estudo_do_produto.tributos.cheio.ii.usd +
+                produto.estudo_do_produto.tributos.cheio.ipi.usd +
+                produto.estudo_do_produto.tributos.cheio.pis.usd +
+                produto.estudo_do_produto.tributos.cheio.cofins.usd) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
             );
 
-            produto.estudo_do_produto.tributos.real.icms.brl = (((
-                produto.estudo_do_produto.cif.real.brl +
-                produto.estudo_do_produto.tributos.real.ii.brl +
-                produto.estudo_do_produto.tributos.real.ipi.brl +
-                produto.estudo_do_produto.tributos.real.pis.brl +
-                produto.estudo_do_produto.tributos.real.cofins.brl) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
+            produto.estudo_do_produto.tributos.cheio.icms.brl = (((
+                produto.estudo_do_produto.cif.cheio.brl +
+                produto.estudo_do_produto.tributos.cheio.ii.brl +
+                produto.estudo_do_produto.tributos.cheio.ipi.brl +
+                produto.estudo_do_produto.tributos.cheio.pis.brl +
+                produto.estudo_do_produto.tributos.cheio.cofins.brl) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
             );
 
             // Cálculo do total de tributos.
@@ -489,20 +516,20 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 produto.estudo_do_produto.tributos.declarado.icms.brl
             );
 
-            produto.estudo_do_produto.tributos.real.total.usd = (
-                produto.estudo_do_produto.tributos.real.ii.usd +
-                produto.estudo_do_produto.tributos.real.ipi.usd +
-                produto.estudo_do_produto.tributos.real.pis.usd +
-                produto.estudo_do_produto.tributos.real.cofins.usd +
-                produto.estudo_do_produto.tributos.real.icms.usd
+            produto.estudo_do_produto.tributos.cheio.total.usd = (
+                produto.estudo_do_produto.tributos.cheio.ii.usd +
+                produto.estudo_do_produto.tributos.cheio.ipi.usd +
+                produto.estudo_do_produto.tributos.cheio.pis.usd +
+                produto.estudo_do_produto.tributos.cheio.cofins.usd +
+                produto.estudo_do_produto.tributos.cheio.icms.usd
             );
 
-            produto.estudo_do_produto.tributos.real.total.brl = (
-                produto.estudo_do_produto.tributos.real.ii.brl +
-                produto.estudo_do_produto.tributos.real.ipi.brl +
-                produto.estudo_do_produto.tributos.real.pis.brl +
-                produto.estudo_do_produto.tributos.real.cofins.brl +
-                produto.estudo_do_produto.tributos.real.icms.brl
+            produto.estudo_do_produto.tributos.cheio.total.brl = (
+                produto.estudo_do_produto.tributos.cheio.ii.brl +
+                produto.estudo_do_produto.tributos.cheio.ipi.brl +
+                produto.estudo_do_produto.tributos.cheio.pis.brl +
+                produto.estudo_do_produto.tributos.cheio.cofins.brl +
+                produto.estudo_do_produto.tributos.cheio.icms.brl
             );
 
         }
@@ -518,18 +545,18 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.estudo.tributos.declarado.icms.brl += produto.estudo_do_produto.tributos.declarado.icms.brl;
             $scope.estudo.tributos.declarado.total.brl += produto.estudo_do_produto.tributos.declarado.total.brl;
 
-            $scope.estudo.tributos.real.ii.brl += produto.estudo_do_produto.tributos.real.ii.brl;
-            $scope.estudo.tributos.real.ipi.brl += produto.estudo_do_produto.tributos.real.ipi.brl;
-            $scope.estudo.tributos.real.pis.brl += produto.estudo_do_produto.tributos.real.pis.brl;
-            $scope.estudo.tributos.real.cofins.brl += produto.estudo_do_produto.tributos.real.cofins.brl;
-            $scope.estudo.tributos.real.icms.brl += produto.estudo_do_produto.tributos.real.icms.brl;
-            $scope.estudo.tributos.real.total.brl += produto.estudo_do_produto.tributos.real.total.brl;
+            $scope.estudo.tributos.cheio.ii.brl += produto.estudo_do_produto.tributos.cheio.ii.brl;
+            $scope.estudo.tributos.cheio.ipi.brl += produto.estudo_do_produto.tributos.cheio.ipi.brl;
+            $scope.estudo.tributos.cheio.pis.brl += produto.estudo_do_produto.tributos.cheio.pis.brl;
+            $scope.estudo.tributos.cheio.cofins.brl += produto.estudo_do_produto.tributos.cheio.cofins.brl;
+            $scope.estudo.tributos.cheio.icms.brl += produto.estudo_do_produto.tributos.cheio.icms.brl;
+            $scope.estudo.tributos.cheio.total.brl += produto.estudo_do_produto.tributos.cheio.total.brl;
 
         }
 
         function calculaResultadosPorProduto(produto) {
-            produto.estudo_do_produto.lucro_unitario_brl = (produto.estudo_do_produto.preco_venda_brl * (1 - $scope.estudo.config.aliquota_simples - $scope.estudo.config.comissao_ml)) - produto.estudo_do_produto.preco_custo_final_brl;
-            produto.estudo_do_produto.lucro_total_brl = produto.estudo_do_produto.lucro_unitario_brl * produto.estudo_do_produto.qtd;
+            produto.estudo_do_produto.resultados.lucro.unitario.brl = (produto.estudo_do_produto.resultados.precos.venda.brl * (1 - $scope.estudo.config.aliquota_simples - $scope.estudo.config.comissao_ml)) - produto.estudo_do_produto.resultados.precos.custo.final.brl;
+            produto.estudo_do_produto.resultados.lucro.total.brl = produto.estudo_do_produto.resultados.lucro.unitario.brl * produto.estudo_do_produto.qtd;
         }
 
 
@@ -543,8 +570,8 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             produto.estudo_do_produto = {
                 qtd: 0,
                 custo_unitario: produto.estudo_do_produto.custo_unitario,
-                fob: {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}, paypal: {usd: 0, brl: 0}},
-                cif: {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}},
+                fob: {declarado: {usd: 0, brl: 0}, cheio: {usd: 0, brl: 0}, paypal: {usd: 0, brl: 0}},
+                cif: {declarado: {usd: 0, brl: 0}, cheio: {usd: 0, brl: 0}},
                 medidas: {
                     peso: {
                         contratado: 0, // Por enquanto não vou usar esse valor > Só será usado quando importar um produto muito pesado.
@@ -595,7 +622,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                             brl: 0
                         }
                     },
-                    real: {
+                    cheio: {
                         ii: {
                             usd: 0,
                             brl: 0
@@ -629,13 +656,57 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     }
                 },
 
-                investimento_brl: 0,
-                investimento_integral_brl: 0,
-                preco_custo_final_brl: 0,
-                preco_custo_final_integral_brl: 0,
-                preco_venda_brl: 0,
-                lucro_unitario_brl: 0,
-                lucro_total_brl: 0
+                resultados: {
+                    investimento: { // Campo que designa o somatório dos custos unitários
+                        declarado: { // Investimento que constará da Invoice, ou seja, será o total declarado para o governo, mas não contemplará o montante enviado por paypal
+                            usd: 0,
+                            brl: 0
+                        },
+                        paypal: { // Investimento feito através do paypal
+                            usd: 0,
+                            brl: 0
+                        },
+                        final: { // Montante EFETIVAMENTE desembolsado para a aquisiçao do produto > declarado + paypal
+                            brl: 0
+                        },
+                        cheio: { // Montante que teria sido investido se o processo fosse feito integralmente por dentro (sem paypal)
+                            brl: 0
+                        }
+                    },
+                    lucro: {
+                        unitario: { // Lucro real obtido na venda de CADA produto
+                            brl: 0
+                        },
+                        total: { // Lucro real obtido na venda de TODOS os produtos
+                            brl: 0
+                        },
+                    },
+                    roi: { // ROI: Retorno Sobre Investimento > Lucro BRL / Investimento BRL
+                        brl: 0
+                    },
+                    precos: {
+                        custo: {
+                            declarado: { // Preço de custo unitário baseado apenas no valor declarado - Não incluirá o montante enviado através do paypal
+                                usd: 0,
+                                brl: 0
+                            },
+                            paypal: { // Preço de custo unitário baseado apenas no valor enviado através do paypal, bem como nas taxas correspondentes
+                                usd: 0,
+                                brl: 0
+                            },
+                            final: { // Preço de custo unitário REAL (valor que o produto efetivamente custou ao final do processo), incluindo o declarado e paypal
+                                brl: 0
+                            },
+                            cheio: { // Preço de custo unitário do produto se toda a operação fosse feita "por dentro", sem envio de dinheiro pelo paypal
+                                brl: 0
+                            }
+                        },
+                        venda: {
+                            brl: 0
+                        }
+                    }
+                },
+
             };
         }
 
@@ -646,15 +717,15 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
          */
         function zeraDadosEstudo() {
 
-            $scope.estudo.fob = {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}};
-            $scope.estudo.cif = {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}};
+            $scope.estudo.fob = {declarado: {usd: 0, brl: 0}, cheio: {usd: 0, brl: 0}};
+            $scope.estudo.cif = {declarado: {usd: 0, brl: 0}, cheio: {usd: 0, brl: 0}};
 
-            $scope.estudo.totalPaypal = 0;
-            $scope.estudo.totalPeso = 0;
-            $scope.estudo.volume_ocupado = 0;
+            $scope.estudo.totalPaypal = 0; // todo: Descobrir para que serve
+            $scope.estudo.totalPeso = 0; // todo: Descobrir para que serve
+            $scope.estudo.volume_ocupado = 0; // todo: Descobrir para que serve
 
             $scope.estudo.tributos.declarado = {ii: {usd: 0, brl: 0}, ipi: {usd: 0, brl: 0}, pis: {usd: 0, brl: 0}, cofins: {usd: 0, brl: 0}, icms: {usd: 0, brl: 0}, total: {usd: 0, brl: 0}};
-            $scope.estudo.tributos.real = {ii: {usd: 0, brl: 0}, ipi: {usd: 0, brl: 0}, pis: {usd: 0, brl: 0}, cofins: {usd: 0, brl: 0}, icms: {usd: 0, brl: 0}, total: {usd: 0, brl: 0}};
+            $scope.estudo.tributos.cheio = {ii: {usd: 0, brl: 0}, ipi: {usd: 0, brl: 0}, pis: {usd: 0, brl: 0}, cofins: {usd: 0, brl: 0}, icms: {usd: 0, brl: 0}, total: {usd: 0, brl: 0}};
 
             $scope.estudo.despesas.total.brl = 0;
             $scope.estudo.despesas.afrmm.brl = 0;
@@ -662,11 +733,10 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.estudo.medidas.peso = {contratado: 0, ocupado: 0, ocupado_percentual: 0};
             $scope.estudo.medidas.volume = {contratado: 0, ocupado: 0, ocupado_percentual: 0};
 
-            $scope.estudo.resultados.investimento = {declarado: {usd: 0, brl: 0}, real: {usd: 0, brl: 0}};
+            $scope.estudo.resultados.investimento = {declarado: {usd: 0, brl: 0}, paypal: {usd: 0, brl: 0}, final: {brl: 0}, cheio: {brl: 0}};
+            $scope.estudo.resultados.lucro = {final: {usd: 0, brl: 0}};
+            $scope.estudo.resultados.roi = {brl: 0};
 
-            $scope.estudo.investimento_brl = 0;
-            $scope.estudo.investimento_integral_brl = 0;
-            $scope.estudo.lucro_brl = 0;
         }
 
         // 2
@@ -714,8 +784,8 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     produto.estudo_do_produto.fob.paypal.usd = produto.estudo_do_produto.custo_unitario.paypal.usd * produto.estudo_do_produto.qtd * (1 + $scope.estudo.config.taxa_paypal + $scope.estudo.config.iof_cartao);
                     produto.estudo_do_produto.fob.paypal.brl = produto.estudo_do_produto.fob.paypal.usd * $scope.estudo.cotacao_dolar_paypal;
 
-                    produto.estudo_do_produto.fob.real.usd = produto.estudo_do_produto.custo_unitario.real.usd * produto.estudo_do_produto.qtd;
-                    produto.estudo_do_produto.fob.real.brl = produto.estudo_do_produto.fob.real.usd * $scope.estudo.cotacao_dolar;
+                    produto.estudo_do_produto.fob.cheio.usd = produto.estudo_do_produto.custo_unitario.cheio.usd * produto.estudo_do_produto.qtd;
+                    produto.estudo_do_produto.fob.cheio.brl = produto.estudo_do_produto.fob.cheio.usd * $scope.estudo.cotacao_dolar;
                 }
 
             });
@@ -739,10 +809,10 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     $scope.estudo.fob.declarado.usd += produto.estudo_do_produto.custo_unitario.declarado.usd * produto.estudo_do_produto.qtd; // Calcula Fob
                     $scope.estudo.fob.declarado.brl += $scope.estudo.fob.declarado.usd * $scope.estudo.cotacao_dolar;
 
-                    $scope.estudo.fob.real.usd += produto.estudo_do_produto.custo_unitario.real.usd * produto.estudo_do_produto.qtd;
-                    $scope.estudo.fob.real.brl += $scope.estudo.fob.real.usd * $scope.estudo.cotacao_dolar;
+                    $scope.estudo.fob.cheio.usd += produto.estudo_do_produto.custo_unitario.cheio.usd * produto.estudo_do_produto.qtd;
+                    $scope.estudo.fob.cheio.brl += $scope.estudo.fob.cheio.usd * $scope.estudo.cotacao_dolar;
 
-                    $scope.estudo.totalPaypal += produto.estudo_do_produto.custo_unitario.paypal.usd * produto.estudo_do_produto.qtd; // todo: Ajustar a nomenclatura (totalPaypal não está em acordo com os demais nomes que usam '_').
+                    // $scope.estudo.totalPaypal += produto.estudo_do_produto.custo_unitario.paypal.usd * produto.estudo_do_produto.qtd; // todo: Ajustar a nomenclatura (totalPaypal não está em acordo com os demais nomes que usam '_').
 
                     $scope.estudo.medidas.peso.ocupado += produto.medidas.peso * produto.estudo_do_produto.qtd; // Calcula peso total
                     $scope.estudo.medidas.volume.ocupado += produto.medidas.cbm * produto.estudo_do_produto.qtd; // Calcula volume ocupado no contêiner
@@ -762,8 +832,8 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.estudo.cif.declarado.usd = $scope.estudo.fob.declarado.usd + $scope.estudo.frete_maritimo.valor.usd + $scope.estudo.frete_maritimo.seguro.usd;
             $scope.estudo.cif.declarado.brl = $scope.estudo.cif.declarado.usd * $scope.estudo.cotacao_dolar;
 
-            $scope.estudo.cif.real.usd = $scope.estudo.fob.real.usd + $scope.estudo.frete_maritimo.valor.usd + $scope.estudo.frete_maritimo.seguro.usd;
-            $scope.estudo.cif.real.brl = $scope.estudo.cif.real.usd * $scope.estudo.cotacao_dolar;
+            $scope.estudo.cif.cheio.usd = $scope.estudo.fob.cheio.usd + $scope.estudo.frete_maritimo.valor.usd + $scope.estudo.frete_maritimo.seguro.usd;
+            $scope.estudo.cif.cheio.brl = $scope.estudo.cif.cheio.usd * $scope.estudo.cotacao_dolar;
 
         }
 
@@ -817,8 +887,8 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     // Cálculo CIFs (que é o mesmo que Valor Aduaneiro).
                     produto.estudo_do_produto.cif.declarado.usd = produto.estudo_do_produto.fob.declarado.usd + produto.estudo_do_produto.frete_maritimo.valor.usd + produto.estudo_do_produto.frete_maritimo.seguro.usd;
                     produto.estudo_do_produto.cif.declarado.brl = produto.estudo_do_produto.cif.declarado.usd * $scope.estudo.cotacao_dolar;
-                    produto.estudo_do_produto.cif.real.usd = produto.estudo_do_produto.fob.real.usd + produto.estudo_do_produto.frete_maritimo.valor.usd + produto.estudo_do_produto.frete_maritimo.seguro.usd;
-                    produto.estudo_do_produto.cif.real.brl = produto.estudo_do_produto.cif.real.usd * $scope.estudo.cotacao_dolar;
+                    produto.estudo_do_produto.cif.cheio.usd = produto.estudo_do_produto.fob.cheio.usd + produto.estudo_do_produto.frete_maritimo.valor.usd + produto.estudo_do_produto.frete_maritimo.seguro.usd;
+                    produto.estudo_do_produto.cif.cheio.brl = produto.estudo_do_produto.cif.cheio.usd * $scope.estudo.cotacao_dolar;
 
                     tempCalculaImpostos(produto);
 
@@ -828,36 +898,35 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
 
                     tempUpdateImpostosEstudo(produto);
 
-
-                    // Cálculo do Investimento (total) a ser feito no produto.
-                    produto.estudo_do_produto.investimento_brl = (
+                    // Cálculo do Investimento (total = Declarado + paypal) a ser feito no produto.
+                    produto.estudo_do_produto.resultados.investimento.final.brl = (
                         produto.estudo_do_produto.cif.declarado.brl +
                         produto.estudo_do_produto.fob.paypal.brl + // já considerando a taxa paypal e o IOF sobre compras internacionais do cartão
                         produto.estudo_do_produto.tributos.declarado.total.brl +
                         produto.estudo_do_produto.despesas.total.brl
                     );
 
-                    produto.estudo_do_produto.investimento_integral_brl = (
-                        produto.estudo_do_produto.cif.real.brl +
-                        produto.estudo_do_produto.tributos.real.total.brl +
+                    produto.estudo_do_produto.resultados.investimento.cheio.brl = (
+                        produto.estudo_do_produto.cif.cheio.brl +
+                        produto.estudo_do_produto.tributos.cheio.total.brl +
                         produto.estudo_do_produto.despesas.total.brl
                     );
 
-                    // Update (soma) do total de investimento do Estudo Geral.
-                    $scope.estudo.investimento_brl += produto.estudo_do_produto.investimento_brl;
-                    $scope.estudo.investimento_integral_brl += produto.estudo_do_produto.investimento_integral_brl;
-
-                    $scope.estudo.resultados.investimento.real.brl += produto.estudo_do_produto.investimento_brl;
+                    $scope.estudo.resultados.investimento.final.brl += produto.estudo_do_produto.resultados.investimento.final.brl;
+                    $scope.estudo.resultados.investimento.cheio.brl += produto.estudo_do_produto.resultados.investimento.cheio.brl;
 
                     // Cálculo do preço de Custo final do produto.
-                    produto.estudo_do_produto.preco_custo_final_brl = produto.estudo_do_produto.investimento_brl / produto.estudo_do_produto.qtd;
-                    produto.estudo_do_produto.preco_custo_final_integral_brl = produto.estudo_do_produto.investimento_integral_brl / produto.estudo_do_produto.qtd;
+                    produto.estudo_do_produto.resultados.precos.custo.final.brl = produto.estudo_do_produto.resultados.investimento.final.brl / produto.estudo_do_produto.qtd;
+                    produto.estudo_do_produto.resultados.precos.custo.cheio.brl = produto.estudo_do_produto.resultados.investimento.cheio.brl / produto.estudo_do_produto.qtd;
+
 
                     // Calcula o resultado unitário e total de cada um dos produtos.
                     calculaResultadosPorProduto(produto);
 
                     // Update (soma) dos lucros dos produtos para formar o Lucro Total do Estudo.
-                    $scope.estudo.lucro_brl += produto.estudo_do_produto.lucro_total_brl;
+                    $scope.estudo.resultados.lucro.final.brl += produto.estudo_do_produto.resultados.lucro.total.brl;
+
+
                 }
 
             });
