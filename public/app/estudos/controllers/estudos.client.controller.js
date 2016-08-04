@@ -362,9 +362,33 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                             usd: 0,
                             brl: 0
                         },
-                        internacionais: {
-                            usd: 0,
-                            brl: 0
+                        internacionais: { // Despesas originadas no exterior.
+                            compartilhadas: { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
+                                usd: 0,
+                                brl: 0
+                            },
+                            individualizadas: { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
+                                usd: 0,
+                                brl: 0
+                            },
+                            totais: { // Somatório das despesas compartilhadas e individualizadas.
+                                usd: 0,
+                                brl: 0
+                            }
+                        },
+                        nacionais: { // Despesas originadas no exterior.
+                            compartilhadas: { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
+                                usd: 0,
+                                brl: 0
+                            },
+                            individualizadas: { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
+                                usd: 0,
+                                brl: 0
+                            },
+                            totais: { // Somatório das despesas compartilhadas e individualizadas.
+                                usd: 0,
+                                brl: 0
+                            }
                         },
                         total: {
                             usd: 0,
@@ -433,11 +457,29 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
 
         $scope.calculaCustoPaypal = function(produto, nomeCampo) {
             if(nomeCampo === 'custo_paypal') {
-                produto.estudo_do_produto.custo_unitario.declarado.usd = produto.custo_usd - produto.estudo_do_produto.custo_unitario.paypal.usd;
+                produto.estudo_do_produto.custo_unitario.declarado.usd = produto.estudo_do_produto.custo_unitario.cheio.usd - produto.estudo_do_produto.custo_unitario.paypal.usd;
             } else {
-                produto.estudo_do_produto.custo_unitario.paypal.usd = produto.custo_usd - produto.estudo_do_produto.custo_unitario.declarado.usd;
+                produto.estudo_do_produto.custo_unitario.paypal.usd = produto.estudo_do_produto.custo_unitario.cheio.usd - produto.estudo_do_produto.custo_unitario.declarado.usd;
             }
             $scope.iniImport();
+        };
+
+        $scope.diluiDespesaDoProduto = function(produto) {
+            if(produto.estudo_do_produto.qtd > 0) {
+                var despesaDiluidaProduto = produto.estudo_do_produto.despesas.internacionais.individualizadas.usd / produto.estudo_do_produto.qtd;
+                produto.estudo_do_produto.custo_unitario.cheio.usd = produto.custo_usd + despesaDiluidaProduto;
+                produto.estudo_do_produto.custo_unitario.paypal.usd = despesaDiluidaProduto;
+                $scope.calculaCustoPaypal(produto, 'custo_paypal');
+            } else { // todo: Lembrar que a quantidade pode ser negativa (encontrar uma forma de validar)
+                if(produto.custo_usd !== produto.estudo_do_produto.custo_unitario.cheio.usd) {
+                    produto.estudo_do_produto.custo_unitario.cheio.usd = produto.custo_usd;
+                    produto.estudo_do_produto.custo_unitario.paypal.usd = 0;
+                    $scope.calculaCustoPaypal(produto, 'custo_paypal');
+                } else {
+                    produto.estudo_do_produto.despesas.internacionais.individualizadas.usd = 0;
+                    alert('A quantidade do produto não pode ser igual a zero'); // todo: Usar o sistema de notificação.
+                }
+            }
         };
 
         function tempCalculaImpostos(produto) {
@@ -650,12 +692,43 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     }
                 },
                 despesas: {
-                    total: {
+                    aduaneiras: {
+                        usd: 0,
+                        brl: 0
+                    },
+                    internacionais: { // Despesas originadas no exterior.
+                        compartilhadas: { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
+                            usd: 0,
+                            brl: 0
+                        },
+                        individualizadas: { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
+                            usd: 0,
+                            brl: 0
+                        },
+                        totais: { // Somatório das despesas compartilhadas e individualizadas.
+                            usd: 0,
+                            brl: 0
+                        }
+                    },
+                    nacionais: { // Despesas originadas no exterior.
+                        compartilhadas: { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
+                            usd: 0,
+                            brl: 0
+                        },
+                        individualizadas: { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
+                            usd: 0,
+                            brl: 0
+                        },
+                        totais: { // Somatório das despesas compartilhadas e individualizadas.
+                            usd: 0,
+                            brl: 0
+                        }
+                    },
+                    total: { // todo: confirmar se nos demais objetos o nome é total ou totais
                         usd: 0,
                         brl: 0
                     }
                 },
-
                 resultados: {
                     investimento: { // Campo que designa o somatório dos custos unitários
                         declarado: { // Investimento que constará da Invoice, ou seja, será o total declarado para o governo, mas não contemplará o montante enviado por paypal

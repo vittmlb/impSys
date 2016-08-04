@@ -107,7 +107,7 @@
                     <div ibox-tools></div>
                 </div>
                 <div class="ibox-content">
-                    <table class="footable table table-striped toggle-arrow-tiny" data-page-size="8" id="tabelaProdutosDoEstudo">
+                    <table class="table table-striped" data-show-toggle="false" id="tabelaProdutosDoEstudo">
                         <thead>
                         <tr>
                             <th data-toggle="true">Produto</th>
@@ -115,28 +115,29 @@
                             <th>C.Paypal</th>
                             <th>C.Dentro</th>
                             <th>Qtd</th>
-                            <th>Fob</th>
+                            <th>Despesa</th>
                             <th>C.Final</th>
                             <th>P.Venda</th>
                             <th>Opções</th>
-                            <th data-hide="all">Modelo</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr data-ng-repeat="itemEstudo in produtosDoEstudo">
-                            <td><span>{{itemEstudo.nome}}</span>&nbsp&nbsp&nbsp&nbsp<span><i class="fa fa-file-text clickable" aria-hidden="true"></i></span></td>
-                            <td data-ng-bind="itemEstudo.custo_usd | currency: 'U$ '"></td>
+                            <td>
+                                <span style="margin-right: 8px;">{{itemEstudo.nome}}</span><span><i class="fa fa-file-text clickable" aria-hidden="true"></i></span>
+                            </td>
+                            <td data-ng-bind="itemEstudo.estudo_do_produto.custo_unitario.cheio.usd | currency: 'U$ '"></td> <!-- Custo Unitário Cheio -->
                             <td>
                                 <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_paypal" ng-model="itemEstudo.estudo_do_produto.custo_unitario.paypal.usd" ng-change="calculaCustoPaypal(itemEstudo, 'custo_paypal')">
-                            </td>
+                            </td> <!-- Custo PAYPAL -->
                             <td>
                                 <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_dentro" ng-model="itemEstudo.estudo_do_produto.custo_unitario.declarado.usd" ng-change="calculaCustoPaypal(itemEstudo, 'custo_dentro')">
-                            </td>
+                            </td> <!-- Custo Dentro -->
                             <td>
-                                <input type="text" class="form-control input-transparente" placeholder="qtd" data-ng-model="itemEstudo.estudo_do_produto.qtd" ng-change="iniImport()">
-                            </td>
-                            <td data-ng-bind="100 | currency: 'U$ '">
-
+                                <input type="text" class="form-control input-transparente" placeholder="qtd" data-ng-model="itemEstudo.estudo_do_produto.qtd" ng-change="diluiDespesaDoProduto(itemEstudo)">
+                            </td> <!-- QTD -->
+                            <td>
+                                <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_dentro" ng-model="itemEstudo.estudo_do_produto.despesas.internacionais.individualizadas.usd" ng-change="diluiDespesaDoProduto(itemEstudo)">
                             </td>
                             <td>
                                 <span data-ng-bind="itemEstudo.estudo_do_produto.resultados.precos.custo.final.brl | currency: 'R$ '"></span>
@@ -147,7 +148,6 @@
                             <td>
                                 <i data-toggle="tooltip" data-placement="right" title="Remover produto"  ng-click="removeProdutoEstudo(itemEstudo)" class="fa fa-times clickable"></i>
                             </td>
-                            <td>{{itemEstudo.modelo}}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -266,18 +266,20 @@
                     <div ibox-tools></div>
                 </div>
                 <div class="ibox-content">
-                    <table class="table table-striped small m-t-sm">
+                    <table class="table table-striped small m-t-sm" data-show-toggle="false" id="tblDadosEstudo">
                     <!--<table class="table table-striped">-->
                         <thead>
                         <tr>
                             <th>Principal</th>
                             <th></th>
+                            <th data-breakpoints="all"></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td>Lucro Operação</td>
                             <td data-ng-bind="estudo.resultados.lucro.final.brl | currency: 'R$ '"></td>
+                            <td data-ng-bind="estudo.resultados.lucro.final.usd | currency: 'U$ '"></td>
                         </tr>
                         <tr>
                             <td>Investimento</td>
@@ -349,3 +351,6 @@
         </div> <!-- Dados do Estudo -->
     </div>
 </section>
+<script>
+    $('#tblDadosEstudo').footable();
+</script>
