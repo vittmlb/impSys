@@ -1,32 +1,8 @@
 <section data-ng-controller="EstudosController" data-ng-init="loadData()">
-    <div ng-click="toggleSearch()"></div>
-    <div class="drawer drawer-right container" ng-class="{expanded: open, collapsed: !open}">
-        <h2>Produtos</h2>
-        <p>Selecione os produtos</p>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Custo</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr data-ng-repeat="item in produtos">
-                <td data-ng-model="item.nome">{{item.nome}}</td>
-                <td data-ng-bind="item.custo_usd | currency: 'U$ '"></td>
-                <td><a ng-click="adicionaProdutoEstudo(item)"><i class="fa fa-plus clickable" aria-hidden="true"></i></a></td>
-            </tr>
-            </tbody>
-        </table>
-    </div> <!-- Painel com todos os Produtos -->
     <div class="row">
         <div class="col-xs-12">
             <h2 style="display: inline-block;" ng-click="toggleSearch()">Produtos do Estudo</h2>
-            <button style="top: -5px; position: relative; margin-left: 20px;" class="btn btn-sm btn-white handle handle-right" ng-click="toggleSearch()"><i class="fa fa-plus"></i></button>
-            <button style="top: -5px; margin-left: 5px; position: relative;" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal">
-                Launch demo modal
-            </button>
+            <button style="top: -5px; position: relative; margin-left: 20px;" class="btn btn-sm btn-white handle handle-right" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i></button>
         </div>
     </div> <!-- Botão Add Produto -->
     <div class="row">

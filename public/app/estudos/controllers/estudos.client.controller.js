@@ -1,44 +1,8 @@
 /**
  * Created by Vittorio on 30/05/2016.
  */
-angular.module('estudos').controller('EstudosController', ['$scope', '$routeParams', '$location', 'Produtos', 'Despesas', '$http', '$window', '$stateParams', '$state',
-    function($scope, $routeParams, $location, Produtos, Despesas, $http, $window, $stateParams, $state) {
-
-        //region Controles
-        $scope.$window = $window;
-        $scope.open = false;
-        $scope.toggleSearch = function () {
-            $scope.open = !$scope.open;
-
-            if ($scope.open) {
-                $scope.$window.onclick = function (event) {
-                    closeSearchWhenClickingElsewhere(event, $scope.toggleSearch);
-                };
-            } else {
-                $scope.open = false;
-                $scope.$window.onclick = null;
-                $scope.$apply();
-            }
-        };
-
-
-        function closeSearchWhenClickingElsewhere(event, callbackOnClose) {
-
-            var clickedElement = event.target;
-            if (!clickedElement) return;
-
-            var elementClasses = clickedElement.classList;
-            var clickedOnSearchDrawer = elementClasses.contains('handle-right') ||
-                                        elementClasses.contains('drawer-right') ||
-                                        (clickedElement.parentElement !== null);
-
-            if (!clickedOnSearchDrawer) {
-                callbackOnClose();
-                return;
-            }
-
-        }
-        //endregion
+angular.module('estudos').controller('EstudosController', ['$scope', '$routeParams', '$location', 'Produtos', 'Despesas', '$http', '$stateParams', '$state',
+    function($scope, $routeParams, $location, Produtos, Despesas, $http, $stateParams, $state) {
 
         $scope.quantidades = [];
         $scope.produtosDoEstudo = [];
