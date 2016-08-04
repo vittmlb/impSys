@@ -24,6 +24,9 @@
         <div class="col-xs-12">
             <h2 style="display: inline-block;" ng-click="toggleSearch()">Produtos do Estudo</h2>
             <button style="top: -5px; position: relative; margin-left: 20px;" class="btn btn-sm btn-white handle handle-right" ng-click="toggleSearch()"><i class="fa fa-plus"></i></button>
+            <button style="top: -5px; margin-left: 5px; position: relative;" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal">
+                Launch demo modal
+            </button>
         </div>
     </div> <!-- Botão Add Produto -->
     <div class="row">
@@ -349,8 +352,56 @@
                 </div>
             </div>
         </div> <!-- Dados do Estudo -->
+        <div>
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Produtos</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <input type="text" class="form-control search-result" placeholder="Busca" data-ng-model="query">
+                            </div>
+                            <div class="produto-modal-list">
+                                <!--<table id="modal-example-1" class="table" data-paging="true" data-filtering="true" data-sorting="true">-->
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-click="adicionaProdutoEstudo(item)" data-ng-repeat="item in produtos | filter: query">
+                                        <td class="produto-modal-people">
+                                            <a href="#"><img class="img-circle" ng-src="{{ item.img_url }}" alt="Imagem {{ item.nome }}"></a>
+                                        </td>
+                                        <td class="produto-modal-title" data-ng-model="item.nome" data-filter-value="query">
+                                            {{item.nome}}<br/>
+                                            <small>{{ item.modelo }}</small>
+                                        </td>
+                                        <td data-ng-bind="item.custo_usd | currency: 'U$ '"></td>
+                                        <td>
+                                            <a ng-click="adicionaProdutoEstudo(item)"><i class="fa fa-plus clickable" aria-hidden="true"></i></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- Modal -->
+        </div>
     </div>
 </section>
-<script>
+<script> // todo: Procurar no Inspinia como carregar esses scripts de forma centralizada.
     $('#tblDadosEstudo').footable();
 </script>

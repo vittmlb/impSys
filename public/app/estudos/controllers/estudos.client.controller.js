@@ -21,6 +21,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             }
         };
 
+
         function closeSearchWhenClickingElsewhere(event, callbackOnClose) {
 
             var clickedElement = event.target;
