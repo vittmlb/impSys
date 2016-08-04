@@ -851,13 +851,13 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 }
                 else
                 {
-                    produto.estudo_do_produto.fob.declarado.usd = produto.estudo_do_produto.custo_unitario.declarado.usd * produto.estudo_do_produto.qtd;
+                    produto.estudo_do_produto.fob.declarado.usd = ((produto.estudo_do_produto.custo_unitario.declarado.usd * (1 + $scope.estudo.config.percentual_comissao_conny)) * produto.estudo_do_produto.qtd);
                     produto.estudo_do_produto.fob.declarado.brl = produto.estudo_do_produto.fob.declarado.usd * $scope.estudo.cotacao_dolar;
 
-                    produto.estudo_do_produto.fob.paypal.usd = produto.estudo_do_produto.custo_unitario.paypal.usd * produto.estudo_do_produto.qtd * (1 + $scope.estudo.config.taxa_paypal + $scope.estudo.config.iof_cartao);
+                    produto.estudo_do_produto.fob.paypal.usd = ((produto.estudo_do_produto.custo_unitario.paypal.usd) * (1 + $scope.estudo.config.percentual_comissao_conny)) * produto.estudo_do_produto.qtd * (1 + $scope.estudo.config.taxa_paypal + $scope.estudo.config.iof_cartao);
                     produto.estudo_do_produto.fob.paypal.brl = produto.estudo_do_produto.fob.paypal.usd * $scope.estudo.cotacao_dolar_paypal;
 
-                    produto.estudo_do_produto.fob.cheio.usd = produto.estudo_do_produto.custo_unitario.cheio.usd * produto.estudo_do_produto.qtd;
+                    produto.estudo_do_produto.fob.cheio.usd = ((produto.estudo_do_produto.custo_unitario.cheio.usd) * (1 + $scope.estudo.config.percentual_comissao_conny)) * produto.estudo_do_produto.qtd;
                     produto.estudo_do_produto.fob.cheio.brl = produto.estudo_do_produto.fob.cheio.usd * $scope.estudo.cotacao_dolar;
                 }
 
