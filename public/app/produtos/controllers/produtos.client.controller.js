@@ -1,8 +1,8 @@
 /**
  * Created by Vittorio on 30/05/2016.
  */
-angular.module('produtos').controller('ProdutosController', ['$scope', '$routeParams', '$location', 'Produtos', '$stateParams', '$state', 'Upload', '$window',
-    function($scope, $routeParams, $location, Produtos, $stateParams, $state, Upload, $window) {
+angular.module('produtos').controller('ProdutosController', ['$scope', '$routeParams', '$location', 'Produtos', 'Ncms', '$stateParams', '$state', 'Upload', '$window',
+    function($scope, $routeParams, $location, Produtos, Ncms, $stateParams, $state, Upload, $window) {
 
         $scope.volCBM20 = '';
         $scope.qtdCBM20 = '';
@@ -33,6 +33,8 @@ angular.module('produtos').controller('ProdutosController', ['$scope', '$routePa
             website: 'www.www.com.br',
             notas: 'Aloha'
         });
+        $scope.ListaNcms = Ncms.query();
+        $scope.xncm = {};
         
         $scope.calculaCBM = function(item) {
             if(item === 20) {
@@ -57,17 +59,19 @@ angular.module('produtos').controller('ProdutosController', ['$scope', '$routePa
         };
 
         $scope.create = function() {
+            var teste = JSON.parse($scope.xncm);
             var produto = new Produtos({
                 nome: this.nome,
                 modelo: this.modelo,
                 descricao: this.descricao,
                 custo_usd: this.custo_usd,
-                ncm: this.ncm,
+                xncm: teste,
+                ncm: teste.cod_ncm,
                 impostos: {
-                    ii: this.impostos.ii,
-                    ipi: this.impostos.ipi,
-                    pis: this.impostos.pis,
-                    cofins: this.impostos.cofins
+                    ii: teste.impostos.ii,
+                    ipi: teste.impostos.ipi,
+                    pis: teste.impostos.pis,
+                    cofins: teste.impostos.cofins
                 },
                 medidas: {
                     cbm: this.medidas.cbm,

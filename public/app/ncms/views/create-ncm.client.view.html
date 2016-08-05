@@ -1,0 +1,43 @@
+<section data-ng-controller="NcmsController">
+    <div class="container">
+        <h1>NCMs</h1>
+        <form data-ng-submit="create()">
+            <div class="form-group">
+                <label for="inputCodNcm">Código NCM</label>
+                <input type="text" class="form-control" id="inputCodNcm" data-ng-model="cod_ncm" placeholder="Código NCM">
+            </div>
+            <div class="form-group">
+                <label for="inputDescricao">Descrição</label>
+                <input type="text" class="form-control" id="inputDescricao" data-ng-model="descricao" placeholder="Descrição">
+            </div>
+            <div class="form-group">
+                <label for="checkBoxLi">
+                    <input type="checkbox" class="form-control" id="checkBoxLi" data-ng-model="li">Licença Importação
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="inputImpostoII">II</label>
+                <input type="text" class="form-control" id="inputImpostoII" data-ng-model="impostos.ii" placeholder="Imposto de Importação">
+            </div>
+            <div class="form-group">
+                <label for="inputImpostoIPI">IPI</label>
+                <input type="text" class="form-control" id="inputImpostoIPI" data-ng-model="impostos.ipi" placeholder="IPI">
+            </div>
+            <div class="form-group">
+                <label for="inputImpostoPIS">PIS</label>
+                <input type="text" class="form-control" id="inputImpostoPIS" data-ng-model="impostos.pis" placeholder="PIS">
+            </div>
+            <div class="form-group">
+                <label for="inputImpostoCOFINS">COFINS</label>
+                <input type="text" class="form-control" id="inputImpostoCOFINS" data-ng-model="impostos.cofins" placeholder="COFINS">
+            </div>
+            <div class="form-group">
+                <label for="inputObs">Obs</label>
+                <input type="text" class="form-control" id="inputObs" data-ng-model="obs" placeholder="Obs">
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-info pull-right" value="Cadastrar">
+            </div>
+        </form>
+    </div>
+</section>

@@ -28,6 +28,7 @@ module.exports = function() {
 
     require('../app/models/produtos.server.model.js');
     require('../app/models/despesas.server.model.js');
+    require('../app/models/ncms.server.model');
     
     return db;
 };
