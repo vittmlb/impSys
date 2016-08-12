@@ -51,6 +51,12 @@ exports.delete = function(req, res) {
 };
 
 exports.update = function(req, res) {
+    // var parsed_ncm = JSON.parse(req.body.ncm);
+    // if(req.body.usa_impostos_ncm) {
+    //     req.body.impostosDoProduto = parsed_ncm.impostos;
+    // } else {
+    //     req.body.impostosDoProduto = req.body.impostos;
+    // }
     var produto = req.produto;
     var img_url_deletion = false;
     if(produto.img_url !== req.body.img_url) {
@@ -60,8 +66,9 @@ exports.update = function(req, res) {
     produto.modelo = req.body.modelo;
     produto.descricao = req.body.descricao;
     produto.custo_usd = req.body.custo_usd;
-    produto.ncm = req.body.ncm;
-    produto.impostos = req.body.impostos;
+    // produto.ncm = parsed_ncm._id;
+    produto.usa_impostos_ncm = req.body.usa_impostos_ncm;
+    // produto.impostos = req.body.impostosDoProduto;
     produto.medidas = req.body.medidas;
     produto.website = req.body.website;
     produto.notas = req.body.notas;
@@ -81,6 +88,15 @@ exports.update = function(req, res) {
 };
 
 exports.findById = function(req, res, next, id) {
+    Produtos.findById(id).populate('ncm').exec(function (err, produto) {
+        if(err) return next(err);
+        if(!produto) return next(new Error(`Failed to load produto id: ${id}`));
+        req.produto = produto;
+        next();
+    });
+};
+
+exports.findByIdOld = function(req, res, next, id) {
     Produtos.findById(id).exec(function (err, produto) {
         if(err) return next(err);
         if(!produto) return next(new Error(`Failed to load produto id: ${id}`));

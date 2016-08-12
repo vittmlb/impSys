@@ -80,15 +80,28 @@
                             <div id="impostos" class="tab-pane fade">
                                 <h3>Dados sobre Impostos</h3><br/>
                                 <div class="container">
-                                    <div class="form-group">
-                                        <label for="selectNcm">NCM</label>
-                                        <select name="xncm" id="selectNcm" class="form-control" data-ng-model="xncm">
-                                            <option data-ng-repeat="ncm in ListaNcms" value="{{ ncm }}">{{ ncm.cod_com_descricao }}</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputNcm">N.C.M:</label>
-                                        <input type="text" class="form-control" id="inputNcm" data-ng-model="ncm">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="selectNcm">NCM</label>
+                                                <select name="ncm" id="selectNcm" class="form-control" data-ng-model="ncm" ng-change="atualizaImpostos()">
+                                                    <option data-ng-repeat="ncm in ListaNcms" value="{{ ncm }}">{{ ncm.cod_com_descricao }}</option>
+                                                </select>
+                                                <!--<select name="ncm"-->
+                                                        <!--id="selectNcm"-->
+                                                        <!--class="form-control"-->
+                                                        <!--ng-model="ncm"-->
+                                                        <!--ng-options="item.cod_com_descricao for item in ListaNcms"-->
+                                                        <!--ng-init="ncm.cod_com_descricao"-->
+                                                <!--&gt;-->
+                                                <!--</select>-->
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group form-group-sm">
+                                                <label style="margin-top: 30px;"> <input icheck type="checkbox" ng-model="usa_impostos_ncm"> Impostos NCM </label>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="inputIi">Imposto de Importação:</label>

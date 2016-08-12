@@ -34,7 +34,10 @@ angular.module('produtos').controller('ProdutosController', ['$scope', '$routePa
             notas: 'Aloha'
         });
         $scope.ListaNcms = Ncms.query();
-        $scope.xncm = {};
+        $scope.ncm = {};
+        $scope.parsed_ncm = {};
+        $scope.usa_impostos_ncm = true;
+        $scope.impostosDoProduto = {};
         
         $scope.calculaCBM = function(item) {
             if(item === 20) {
@@ -59,20 +62,15 @@ angular.module('produtos').controller('ProdutosController', ['$scope', '$routePa
         };
 
         $scope.create = function() {
-            var teste = JSON.parse($scope.xncm);
             var produto = new Produtos({
                 nome: this.nome,
                 modelo: this.modelo,
                 descricao: this.descricao,
                 custo_usd: this.custo_usd,
-                xncm: teste,
-                ncm: teste.cod_ncm,
-                impostos: {
-                    ii: teste.impostos.ii,
-                    ipi: teste.impostos.ipi,
-                    pis: teste.impostos.pis,
-                    cofins: teste.impostos.cofins
-                },
+                // ncm: parsed_ncm._id,
+                ncm: $scope.parsed_ncm._id,
+                usa_impostos_ncm: this.usa_impostos_ncm,
+                impostos: $scope.impostos,
                 medidas: {
                     cbm: this.medidas.cbm,
                     peso: this.medidas.peso
@@ -143,6 +141,23 @@ angular.module('produtos').controller('ProdutosController', ['$scope', '$routePa
             }
         };
 
+        $scope.atualizaImpostos = function() {
+            if($scope.usa_impostos_ncm) {
+                $scope.parsed_ncm = JSON.parse($scope.ncm);
+                if($scope.usa_impostos_ncm) {
+                    $scope.impostos = $scope.parsed_ncm.impostos;
+                }
+            }
+        };
+        $scope.atualizaImpostosEdit = function() {
+            if($scope.usa_impostos_ncm) {
+                var i = 10;
+                // $scope.impostosDoProduto = $scope.produto.ncm.impostos;
+                // $scope.produto.impostos.ii = $scope.produto.ncm.impostos.ii;
+            } else {
+                var j = 10;
+            }
+        };
 
         /**
          * Valida formulário e usa Serviço Upload para upar a imagem do produto.

@@ -30,17 +30,15 @@ var ProdutoSchema = new Schema({
             return value / 100;
         }
     },
-    xncm: {
+    ncm: {
       type: mongoose.Schema.Types.ObjectId, ref: 'NCM'
     },
-    ncm: {
-        type: String,
-        trim: true
+    usa_impostos_ncm: {
+        type: Boolean,
+        default: true
     },
     impostos: {
-        ii: {
-            type: Number
-        },
+        ii: Number,
         ipi: Number,
         pis: Number,
         cofins: Number

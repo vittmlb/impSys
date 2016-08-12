@@ -72,13 +72,26 @@
                     <div id="impostos" class="tab-pane fade">
                         <h3>Dados sobre Impostos</h3>
                         <div class="">
-                            <label for="inputNcm">N.C.M:</label>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="inputNcm" data-ng-model="produto.ncm">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="selectNcm">NCM: </label>
+                                        <select class="form-control" name="produto.ncm" id="selectNcm"
+                                                data-ng-model="produto.ncm"
+                                                ng-change="atualizaImpostosEdit()"
+                                                data-ng-options="item as item.cod_com_descricao for item in ListaNcms track by item._id"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-sm">
+                                        <label style="margin-top: 30px;"> <input icheck type="checkbox" ng-model="produto.usa_impostos_ncm"> Impostos NCM </label>
+                                    </div>
+                                </div>
+
                             </div>
                             <label for="inputIi">Imposto de Importação:</label>
                             <div class="form-group">
-                                <input type="text" class="form-control" id="inputIi" data-ng-model="produto.impostos.ii">
+                                <input type="number" class="form-control" id="inputIi" data-ng-model="produto.impostos.ii">
                             </div>
                             <label for="inputImpostoIpi">IPI:</label>
                             <div class="form-group">
