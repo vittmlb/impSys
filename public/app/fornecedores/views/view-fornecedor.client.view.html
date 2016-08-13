@@ -1,0 +1,13 @@
+<section ng-controller="FornecedoresController" data-ng-init="findOne()">
+    <div class="container">
+        <div class="col-xs-8">
+            <h1>Fornecedor</h1>
+            <a href="#!/produtos/{{fornecedor._id}}/edit" class="btn btn-warning btn-xs btn-round"><span class="glyphicon glyphicon-pencil"></span></a>
+            <button class="btn btn-danger btn-xs btn-round" data-ng-click="delete()"><span class="glyphicon glyphicon-trash"></span></button>
+            <hr>
+            <h2 data-ng-bind="fornecedor.nome_fornecedor"></h2>
+            <h2 data-ng-bind="fornecedor.razao_social"></h2>
+            <h3 data-ng-bind="fornecedor.email[0]"></h3>
+        </div>
+    </div>
+</section>
