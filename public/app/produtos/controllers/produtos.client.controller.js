@@ -150,12 +150,8 @@ angular.module('produtos').controller('ProdutosController', ['$scope', '$routePa
             }
         };
         $scope.atualizaImpostosEdit = function() {
-            if($scope.usa_impostos_ncm) {
-                var i = 10;
-                // $scope.impostosDoProduto = $scope.produto.ncm.impostos;
-                // $scope.produto.impostos.ii = $scope.produto.ncm.impostos.ii;
-            } else {
-                var j = 10;
+            if($scope.produto.usa_impostos_ncm) {
+                $scope.produto.impostos = $scope.produto.ncm.impostos;
             }
         };
 
