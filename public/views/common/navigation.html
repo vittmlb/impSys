@@ -26,31 +26,38 @@
                 </div>
             </li>
             <li ng-class="{active: $state.includes('ml')}">
-                <a href=""><i class="fa fa-archive"></i> <span class="nav-label">Produtos</span> <span class="fa arrow"></span></a>
+                <a href=""><i class="fa fa-archive"></i> <span class="nav-label"> Produtos</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('ml')}">
                     <li ui-sref-active="active"><a ui-sref="produto_list">Listar Produtos</a></li>
                     <li ui-sref-active="active"><a ui-sref="produto_create">Criar Produto</a></li>
                 </ul>
             </li>
             <li>
-                <a href=""><i class="fa fa-money"></i> <span class="nav-label">Despesas</span> <span class="fa arrow"></span></a>
+                <a href=""><i class="fa fa-money"></i> <span class="nav-label"> Despesas</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse">
                     <li ui-sref-active="active"><a ui-sref="despesas_list">Listar Despesas</a></li>
                     <li ui-sref-active="active"><a ui-sref="despesas_create">Criar Despesas</a></li>
                 </ul>
             </li>
             <li>
-                <a href=""><i class="fa fa-book"></i> <span class="nav-label">NCMs</span> <span class="fa arrow"></span></a>
+                <a href=""><i class="fa fa-book"></i> <span class="nav-label"> NCMs</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse">
                     <li ui-sref-active="active"><a ui-sref="ncm_list">Listar NCMs</a></li>
                     <li ui-sref-active="active"><a ui-sref="ncm_create">Criar NCMs</a></li>
                 </ul>
             </li>
             <li>
-                <a href=""><i class="fa fa-building-o"></i> <span class="nav-label">Fornecedores</span> <span class="fa arrow"></span></a>
+                <a href=""><i class="fa fa-building-o"></i> <span class="nav-label"> Fornecedores</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse">
                     <li ui-sref-active="active"><a ui-sref="fornecedor_list">Listar Fornecedores</a></li>
                     <li ui-sref-active="active"><a ui-sref="fornecedor_create">Criar Fornecedores</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href=""><i class="fa fa-globe"></i> <span class="nav-label"> Países</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li ui-sref-active="active"><a ui-sref="pais_list">Listar Países</a></li>
+                    <li ui-sref-active="active"><a ui-sref="pais_create">Criar Países</a></li>
                 </ul>
             </li>
             <li>

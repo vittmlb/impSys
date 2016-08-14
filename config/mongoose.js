@@ -30,6 +30,7 @@ module.exports = function() {
     require('../app/models/despesas.server.model.js');
     require('../app/models/ncms.server.model');
     require('../app/models/fornecedores.server.model');
-    
+    require('../app/models/países.server.model');
+
     return db;
 };

@@ -12,6 +12,7 @@ var mainAppModule = angular.module('impsys', [
     'despesas',
     'ncms',
     'fornecedores',
+    'paises',
     'ngToast',
     'ui.router',
     'ngAnimate',
