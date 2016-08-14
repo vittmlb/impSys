@@ -43,7 +43,7 @@ exports.findById = function(req, res, next, id) {
 
 exports.update = function(req, res) {
     var pais = req.pais;
-    pais.nome_pais = req.body.pais;
+    pais.nome_pais = req.body.nome_pais;
     pais.sigla_pais = req.body.sigla_pais;
     pais.save(function (err) {
         if(err) {

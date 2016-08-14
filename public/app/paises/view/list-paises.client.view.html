@@ -44,7 +44,7 @@
                                     <!--<span class="label label-danger" ng-show="ncm.li">Licença</span>-->
                                     <!--</td>-->
                                     <td class="project-title">
-                                        <a ui-sref="project_detail">{{ pais.nome_pais }}</a>
+                                        <a href="#!/paises/{{ pais._id }}">{{ pais.nome_pais }}</a>
                                         <br/>
                                         <small style="font-size: 0.9em;">{{ pais.sigla_pais }}</small>
                                     </td>
@@ -61,9 +61,9 @@
 
                                     </td>
                                     <td class="project-actions">
-                                        <a href="#!/fornecedores/{{ fornecedor._id }}" class="btn btn-white btn-sm"><i class="fa fa-eye"></i></a>
-                                        <a href="#!/fornecedores/{{ fornecedor._id }}/edit" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i></a>
-                                        <a ng-click="delete(fornecedor)" class="btn btn-white btn-sm"><i class="fa fa-times"></i></a>
+                                        <a href="#!/paises/{{ pais._id }}" class="btn btn-white btn-sm"><i class="fa fa-eye"></i></a>
+                                        <a href="#!/paises/{{ pais._id }}/edit" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i></a>
+                                        <a ng-click="delete(pais)" class="btn btn-white btn-sm"><i class="fa fa-times"></i></a>
                                     </td>
                                 </tr>
 

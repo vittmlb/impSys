@@ -1,0 +1,25 @@
+<section data-ng-controller="PaisesController" data-ng-init="findOne()">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>Cadastrar Países</h5>
+            <div ibox-tools=""></div>
+        </div>
+        <div class="ibox-content">
+            <div class="container">
+                <form data-ng-submit="update()">
+                    <div class="form-group">
+                        <label for="inputNomePais">Nome do País</label>
+                        <input type="text" class="form-control" id="inputNomePais" data-ng-model="pais.nome_pais" placeholder="Nome do País">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputSiglaPais">Sigla País</label>
+                        <input type="text" class="form-control" id="inputSiglaPais" data-ng-model="pais.sigla_pais" placeholder="Sigla País">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-info pull-right" value="Cadastrar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
