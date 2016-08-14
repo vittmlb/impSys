@@ -12,7 +12,6 @@ var morgan = require('morgan');
 var compress = require('compression');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-// var handlebars = require('express-handlebars').create({layoutsDir: path.join(__dirname, '../app/views/layouts'), defaultLayout: 'main'});
 
 module.exports = function() {
 
@@ -35,18 +34,9 @@ module.exports = function() {
         secret: config.sessionSecret
     }));
 
-    // app.engine('handlebars', handlebars.engine);
-    // app.set('views', path.join(__dirname, '../app/views'));
-    // app.set('view engine', 'handlebars');
-
-    // app.set('process.env.uploadsDir', ('/uploads'));
-
     app.use(express.static('./public'));
     app.use(express.static('./app')); // Abriga as imagens upadas para o servidor.
 
-    // app.get('/', function (req, res) {
-    //     res.render('teste');
-    // });
 
     require('../app/routes/produtos.server.routes.js')(app);
     require('../app/routes/despesas.server.routes.js')(app);
@@ -54,6 +44,7 @@ module.exports = function() {
     require('../app/routes/ncms.server.routes')(app);
     require('../app/routes/fornecedores.server.routes')(app);
     require('../app/routes/paises.server.routes')(app);
+    require('../app/routes/estados.server.routes')(app);
     
     return app;
 
