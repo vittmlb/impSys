@@ -1,13 +1,16 @@
 /**
  * Created by Vittorio on 13/08/2016.
  */
-angular.module('fornecedores').controller('FornecedoresController', ['$scope', '$stateParams', '$location', 'Fornecedores',
-    function($scope, $stateParams, $location, Fornecedores) {
+angular.module('fornecedores').controller('FornecedoresController', ['$scope', '$stateParams', '$location', 'Fornecedores', 'Cidades',
+    function($scope, $stateParams, $location, Fornecedores, Cidades) {
+        $scope.ListaCidades = Cidades.query();
+
         $scope.create = function() {
             var fornecedor = new Fornecedores({
                 nome_fornecedor: this.nome_fornecedor,
                 razao_social: this.razao_social,
-                email: this.email
+                email: this.email,
+                cidade_fornecedor: this.cidade_fornecedor
             });
             fornecedor.$save(function (response) {
                 $location.path('/fornecedores/' + response._id);
@@ -49,6 +52,10 @@ angular.module('fornecedores').controller('FornecedoresController', ['$scope', '
                     $scope.error = errorResponse;
                 });
             }
+        };
+        $scope.teste = function(forn) {
+            var teste = 10;
+            var b = 20;
         };
     }
 ]);

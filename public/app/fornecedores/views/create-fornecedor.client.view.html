@@ -20,6 +20,14 @@
                         <input type="text" class="form-control" id="inputEmail" data-ng-model="email" placeholder="email">
                     </div>
                     <div class="form-group">
+                        <label for="selectCidadeFornecedor">Cidade do Fornecedor</label>
+                        <select name="cidade_fornecedor" id="selectCidadeFornecedor"
+                                class="form-control"
+                                data-ng-model="cidade_fornecedor"
+                                data-ng-options="item as item.nome_cidade for item in ListaCidades track by item._id"
+                        ></select>
+                    </div>
+                    <div class="form-group">
                         <input type="submit" class="btn btn-info pull-right" value="Cadastrar">
                     </div>
                 </form>

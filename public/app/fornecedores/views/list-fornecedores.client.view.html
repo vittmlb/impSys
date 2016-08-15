@@ -49,9 +49,9 @@
                                         <small style="font-size: 0.9em;">{{ fornecedor.email[0] }}</small>
                                     </td>
                                     <td class="project-title">
-                                        <a>Impostos</a>
+                                        <a>{{ fornecedor.cidade_fornecedor.nome_cidade }}</a>
                                         <br>
-                                        <small>II:</small><small class="text-info"> {{ ncm.impostos.ii | percentage: 2}}</small>
+                                        <small class="text-info"> {{ fornecedor.cidade_fornecedor.estado_cidade }}</small>
                                         <small>IPI: {{ ncm.impostos.ipi | percentage: 2 }}</small>
                                         <small>Pis: {{ ncm.impostos.pis | percentage: 2 }}</small>
                                         <small>Cofins: {{ ncm.impostos.cofins | percentage: 2 }}</small>

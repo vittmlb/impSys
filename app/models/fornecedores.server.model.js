@@ -17,7 +17,10 @@ var FornecedorSchema = new Schema({
     email: [{
         type: String,
         trim: true
-    }]
+    }],
+    cidade_fornecedor: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'Cidade'
+    }
 });
 
 mongoose.model('Fornecedor', FornecedorSchema);
