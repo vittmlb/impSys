@@ -1,8 +1,10 @@
 /**
  * Created by Vittorio on 30/05/2016.
  */
-angular.module('produtos').controller('ProdutosController', ['$scope', '$routeParams', '$location', 'Produtos', 'Ncms', '$stateParams', '$state', 'Upload', '$window',
-    function($scope, $routeParams, $location, Produtos, Ncms, $stateParams, $state, Upload, $window) {
+angular.module('produtos').controller('ProdutosController', ['$scope', '$routeParams', '$location', 'Produtos', 'Fornecedores', 'Ncms', '$stateParams', '$state', 'Upload', '$window',
+    function($scope, $routeParams, $location, Produtos, Fornecedores, Ncms, $stateParams, $state, Upload, $window) {
+
+        $scope.ListaFornecedores = Fornecedores.query();
 
         $scope.volCBM20 = '';
         $scope.qtdCBM20 = '';
@@ -76,7 +78,8 @@ angular.module('produtos').controller('ProdutosController', ['$scope', '$routePa
                     peso: this.medidas.peso
                 },
                 website: this.website,
-                notas: this.notas
+                notas: this.notas,
+                fornecedor: this.fornecedor
             });
             // var produto = $scope.mockProduto;
             var p = $scope.validateForm(produto); // Validates form and uploads image.

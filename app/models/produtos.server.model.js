@@ -59,6 +59,9 @@ var ProdutoSchema = new Schema({
     img_url: {
         type: String,
         default: '/uploads/images/no-thumb.png'
+    },
+    fornecedor: {
+        type: mongoose.Schema.Types.ObjectId, ref: 'Fornecedor'
     }
 });
 

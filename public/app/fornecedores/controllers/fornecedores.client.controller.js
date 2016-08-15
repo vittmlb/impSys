@@ -53,9 +53,5 @@ angular.module('fornecedores').controller('FornecedoresController', ['$scope', '
                 });
             }
         };
-        $scope.teste = function(forn) {
-            var teste = 10;
-            var b = 20;
-        };
     }
 ]);

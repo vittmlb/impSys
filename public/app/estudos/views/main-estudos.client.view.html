@@ -358,7 +358,8 @@
                                         </td>
                                         <td class="produto-modal-title" data-ng-model="item.nome" data-filter-value="query">
                                             {{item.nome}}<br/>
-                                            <small>{{ item.modelo }}</small>
+                                            <small>{{ item.modelo }}</small> - <small>{{ item.fornecedor.nome_fornecedor }}</small>
+                                            - <small>{{ item.fornecedor.cidade_fornecedor }}</small>
                                         </td>
                                         <td data-ng-bind="item.custo_usd | currency: 'U$ '"></td>
                                         <td>

@@ -20,7 +20,7 @@ exports.create = function(req, res) {
 };
 
 exports.list = function(req, res) {
-    Produtos.find().exec(function (err, produtos) {
+    Produtos.find().populate('ncm').populate('fornecedor').exec(function (err, produtos) {
         if(err) {
             return res.status(400).send({
                 message: err
@@ -73,6 +73,7 @@ exports.update = function(req, res) {
     produto.website = req.body.website;
     produto.notas = req.body.notas;
     produto.img_url = req.body.img_url;
+    produto.fornecedor = req.body.fornecedor;
     produto.save(function (err, produto) {
         if(err) {
             return res.status(400).send({
@@ -88,7 +89,7 @@ exports.update = function(req, res) {
 };
 
 exports.findById = function(req, res, next, id) {
-    Produtos.findById(id).populate('ncm').exec(function (err, produto) {
+    Produtos.findById(id).populate('ncm').populate('fornecedor').exec(function (err, produto) {
         if(err) return next(err);
         if(!produto) return next(new Error(`Failed to load produto id: ${id}`));
         req.produto = produto;
