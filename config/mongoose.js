@@ -32,6 +32,7 @@ module.exports = function() {
     require('../app/models/fornecedores.server.model');
     require('../app/models/paises.server.model');
     require('../app/models/estados.server.model');
+    require('../app/models/cidades.server.model');
 
     return db;
 };
