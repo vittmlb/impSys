@@ -60,6 +60,7 @@ footer {
 .input-transparente {
     width: 70px;
     height: 19px;
+    margin: auto;
     border: none;
     background-color: transparent;
     -webkit-box-shadow: none;

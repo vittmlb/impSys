@@ -430,34 +430,57 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.iniImport();
         };
 
-        $scope.calculaCustoPaypal = function(produto, nomeCampo) {
-            if(nomeCampo === 'custo_paypal') {
-                produto.estudo_do_produto.custo_unitario.declarado.usd = produto.estudo_do_produto.custo_unitario.cheio.usd - produto.estudo_do_produto.custo_unitario.paypal.usd;
-            } else {
-                produto.estudo_do_produto.custo_unitario.paypal.usd = produto.estudo_do_produto.custo_unitario.cheio.usd - produto.estudo_do_produto.custo_unitario.declarado.usd;
+        $scope.processaMudancas = function(produto, campo) {
+            var aux = produto.estudo_do_produto;
+            var desp = aux.despesas.internacionais.individualizadas.usd;
+            var cUnit = produto.estudo_do_produto.custo_unitario;
+            var despUnit = 0;
+            if(aux.qtd > 0) {
+                despUnit = desp / aux.qtd;
             }
+            var cCheio = produto.custo_usd + despUnit;
+            cUnit.cheio.usd = cCheio;
+            switch (campo) {
+                case 'custo_paypal':
+                    cUnit.declarado.usd = cCheio - cUnit.paypal.usd;
+                    break;
+                case 'custo_dentro':
+                    cUnit.paypal.usd = cCheio - cUnit.declarado.usd;
+                    break;
+                case 'qtd':
+                    cUnit.paypal.usd = cUnit.paypal.usd + despUnit;
+                    cUnit.declarado.usd = cCheio - cUnit.paypal.usd;
+                    break;
+                case 'despesas':
+                    cUnit.paypal.usd = cUnit.paypal.usd + despUnit;
+                    cUnit.declarado.usd = cCheio - cUnit.paypal.usd;
+                    break;
+            }
+            testaSomatorioValoresProduto(produto);
             $scope.iniImport();
         };
 
-        $scope.diluiDespesaDoProduto = function(produto) {
-            if(produto.estudo_do_produto.qtd > 0) {
-                if(produto.estudo_do_produto.despesas.internacionais.individualizadas.usd > 0) {
-                    var despesaDiluidaProduto = produto.estudo_do_produto.despesas.internacionais.individualizadas.usd / produto.estudo_do_produto.qtd;
-                    produto.estudo_do_produto.custo_unitario.cheio.usd = produto.custo_usd + despesaDiluidaProduto;
-                    produto.estudo_do_produto.custo_unitario.paypal.usd = despesaDiluidaProduto;
-                    $scope.calculaCustoPaypal(produto, 'custo_paypal');
-                }
-            } else { // todo: Lembrar que a quantidade pode ser negativa (encontrar uma forma de validar)
-                if(produto.custo_usd !== produto.estudo_do_produto.custo_unitario.cheio.usd) {
-                    produto.estudo_do_produto.custo_unitario.cheio.usd = produto.custo_usd;
-                    produto.estudo_do_produto.custo_unitario.paypal.usd = 0;
-                    $scope.calculaCustoPaypal(produto, 'custo_paypal');
-                } else {
-                    produto.estudo_do_produto.despesas.internacionais.individualizadas.usd = 0;
-                    alert('A quantidade do produto não pode ser igual a zero'); // todo: Usar o sistema de notificação.
-                }
+        function testaSomatorioValoresProduto(produto) {
+            var aux = produto.estudo_do_produto;
+            var desp = aux.despesas.internacionais.individualizadas.usd;
+            var cUnit = produto.estudo_do_produto.custo_unitario;
+            var custo = produto.custo_usd;
+            var despUnit = 0;
+            if(aux.qtd > 0) {
+                despUnit = desp / aux.qtd;
             }
-        };
+            $scope.auxTestes = areEqual((custo + despUnit), (cUnit.cheio.usd), (cUnit.paypal.usd + cUnit.declarado.usd));
+            return ((custo + despUnit) === (cUnit.cheio.usd) === (cUnit.paypal.usd + cUnit.declarado.usd));
+        }
+
+        function areEqual(){
+            var len = arguments.length;
+            for (var i = 1; i< len; i++){
+                if (arguments[i] == null || arguments[i] != arguments[i-1])
+                    return false;
+            }
+            return true;
+        }
 
         function tempCalculaImpostos(produto) {
 
