@@ -15,7 +15,7 @@ var mainAppModule = angular.module('impsys', [
     'paises',
     'estados',
     'cidades',
-    'ngToast',
+    'toaster',
     'ui.router',
     'ngAnimate',
     'ui.bootstrap',

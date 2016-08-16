@@ -1,8 +1,8 @@
 /**
  * Created by Vittorio on 30/05/2016.
  */
-angular.module('estudos').controller('EstudosController', ['$scope', '$routeParams', '$location', 'Produtos', 'Despesas', 'Estudos', '$http', '$stateParams', '$state',
-    function($scope, $routeParams, $location, Produtos, Despesas, Estudos, $http, $stateParams, $state) {
+angular.module('estudos').controller('EstudosController', ['$scope', '$routeParams', '$location', 'Produtos', 'Despesas', 'Estudos', '$http', '$stateParams', 'toaster',
+    function($scope, $routeParams, $location, Produtos, Despesas, Estudos, $http, $stateParams, toaster) {
 
         $scope.quantidades = [];
         $scope.produtosDoEstudo = [];
@@ -187,30 +187,12 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             seguro_frete_maritimo_usd: 0,
             comissao_conny: 0
         };
-        $scope.mockProduto = new Produtos({
-            nome: 'Mocking',
-            modelo: 'MDB',
-            descricao: 'Mocking Produto System',
-            custo_usd: 10000,
-            ncm: '99.99.99.99',
-            impostos: {
-                ii: 0.18,
-                ipi: 0.15,
-                pis: 0.05,
-                cofins: 0.02
-            },
-            medidas: {
-                cbm: 0.05,
-                peso: 1
-            },
-            website: 'www.www.com.br',
-            notas: 'Aloha'
-        });
+
         $scope.create = function() {
             var arrayTestes = [];
             for(var i = 0; i < $scope.produtosDoEstudo.length; i++) {
                 var obj = {
-                    produto_ref: $scope.produtosDoEstudo[i],
+                    produto_ref: $scope.produtosDoEstudo[i].estudo_do_produto,
                     estudo_do_produto: $scope.produtosDoEstudo[i].estudo_do_produto
                 };
                 arrayTestes.push(obj);
@@ -223,7 +205,12 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 alert(`Estudo id: ${response._id} criado com sucesso`);
             }, function(errorResponse) {
                 console.log(errorResponse);
-                alert(errorResponse);
+                toaster.pop({
+                    type: 'error',
+                    title: 'Erro',
+                    body: errorResponse,
+                    timeout: 3000
+                });
             });
         };
 

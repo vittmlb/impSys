@@ -6,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bower_components/ngToast/dist/ngToast.css"> <!-- CSS do notificador Toastr -->
 
-    <link rel="stylesheet" href="bower_components/FooTable/compiled/footable.bootstrap.css"> <!-- CSS do plugin FooTable -->
+    <link rel="stylesheet" href="bower_components/AngularJS-Toaster/toaster.css">
     <link rel="stylesheet" href="bower_components/metisMenu/dist/metisMenu.css">
     <link rel="stylesheet" href="css/inspina_style.css">
     <link rel="stylesheet" href="css/inspina_style_override.css">
@@ -17,7 +16,7 @@
 <body>
 
 <main>
-    <toast></toast>
+    <toaster-container></toaster-container>
     <div ng-include="'views/common/content.html'"></div>
 </main>
 
@@ -32,9 +31,8 @@
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 <script src="bower_components/angular-animate/angular-animate.min.js"></script>
 <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
-<script src="bower_components/ngToast/dist/ngToast.min.js"></script>
 <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-
+<script src="bower_components/AngularJS-Toaster/toaster.js"></script>
 
 <!-- Plugins-->
 <script src="https://use.fontawesome.com/f474efa969.js"></script>
