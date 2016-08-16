@@ -1,8 +1,8 @@
 /**
  * Created by Vittorio on 30/05/2016.
  */
-angular.module('estudos').controller('EstudosController', ['$scope', '$routeParams', '$location', 'Produtos', 'Despesas', '$http', '$stateParams', '$state',
-    function($scope, $routeParams, $location, Produtos, Despesas, $http, $stateParams, $state) {
+angular.module('estudos').controller('EstudosController', ['$scope', '$routeParams', '$location', 'Produtos', 'Despesas', 'Estudos', '$http', '$stateParams', '$state',
+    function($scope, $routeParams, $location, Produtos, Despesas, Estudos, $http, $stateParams, $state) {
 
         $scope.quantidades = [];
         $scope.produtosDoEstudo = [];
@@ -186,6 +186,16 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             frete_maritimo_usd: 0,
             seguro_frete_maritimo_usd: 0,
             comissao_conny: 0
+        };
+
+        $scope.create = function() {
+            var estudo = new Estudos({
+                cotacao_dolar: $scope.estudo.cotacao_dolar,
+                config: $scope.estudo.config
+            });
+            estudo.$save(function (response) {
+                alert(`Estudo id: ${response._id} criado com sucesso`);
+            });
         };
 
 
@@ -431,10 +441,12 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
 
         $scope.diluiDespesaDoProduto = function(produto) {
             if(produto.estudo_do_produto.qtd > 0) {
-                var despesaDiluidaProduto = produto.estudo_do_produto.despesas.internacionais.individualizadas.usd / produto.estudo_do_produto.qtd;
-                produto.estudo_do_produto.custo_unitario.cheio.usd = produto.custo_usd + despesaDiluidaProduto;
-                produto.estudo_do_produto.custo_unitario.paypal.usd = despesaDiluidaProduto;
-                $scope.calculaCustoPaypal(produto, 'custo_paypal');
+                if(produto.estudo_do_produto.despesas.internacionais.individualizadas.usd > 0) {
+                    var despesaDiluidaProduto = produto.estudo_do_produto.despesas.internacionais.individualizadas.usd / produto.estudo_do_produto.qtd;
+                    produto.estudo_do_produto.custo_unitario.cheio.usd = produto.custo_usd + despesaDiluidaProduto;
+                    produto.estudo_do_produto.custo_unitario.paypal.usd = despesaDiluidaProduto;
+                    $scope.calculaCustoPaypal(produto, 'custo_paypal');
+                }
             } else { // todo: Lembrar que a quantidade pode ser negativa (encontrar uma forma de validar)
                 if(produto.custo_usd !== produto.estudo_do_produto.custo_unitario.cheio.usd) {
                     produto.estudo_do_produto.custo_unitario.cheio.usd = produto.custo_usd;
@@ -591,7 +603,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                         ocupado_percentual: 0
                     }
                 },
-
                 frete_maritimo: {
                     valor: {
                         usd: 0,

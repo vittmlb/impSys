@@ -46,6 +46,7 @@ module.exports = function() {
     require('../app/routes/paises.server.routes')(app);
     require('../app/routes/estados.server.routes')(app);
     require('../app/routes/cidades.server.routes')(app);
+    require('../app/routes/estudos.server.routes')(app);
     
     return app;
 

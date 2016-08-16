@@ -33,6 +33,7 @@ module.exports = function() {
     require('../app/models/paises.server.model');
     require('../app/models/estados.server.model');
     require('../app/models/cidades.server.model');
+    require('../app/models/estudos.server.model');
 
     return db;
 };

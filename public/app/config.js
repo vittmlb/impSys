@@ -51,13 +51,10 @@ angular.module('estudos').config(['$stateProvider', '$urlRouterProvider',
             .state('produto_edit', {
                 url: '/produtos/:produtoId/edit',
                 templateUrl: 'app/produtos/views/edit-produto.client.view.html'
-            })
+            });
 
             // Estudos
-            .state('estudos_main', {
-                url: '/estudos',
-                templateUrl: 'app/estudos/views/main-estudos.client.view.html'
-            });
+
 
     }
 ]);
