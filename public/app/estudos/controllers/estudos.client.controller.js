@@ -187,14 +187,43 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             seguro_frete_maritimo_usd: 0,
             comissao_conny: 0
         };
-
+        $scope.mockProduto = new Produtos({
+            nome: 'Mocking',
+            modelo: 'MDB',
+            descricao: 'Mocking Produto System',
+            custo_usd: 10000,
+            ncm: '99.99.99.99',
+            impostos: {
+                ii: 0.18,
+                ipi: 0.15,
+                pis: 0.05,
+                cofins: 0.02
+            },
+            medidas: {
+                cbm: 0.05,
+                peso: 1
+            },
+            website: 'www.www.com.br',
+            notas: 'Aloha'
+        });
         $scope.create = function() {
+            var arrayTestes = [];
+            for(var i = 0; i < $scope.produtosDoEstudo.length; i++) {
+                var obj = {
+                    produto_ref: $scope.produtosDoEstudo[i],
+                    estudo_do_produto: $scope.produtosDoEstudo[i].estudo_do_produto
+                };
+                arrayTestes.push(obj);
+            }
             var estudo = new Estudos({
-                cotacao_dolar: $scope.estudo.cotacao_dolar,
-                config: $scope.estudo.config
+                estudo: $scope.estudo,
+                produtosDoEstudo: arrayTestes
             });
             estudo.$save(function (response) {
                 alert(`Estudo id: ${response._id} criado com sucesso`);
+            }, function(errorResponse) {
+                console.log(errorResponse);
+                alert(errorResponse);
             });
         };
 
@@ -430,7 +459,14 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.iniImport();
         };
 
+        /**
+         * Ajusta os valores digitados na tabela do produto da página main-estudos.client.view.html
+         * <custo_cheio> / <custo_paypal> / <custo_dentro> / <qtd> / <despesas>
+         * @param produto - objeto <produto> proveniente da iteração ng-repeat pelos produtos adicionados ao estudo.
+         * @param campo - string utilizada para designar qual é o campo que está sendo modificado.
+         */
         $scope.processaMudancas = function(produto, campo) {
+            // As variáveis abaixo servem apenas para reduzir o tamanho dos nomes.
             var aux = produto.estudo_do_produto;
             var desp = aux.despesas.internacionais.individualizadas.usd;
             var cUnit = produto.estudo_do_produto.custo_unitario;
@@ -439,7 +475,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 despUnit = desp / aux.qtd;
             }
             var cCheio = produto.custo_usd + despUnit;
-            cUnit.cheio.usd = cCheio;
+            cUnit.cheio.usd = cCheio; // Este objeto é inicializado com o valor custo_usd do produto. Aqui ele é alterado para refletir o total inicial + as despesas do produto.
             switch (campo) {
                 case 'custo_paypal':
                     cUnit.declarado.usd = cCheio - cUnit.paypal.usd;
@@ -460,6 +496,12 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             $scope.iniImport();
         };
 
+        /**
+         * Funçao provisória para testar se cada produto que tem seus valores alterados em algum campo da tabela de produtos apresenta o somatório de custos que compõe o preço final do ítem estão corretos.
+         * todo: Apagar esta funçao assim que possível.
+         * @param produto
+         * @returns {boolean}
+         */
         function testaSomatorioValoresProduto(produto) {
             var aux = produto.estudo_do_produto;
             var desp = aux.despesas.internacionais.individualizadas.usd;
@@ -473,6 +515,10 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             return ((custo + despUnit) === (cUnit.cheio.usd) === (cUnit.paypal.usd + cUnit.declarado.usd));
         }
 
+        /**
+         * Função muito útil para comparar x variáveis e descobrir se são iguais entre si.
+         * @returns {boolean}
+         */
         function areEqual(){
             var len = arguments.length;
             for (var i = 1; i< len; i++){
@@ -480,125 +526,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     return false;
             }
             return true;
-        }
-
-        function tempCalculaImpostos(produto) {
-
-            // Cálculo dos Impostos - II.
-            produto.estudo_do_produto.tributos.declarado.ii.usd = produto.estudo_do_produto.cif.declarado.usd * produto.impostos.ii;
-            produto.estudo_do_produto.tributos.declarado.ii.brl = produto.estudo_do_produto.cif.declarado.brl * produto.impostos.ii;
-            produto.estudo_do_produto.tributos.cheio.ii.usd = produto.estudo_do_produto.cif.cheio.usd * produto.impostos.ii;
-            produto.estudo_do_produto.tributos.cheio.ii.brl = produto.estudo_do_produto.cif.cheio.brl * produto.impostos.ii;
-
-            // Cálculo dos Impostos - IPI.
-            produto.estudo_do_produto.tributos.declarado.ipi.usd = (produto.estudo_do_produto.cif.declarado.usd + produto.estudo_do_produto.tributos.declarado.ii.usd) * produto.impostos.ipi;
-            produto.estudo_do_produto.tributos.declarado.ipi.brl = (produto.estudo_do_produto.cif.declarado.brl + produto.estudo_do_produto.tributos.declarado.ii.brl) * produto.impostos.ipi;
-            produto.estudo_do_produto.tributos.cheio.ipi.usd = (produto.estudo_do_produto.cif.cheio.usd + produto.estudo_do_produto.tributos.cheio.ii.usd) * produto.impostos.ipi;
-            produto.estudo_do_produto.tributos.cheio.ipi.brl = (produto.estudo_do_produto.cif.cheio.brl + produto.estudo_do_produto.tributos.cheio.ii.brl) * produto.impostos.ipi;
-
-            // Cálculo dos Impostos - PIS.
-            produto.estudo_do_produto.tributos.declarado.pis.usd = produto.estudo_do_produto.cif.declarado.usd * produto.impostos.pis;
-            produto.estudo_do_produto.tributos.declarado.pis.brl = produto.estudo_do_produto.cif.declarado.brl * produto.impostos.pis;
-            produto.estudo_do_produto.tributos.cheio.pis.usd = produto.estudo_do_produto.cif.cheio.usd * produto.impostos.pis;
-            produto.estudo_do_produto.tributos.cheio.pis.brl = produto.estudo_do_produto.cif.cheio.brl * produto.impostos.pis;
-
-            // Cálculo dos Impostos - Cofins.
-            produto.estudo_do_produto.tributos.declarado.cofins.usd = produto.estudo_do_produto.cif.declarado.usd * produto.impostos.cofins;
-            produto.estudo_do_produto.tributos.declarado.cofins.brl = produto.estudo_do_produto.cif.declarado.brl * produto.impostos.cofins;
-            produto.estudo_do_produto.tributos.cheio.cofins.usd = produto.estudo_do_produto.cif.cheio.usd * produto.impostos.cofins;
-            produto.estudo_do_produto.tributos.cheio.cofins.brl = produto.estudo_do_produto.cif.cheio.brl * produto.impostos.cofins;
-
-            // Cálculo dos Impostos - ICMS.
-            produto.estudo_do_produto.tributos.declarado.icms.usd = (((
-                produto.estudo_do_produto.cif.declarado.usd +
-                produto.estudo_do_produto.tributos.declarado.ii.usd +
-                produto.estudo_do_produto.tributos.declarado.ipi.usd +
-                produto.estudo_do_produto.tributos.declarado.pis.usd +
-                produto.estudo_do_produto.tributos.declarado.cofins.usd) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
-            );
-
-            produto.estudo_do_produto.tributos.declarado.icms.brl = (((
-                produto.estudo_do_produto.cif.declarado.brl +
-                produto.estudo_do_produto.tributos.declarado.ii.brl +
-                produto.estudo_do_produto.tributos.declarado.ipi.brl +
-                produto.estudo_do_produto.tributos.declarado.pis.brl +
-                produto.estudo_do_produto.tributos.declarado.cofins.brl) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
-            );
-
-            produto.estudo_do_produto.tributos.cheio.icms.usd = (((
-                produto.estudo_do_produto.cif.cheio.usd +
-                produto.estudo_do_produto.tributos.cheio.ii.usd +
-                produto.estudo_do_produto.tributos.cheio.ipi.usd +
-                produto.estudo_do_produto.tributos.cheio.pis.usd +
-                produto.estudo_do_produto.tributos.cheio.cofins.usd) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
-            );
-
-            produto.estudo_do_produto.tributos.cheio.icms.brl = (((
-                produto.estudo_do_produto.cif.cheio.brl +
-                produto.estudo_do_produto.tributos.cheio.ii.brl +
-                produto.estudo_do_produto.tributos.cheio.ipi.brl +
-                produto.estudo_do_produto.tributos.cheio.pis.brl +
-                produto.estudo_do_produto.tributos.cheio.cofins.brl) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
-            );
-
-            // Cálculo do total de tributos.
-            produto.estudo_do_produto.tributos.declarado.total.usd = (
-                produto.estudo_do_produto.tributos.declarado.ii.usd +
-                produto.estudo_do_produto.tributos.declarado.ipi.usd +
-                produto.estudo_do_produto.tributos.declarado.pis.usd +
-                produto.estudo_do_produto.tributos.declarado.cofins.usd +
-                produto.estudo_do_produto.tributos.declarado.icms.usd
-            );
-
-            produto.estudo_do_produto.tributos.declarado.total.brl = (
-                produto.estudo_do_produto.tributos.declarado.ii.brl +
-                produto.estudo_do_produto.tributos.declarado.ipi.brl +
-                produto.estudo_do_produto.tributos.declarado.pis.brl +
-                produto.estudo_do_produto.tributos.declarado.cofins.brl +
-                produto.estudo_do_produto.tributos.declarado.icms.brl
-            );
-
-            produto.estudo_do_produto.tributos.cheio.total.usd = (
-                produto.estudo_do_produto.tributos.cheio.ii.usd +
-                produto.estudo_do_produto.tributos.cheio.ipi.usd +
-                produto.estudo_do_produto.tributos.cheio.pis.usd +
-                produto.estudo_do_produto.tributos.cheio.cofins.usd +
-                produto.estudo_do_produto.tributos.cheio.icms.usd
-            );
-
-            produto.estudo_do_produto.tributos.cheio.total.brl = (
-                produto.estudo_do_produto.tributos.cheio.ii.brl +
-                produto.estudo_do_produto.tributos.cheio.ipi.brl +
-                produto.estudo_do_produto.tributos.cheio.pis.brl +
-                produto.estudo_do_produto.tributos.cheio.cofins.brl +
-                produto.estudo_do_produto.tributos.cheio.icms.brl
-            );
-
-        }
-
-        function tempUpdateImpostosEstudo(produto) {
-
-            // Update (soma) dos valores dos impostos ao Estudo Geral.
-
-            $scope.estudo.tributos.declarado.ii.brl += produto.estudo_do_produto.tributos.declarado.ii.brl;
-            $scope.estudo.tributos.declarado.ipi.brl += produto.estudo_do_produto.tributos.declarado.ipi.brl;
-            $scope.estudo.tributos.declarado.pis.brl += produto.estudo_do_produto.tributos.declarado.pis.brl;
-            $scope.estudo.tributos.declarado.cofins.brl += produto.estudo_do_produto.tributos.declarado.cofins.brl;
-            $scope.estudo.tributos.declarado.icms.brl += produto.estudo_do_produto.tributos.declarado.icms.brl;
-            $scope.estudo.tributos.declarado.total.brl += produto.estudo_do_produto.tributos.declarado.total.brl;
-
-            $scope.estudo.tributos.cheio.ii.brl += produto.estudo_do_produto.tributos.cheio.ii.brl;
-            $scope.estudo.tributos.cheio.ipi.brl += produto.estudo_do_produto.tributos.cheio.ipi.brl;
-            $scope.estudo.tributos.cheio.pis.brl += produto.estudo_do_produto.tributos.cheio.pis.brl;
-            $scope.estudo.tributos.cheio.cofins.brl += produto.estudo_do_produto.tributos.cheio.cofins.brl;
-            $scope.estudo.tributos.cheio.icms.brl += produto.estudo_do_produto.tributos.cheio.icms.brl;
-            $scope.estudo.tributos.cheio.total.brl += produto.estudo_do_produto.tributos.cheio.total.brl;
-
-        }
-
-        function calculaResultadosPorProduto(produto) {
-            produto.estudo_do_produto.resultados.lucro.unitario.brl = (produto.estudo_do_produto.resultados.precos.venda.brl * (1 - $scope.estudo.config.aliquota_simples - $scope.estudo.config.comissao_ml)) - produto.estudo_do_produto.resultados.precos.custo.final.brl;
-            produto.estudo_do_produto.resultados.lucro.total.brl = produto.estudo_do_produto.resultados.lucro.unitario.brl * produto.estudo_do_produto.qtd;
         }
 
 
@@ -778,7 +705,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                         }
                     }
                 },
-
             };
         }
 
@@ -948,55 +874,57 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 {
                     auxCalculaMedidasDeCadaProduto(produto);
 
+                    var estProd = produto.estudo_do_produto; // Simplificando a variável para reduzir o espaço e facilitar a leitura.
+
                     // Cálculo de Frete Marítimo proporcional.
-                    produto.estudo_do_produto.frete_maritimo.valor.usd = produto.estudo_do_produto.medidas.peso.ocupado_percentual * $scope.estudo.frete_maritimo.valor.usd;
-                    produto.estudo_do_produto.frete_maritimo.valor.brl = produto.estudo_do_produto.frete_maritimo.valor.usd * $scope.estudo.cotacao_dolar;
+                    estProd.frete_maritimo.valor.usd = estProd.medidas.peso.ocupado_percentual * $scope.estudo.frete_maritimo.valor.usd;
+                    estProd.frete_maritimo.valor.brl = estProd.frete_maritimo.valor.usd * $scope.estudo.cotacao_dolar;
 
                     // Cálculo de SEGURO de Frete Marítimo proporcional.
-                    produto.estudo_do_produto.frete_maritimo.seguro.usd = produto.estudo_do_produto.medidas.peso.ocupado_percentual * $scope.estudo.frete_maritimo.seguro.usd;
-                    produto.estudo_do_produto.frete_maritimo.seguro.brl = produto.estudo_do_produto.frete_maritimo.seguro.usd * $scope.estudo.cotacao_dolar;
+                    estProd.frete_maritimo.seguro.usd = estProd.medidas.peso.ocupado_percentual * $scope.estudo.frete_maritimo.seguro.usd;
+                    estProd.frete_maritimo.seguro.brl = estProd.frete_maritimo.seguro.usd * $scope.estudo.cotacao_dolar;
 
                     // Cálculo CIFs (que é o mesmo que Valor Aduaneiro).
-                    produto.estudo_do_produto.cif.declarado.usd = produto.estudo_do_produto.fob.declarado.usd + produto.estudo_do_produto.frete_maritimo.valor.usd + produto.estudo_do_produto.frete_maritimo.seguro.usd;
-                    produto.estudo_do_produto.cif.declarado.brl = produto.estudo_do_produto.cif.declarado.usd * $scope.estudo.cotacao_dolar;
-                    produto.estudo_do_produto.cif.cheio.usd = produto.estudo_do_produto.fob.cheio.usd + produto.estudo_do_produto.frete_maritimo.valor.usd + produto.estudo_do_produto.frete_maritimo.seguro.usd;
-                    produto.estudo_do_produto.cif.cheio.brl = produto.estudo_do_produto.cif.cheio.usd * $scope.estudo.cotacao_dolar;
+                    estProd.cif.declarado.usd = estProd.fob.declarado.usd + estProd.frete_maritimo.valor.usd + estProd.frete_maritimo.seguro.usd;
+                    estProd.cif.declarado.brl = estProd.cif.declarado.usd * $scope.estudo.cotacao_dolar;
+                    estProd.cif.cheio.usd = estProd.fob.cheio.usd + estProd.frete_maritimo.valor.usd + estProd.frete_maritimo.seguro.usd;
+                    estProd.cif.cheio.brl = estProd.cif.cheio.usd * $scope.estudo.cotacao_dolar;
 
-                    tempCalculaImpostos(produto);
+                    calculaImpostosProduto(produto); // Calcula todos os impostos do produto, que depois servirá de base para a totalização dos impostos do estudo.
 
                     // Cálculo do total de despesas proporcional do produto.
-                    produto.estudo_do_produto.despesas.total.brl = (produto.estudo_do_produto.cif.declarado.brl / $scope.estudo.cif.declarado.brl) * $scope.estudo.despesas.total.brl;
-                    produto.estudo_do_produto.despesas.total.usd = produto.estudo_do_produto.despesas.total.brl / $scope.estudo.cotacao_dolar; // todo: Definir se esta é a melhor forma de calcular este valor.
+                    estProd.despesas.total.brl = (estProd.cif.declarado.brl / $scope.estudo.cif.declarado.brl) * $scope.estudo.despesas.total.brl;
+                    estProd.despesas.total.usd = estProd.despesas.total.brl / $scope.estudo.cotacao_dolar; // todo: Definir se esta é a melhor forma de calcular este valor.
 
-                    tempUpdateImpostosEstudo(produto);
+                    totalizaImpostosEstudo(produto);
 
                     // Cálculo do Investimento (total = Declarado + paypal) a ser feito no produto.
-                    produto.estudo_do_produto.resultados.investimento.final.brl = (
-                        produto.estudo_do_produto.cif.declarado.brl +
-                        produto.estudo_do_produto.fob.paypal.brl + // já considerando a taxa paypal e o IOF sobre compras internacionais do cartão
-                        produto.estudo_do_produto.tributos.declarado.total.brl +
-                        produto.estudo_do_produto.despesas.total.brl
+                    estProd.resultados.investimento.final.brl = (
+                        estProd.cif.declarado.brl +
+                        estProd.fob.paypal.brl + // já considerando a taxa paypal e o IOF sobre compras internacionais do cartão
+                        estProd.tributos.declarado.total.brl +
+                        estProd.despesas.total.brl
                     );
 
-                    produto.estudo_do_produto.resultados.investimento.cheio.brl = (
-                        produto.estudo_do_produto.cif.cheio.brl +
-                        produto.estudo_do_produto.tributos.cheio.total.brl +
-                        produto.estudo_do_produto.despesas.total.brl
+                    estProd.resultados.investimento.cheio.brl = (
+                        estProd.cif.cheio.brl +
+                        estProd.tributos.cheio.total.brl +
+                        estProd.despesas.total.brl
                     );
 
-                    $scope.estudo.resultados.investimento.final.brl += produto.estudo_do_produto.resultados.investimento.final.brl;
-                    $scope.estudo.resultados.investimento.cheio.brl += produto.estudo_do_produto.resultados.investimento.cheio.brl;
+                    $scope.estudo.resultados.investimento.final.brl += estProd.resultados.investimento.final.brl;
+                    $scope.estudo.resultados.investimento.cheio.brl += estProd.resultados.investimento.cheio.brl;
 
                     // Cálculo do preço de Custo final do produto.
-                    produto.estudo_do_produto.resultados.precos.custo.final.brl = produto.estudo_do_produto.resultados.investimento.final.brl / produto.estudo_do_produto.qtd;
-                    produto.estudo_do_produto.resultados.precos.custo.cheio.brl = produto.estudo_do_produto.resultados.investimento.cheio.brl / produto.estudo_do_produto.qtd;
+                    estProd.resultados.precos.custo.final.brl = estProd.resultados.investimento.final.brl / estProd.qtd;
+                    estProd.resultados.precos.custo.cheio.brl = estProd.resultados.investimento.cheio.brl / estProd.qtd;
 
 
                     // Calcula o resultado unitário e total de cada um dos produtos.
                     calculaResultadosPorProduto(produto);
 
                     // Update (soma) dos lucros dos produtos para formar o Lucro Total do Estudo.
-                    $scope.estudo.resultados.lucro.final.brl += produto.estudo_do_produto.resultados.lucro.total.brl;
+                    $scope.estudo.resultados.lucro.final.brl += estProd.resultados.lucro.total.brl;
 
 
                 }
@@ -1023,6 +951,144 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
 
         }
 
+        /**
+         * Função para cálculo dos impostos do Produto
+         * Servirá como base para a totalização dos impostos do estudo "geral"
+         * @param produto
+         */
+        function calculaImpostosProduto(produto) {
+
+            var estProd = produto.estudo_do_produto; // Simplificando a variável para reduzir o espaço e facilitar a leitura.
+
+            // Cálculo dos Impostos - II.
+            estProd.tributos.declarado.ii.usd = estProd.cif.declarado.usd * produto.impostos.ii;
+            estProd.tributos.declarado.ii.brl = estProd.cif.declarado.brl * produto.impostos.ii;
+            estProd.tributos.cheio.ii.usd = estProd.cif.cheio.usd * produto.impostos.ii;
+            estProd.tributos.cheio.ii.brl = estProd.cif.cheio.brl * produto.impostos.ii;
+
+            // Cálculo dos Impostos - IPI.
+            estProd.tributos.declarado.ipi.usd = (estProd.cif.declarado.usd + estProd.tributos.declarado.ii.usd) * produto.impostos.ipi;
+            estProd.tributos.declarado.ipi.brl = (estProd.cif.declarado.brl + estProd.tributos.declarado.ii.brl) * produto.impostos.ipi;
+            estProd.tributos.cheio.ipi.usd = (estProd.cif.cheio.usd + estProd.tributos.cheio.ii.usd) * produto.impostos.ipi;
+            estProd.tributos.cheio.ipi.brl = (estProd.cif.cheio.brl + estProd.tributos.cheio.ii.brl) * produto.impostos.ipi;
+
+            // Cálculo dos Impostos - PIS.
+            estProd.tributos.declarado.pis.usd = estProd.cif.declarado.usd * produto.impostos.pis;
+            estProd.tributos.declarado.pis.brl = estProd.cif.declarado.brl * produto.impostos.pis;
+            estProd.tributos.cheio.pis.usd = estProd.cif.cheio.usd * produto.impostos.pis;
+            estProd.tributos.cheio.pis.brl = estProd.cif.cheio.brl * produto.impostos.pis;
+
+            // Cálculo dos Impostos - Cofins.
+            estProd.tributos.declarado.cofins.usd = estProd.cif.declarado.usd * produto.impostos.cofins;
+            estProd.tributos.declarado.cofins.brl = estProd.cif.declarado.brl * produto.impostos.cofins;
+            estProd.tributos.cheio.cofins.usd = estProd.cif.cheio.usd * produto.impostos.cofins;
+            estProd.tributos.cheio.cofins.brl = estProd.cif.cheio.brl * produto.impostos.cofins;
+
+            // Cálculo dos Impostos - ICMS.
+            estProd.tributos.declarado.icms.usd = (((
+                estProd.cif.declarado.usd +
+                estProd.tributos.declarado.ii.usd +
+                estProd.tributos.declarado.ipi.usd +
+                estProd.tributos.declarado.pis.usd +
+                estProd.tributos.declarado.cofins.usd) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
+            );
+
+            estProd.tributos.declarado.icms.brl = (((
+                estProd.cif.declarado.brl +
+                estProd.tributos.declarado.ii.brl +
+                estProd.tributos.declarado.ipi.brl +
+                estProd.tributos.declarado.pis.brl +
+                estProd.tributos.declarado.cofins.brl) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
+            );
+
+            estProd.tributos.cheio.icms.usd = (((
+                estProd.cif.cheio.usd +
+                estProd.tributos.cheio.ii.usd +
+                estProd.tributos.cheio.ipi.usd +
+                estProd.tributos.cheio.pis.usd +
+                estProd.tributos.cheio.cofins.usd) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
+            );
+
+            estProd.tributos.cheio.icms.brl = (((
+                estProd.cif.cheio.brl +
+                estProd.tributos.cheio.ii.brl +
+                estProd.tributos.cheio.ipi.brl +
+                estProd.tributos.cheio.pis.brl +
+                estProd.tributos.cheio.cofins.brl) / (1 - $scope.estudo.aliq_icms)) * $scope.estudo.aliq_icms
+            );
+
+            // Cálculo do total de tributos.
+            estProd.tributos.declarado.total.usd = (
+                estProd.tributos.declarado.ii.usd +
+                estProd.tributos.declarado.ipi.usd +
+                estProd.tributos.declarado.pis.usd +
+                estProd.tributos.declarado.cofins.usd +
+                estProd.tributos.declarado.icms.usd
+            );
+
+            estProd.tributos.declarado.total.brl = (
+                estProd.tributos.declarado.ii.brl +
+                estProd.tributos.declarado.ipi.brl +
+                estProd.tributos.declarado.pis.brl +
+                estProd.tributos.declarado.cofins.brl +
+                estProd.tributos.declarado.icms.brl
+            );
+
+            estProd.tributos.cheio.total.usd = (
+                estProd.tributos.cheio.ii.usd +
+                estProd.tributos.cheio.ipi.usd +
+                estProd.tributos.cheio.pis.usd +
+                estProd.tributos.cheio.cofins.usd +
+                estProd.tributos.cheio.icms.usd
+            );
+
+            estProd.tributos.cheio.total.brl = (
+                estProd.tributos.cheio.ii.brl +
+                estProd.tributos.cheio.ipi.brl +
+                estProd.tributos.cheio.pis.brl +
+                estProd.tributos.cheio.cofins.brl +
+                estProd.tributos.cheio.icms.brl
+            );
+
+        }
+
+        /**
+         * Incrementa os totais dos tributos do estudo "geral" com base nos valores de cada produto passado como argumento.
+         * @param produto
+         */
+        function totalizaImpostosEstudo(produto) {
+
+            var estProduto = produto.estudo_do_produto;
+
+            // Update (soma) dos valores dos impostos ao Estudo Geral.
+
+            $scope.estudo.tributos.declarado.ii.brl += estProduto.tributos.declarado.ii.brl;
+            $scope.estudo.tributos.declarado.ipi.brl += estProduto.tributos.declarado.ipi.brl;
+            $scope.estudo.tributos.declarado.pis.brl += estProduto.tributos.declarado.pis.brl;
+            $scope.estudo.tributos.declarado.cofins.brl += estProduto.tributos.declarado.cofins.brl;
+            $scope.estudo.tributos.declarado.icms.brl += estProduto.tributos.declarado.icms.brl;
+            $scope.estudo.tributos.declarado.total.brl += estProduto.tributos.declarado.total.brl;
+
+            $scope.estudo.tributos.cheio.ii.brl += estProduto.tributos.cheio.ii.brl;
+            $scope.estudo.tributos.cheio.ipi.brl += estProduto.tributos.cheio.ipi.brl;
+            $scope.estudo.tributos.cheio.pis.brl += estProduto.tributos.cheio.pis.brl;
+            $scope.estudo.tributos.cheio.cofins.brl += estProduto.tributos.cheio.cofins.brl;
+            $scope.estudo.tributos.cheio.icms.brl += estProduto.tributos.cheio.icms.brl;
+            $scope.estudo.tributos.cheio.total.brl += estProduto.tributos.cheio.total.brl;
+
+        }
+
+        /**
+         * Calcula os lucros unitário e total do produto passado como parâmetro, em brl.
+         * @param produto
+         */
+        function calculaResultadosPorProduto(produto) {
+
+            var estProd = produto.estudo_do_produto; // Simplificando a variável para reduzir o espaço e facilitar a leitura.
+
+            estProd.resultados.lucro.unitario.brl = (estProd.resultados.precos.venda.brl * (1 - $scope.estudo.config.aliquota_simples - $scope.estudo.config.comissao_ml)) - estProd.resultados.precos.custo.final.brl;
+            estProd.resultados.lucro.total.brl = estProd.resultados.lucro.unitario.brl * estProd.qtd;
+        }
 
         $scope.iniImport = function() {
             zeraDadosEstudo();
