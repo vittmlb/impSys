@@ -22,7 +22,22 @@ var ConfigSchema = new Schema({
     }
 });
 
+var ObjetoConfigSchema = new Schema({
+    cotacao_dolar: Number,
+    cotacao_dolar_paypal: Number,
+    volume_cntr_20: Number,
+    iof_cartao: Number,
+    taxa_paypal: Number,
+    frete_maritimo_usd: Number,
+    seguro_frete_maritimo_usd: Number,
+    comissao_conny: Number,
+    comissao_ml: Number,
+    aliquota_simples: Number,
+    percentual_comissao_conny: Number
+});
+
 var ObjetoEstudoSchema = new Schema({
+    nome_estudo: String,
     cotacao_dolar: {
         type: Number
     },
@@ -399,6 +414,21 @@ var EstudoDoProduto = new Schema({
 });
 
 var EstudoSchema = new Schema({
+    criadoEm: {
+        type: Date,
+        default: Date.now
+    },
+    ultima_atualizacao: {
+        type: Date,
+        default: Date.now
+    },
+    nome_estudo: {
+        type: String,
+        trim: true,
+        default: 'Caralho ' + Date.now
+        // unique: true,
+        // required: 'O Campo nome_estudo é obrigatório'
+    },
     estudo: ObjetoEstudoSchema,
     produtosDoEstudo: [
         {
@@ -408,6 +438,7 @@ var EstudoSchema = new Schema({
             estudo_do_produto: EstudoDoProduto
         }
     ],
+    config: ObjetoConfigSchema
 });
 
 mongoose.model('Estudo', EstudoSchema);

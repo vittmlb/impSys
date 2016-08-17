@@ -1,12 +1,13 @@
 /**
  * Created by Vittorio on 30/05/2016.
  */
-angular.module('estudos').controller('EstudosController', ['$scope', '$routeParams', '$location', 'Produtos', 'Despesas', 'Estudos', '$http', '$stateParams', 'toaster',
-    function($scope, $routeParams, $location, Produtos, Despesas, Estudos, $http, $stateParams, toaster) {
+angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal', '$routeParams', '$location', 'Produtos', 'Despesas', 'Estudos', '$http', '$stateParams', 'toaster',
+    function($scope, $uibModal, $routeParams, $location, Produtos, Despesas, Estudos, $http, $stateParams, toaster) {
 
         $scope.quantidades = [];
         $scope.produtosDoEstudo = [];
         $scope.estudo = {
+            nome_estudo: '',
             cotacao_dolar: 0,
             cotacao_dolar_paypal: 0,
             config: {
@@ -185,21 +186,37 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
             taxa_paypal: 0,
             frete_maritimo_usd: 0,
             seguro_frete_maritimo_usd: 0,
-            comissao_conny: 0
+            comissao_conny: 0,
+            comissao_ml: 0,
+            aliquota_simples: 0,
+            percentual_comissao_conny: 0
+        };
+
+        $scope.teste = 'Alow Alow';
+
+        $scope.testeModal = function() {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'app/estudos/views/modals/save-estudo.modal.view.html',
+                controller: ModalInstanceCtrl,
+                scope: $scope,
+                windowClass: 'animated flipInY'
+            });
         };
 
         $scope.create = function() {
             var arrayTestes = [];
             for(var i = 0; i < $scope.produtosDoEstudo.length; i++) {
                 var obj = {
-                    produto_ref: $scope.produtosDoEstudo[i].estudo_do_produto,
+                    produto_ref: $scope.produtosDoEstudo[i],
                     estudo_do_produto: $scope.produtosDoEstudo[i].estudo_do_produto
                 };
                 arrayTestes.push(obj);
             }
             var estudo = new Estudos({
+                nome_estudo: $scope.estudo.nome_estudo,
                 estudo: $scope.estudo,
-                produtosDoEstudo: arrayTestes
+                produtosDoEstudo: arrayTestes,
+                config: $scope.config
             });
             estudo.$save(function (response) {
                 alert(`Estudo id: ${response._id} criado com sucesso`);
@@ -212,6 +229,28 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                     timeout: 3000
                 });
             });
+        };
+        $scope.loadOne = function(id) {
+            Estudos.get({
+                estudoId: id
+            }).$promise.then(function (data) {
+                var estudo = data;
+                //$scope.estudo = estudo.estudo;
+                var prdEstudo = estudo.produtosDoEstudo;
+                for (var i = 0; i < prdEstudo.length; i++) {
+                    var produto = prdEstudo[i].produto_ref;
+                    produto.estudo_do_produto = prdEstudo[i].estudo_do_produto;
+                    $scope.produtosDoEstudo.push(produto);
+                }
+                $scope.config = data.config;
+                $scope.iniImport();
+            });
+        };
+        $scope.loadAll = function() {
+            Estudos.query().$promise.then(function (data) {
+                $scope.loadedEstudos = data;
+            });
+            // $scope.loadedEstudos = Estudos.query();
         };
 
 
@@ -879,9 +918,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
 
                     calculaImpostosProduto(produto); // Calcula todos os impostos do produto, que depois servirá de base para a totalização dos impostos do estudo.
 
-                    // Cálculo do total de despesas proporcional do produto.
-                    estProd.despesas.total.brl = (estProd.cif.declarado.brl / $scope.estudo.cif.declarado.brl) * $scope.estudo.despesas.total.brl;
-                    estProd.despesas.total.usd = estProd.despesas.total.brl / $scope.estudo.cotacao_dolar; // todo: Definir se esta é a melhor forma de calcular este valor.
+                    totalizaDespesasDoProduto(produto);
 
                     totalizaImpostosEstudo(produto);
 
@@ -912,7 +949,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
 
                     // Update (soma) dos lucros dos produtos para formar o Lucro Total do Estudo.
                     $scope.estudo.resultados.lucro.final.brl += estProd.resultados.lucro.total.brl;
-
 
                 }
 
@@ -1036,6 +1072,18 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$routePara
                 estProd.tributos.cheio.cofins.brl +
                 estProd.tributos.cheio.icms.brl
             );
+
+        }
+
+        function totalizaDespesasDoProduto(produto) {
+
+            var estProd = produto.estudo_do_produto; // Simplificando a variável para reduzir o espaço e facilitar a leitura.
+
+            // Cálculo do total de despesas proporcional do produto.
+            estProd.despesas.total.brl = (estProd.cif.declarado.brl / $scope.estudo.cif.declarado.brl) * $scope.estudo.despesas.total.brl;
+            estProd.despesas.total.usd = estProd.despesas.total.brl / $scope.estudo.cotacao_dolar; // todo: Definir se esta é a melhor forma de calcular este valor.
+
+            estProd.despesas.internacionais.individualizadas.brl = estProd.despesas.internacionais.individualizadas.usd / $scope.config.cotacao_dolar; // todo: Usar estudo.cotação ou config.cotaçao???
 
         }
 

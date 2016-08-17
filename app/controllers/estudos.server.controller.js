@@ -17,7 +17,7 @@ exports.create = function(req, res) {
 };
 
 exports.list = function(req, res) {
-    Estudos.find().exec(function (err, estudos) {
+    Estudos.find().populate({path: 'produtosDoEstudo.produto_ref'}).exec(function (err, estudos) {
         if(err) {
             return res.status(400).send({
                 message: err
@@ -33,7 +33,7 @@ exports.read = function(req, res) {
 };
 
 exports.findById = function(req, res, next, id) {
-    Estudos.findById(id).exec(function (err, estudo) {
+    Estudos.findById(id).populate({path: 'produtosDoEstudo.produto_ref'}).exec(function (err, estudo) {
         if(err) return next(err);
         if(!estudo) return next(new Error(`Failed to load estudo id: ${id}`));
         req.estudo = estudo;

@@ -1,4 +1,4 @@
-<div id="right-sidebar" ng-show="rightSidebar" class="sidebar-open">
+<div id="right-sidebar" ng-show="rightSidebar" class="sidebar-open" data-ng-init="loadAll()">
     <div class="sidebar-container" full-scroll>
 
         <ul class="nav nav-tabs navs-3">
@@ -18,13 +18,13 @@
             <div class="tab-pane" ng-class="{active: tab1}">
                 <div class="sidebar-title">
                     <h3> <i style="margin-right: 5px;" class="fa fa-pie-chart"></i> Últimos Estudos</h3>
-                    <small><i class="fa fa-tim"></i> Últimos 10 estudos.</small>{{ teste }}
+                    <small><i class="fa fa-tim"></i> Últimos 10 estudos.</small>
                 </div>
                 <div>
-                    <div class="sidebar-message">
-                        <a href="#">
+                    <div class="sidebar-message" data-ng-repeat="estudo in loadedEstudos">
+                        <a ng-click="loadOne(estudo._id)">
                             <div class="pull-left text-center">
-                                <img alt="image" class="img-circle message-avatar" src="img/a1.jpg">
+                                <img alt="image" class="img-circle message-avatar" ng-src="{{ estudo.produtosDoEstudo[0].produto_ref.img_url }}">
 
                                 <div class="m-t-xs">
                                     <i class="fa fa-star text-warning"></i>
@@ -32,10 +32,11 @@
                                 </div>
                             </div>
                             <div class="media-body">
-
-                                There are many variations of passages of Lorem Ipsum available.
+                                {{ estudo.nome_estudo }}
                                 <br>
-                                <small class="text-muted">Today 4:21 pm</small>
+                                <small class="text-muted">Criaçao: {{ estudo.criadoEm | date: 'dd/MM/yyyy' }}</small>
+                                <br>
+                                <small>Investimento: {{ estudo.estudo.resultados.investimento.final.brl | currency: 'R$ ' }}</small>
                             </div>
                         </a>
                     </div>
