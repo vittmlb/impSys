@@ -1,7 +1,7 @@
 /**
  * Created by Vittorio on 01/06/2016.
  */
-angular.module('despesas').controller('DespesasController', ['$scope', '$routeParams', '$location', 'Despesas', 'ngToast', '$stateParams', '$state',
+angular.module('despesas').controller('DespesasController', ['$scope', '$routeParams', '$location', 'Despesas', 'toaster', '$stateParams', '$state',
     function($scope, $routeParams, $location, Despesas, ngToast, $stateParams, $state) {
         
         $scope.enumTiposDespesas = ['despesa aduaneira', 'alíquota', 'outras']; // todo: Encontrar solução que envolva o mongoose.
@@ -51,7 +51,12 @@ angular.module('despesas').controller('DespesasController', ['$scope', '$routePa
                 $location.path('/despesas/' + $scope.despesa._id);
             }, function (errorResponse) {
                 $scope.error = errorResponse.data.message;
-                ngToast.danger(errorResponse.data.message);
+                toaster.pop({
+                    type: 'error',
+                    title: 'Erro',
+                    body: errorResponse,
+                    timeout: 3000
+                });
             });
         };
     }

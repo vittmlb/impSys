@@ -126,10 +126,12 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                     brl: 0
                 },
                 internacionais: { // Despesas originadas no exterior.
-                    compartilhadas: { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
-                        usd: 0,
-                        brl: 0
-                    },
+                    compartilhadas: [],
+                    // compartilhadas: [{ // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
+                    //     desc: '',
+                    //     usd: 0,
+                    //     brl: 0
+                    // }],
                     individualizadas: { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
                         usd: 0,
                         brl: 0
@@ -192,15 +194,12 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             percentual_comissao_conny: 0
         };
 
-        $scope.teste = 'Alow Alow';
-
-        $scope.testeModal = function() {
-            var modalInstance = $uibModal.open({
-                templateUrl: 'app/estudos/views/modals/save-estudo.modal.view.html',
-                controller: ModalInstanceCtrl,
-                scope: $scope,
-                windowClass: 'animated flipInY'
-            });
+        $scope.despesa_internacional = {
+            // Variável referenciada no formulário modal usada para inserir a despesa em <$scope.estudo> despesas[].
+            // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
+            // desc: '',
+            // usd: 0,
+            // brl: 0
         };
 
         $scope.create = function() {
@@ -253,7 +252,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             // $scope.loadedEstudos = Estudos.query();
         };
 
-
         /**
          * Carrega os dados à partir do BD e arquivos para <$scope.produtos> / <$scope.despesas> / <$scope.config>
          */
@@ -264,6 +262,30 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                 $scope.config = data;
             });
         };
+
+
+        /**
+         * Invoca o formulário modal em que o usuário vai informar o nome e o valor da despesa compartilhada.
+         */
+        $scope.addDespesaInternacionalCompartilhadaModal = function() {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'app/estudos/views/modals/adiciona-despesa-internacional-compartilhada.modal.view.html',
+                controller: ModalInstanceCtrl,
+                scope: $scope,
+                windowClass: 'animated flipInY'
+            });
+        };
+
+        /**
+         * Evento invocado pelo formulário modal. Adiciona o "objeto" despesa internacional compartilhada ao array de respectivas despesas.
+         */
+        $scope.addDespesaInternacionalCompartilhada = function() {
+            $scope.despesa_internacional.brl = $scope.despesa_internacional.usd * $scope.config.cotacao_dolar; // Convertendo despesa internacional para brl.
+            $scope.estudo.despesas.internacionais.compartilhadas.push($scope.despesa_internacional); // todo: Ver como "zerar" o objeto.
+            $scope.despesa_internacional = {};
+            $scope.iniImport();
+        };
+
 
         /**
          * Adiciona objeto <estudo_do_produto> ao objeto <produto> e depois faz um push para adicionar <produto> no array $scope.produtosDoEstudo.
@@ -865,7 +887,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
         /**
          * Itera pelo objeto <$scope.despesas> e faz o somatório para adicionar ao <$scope.estudo>
          */
-        function totalizaDespesasDoEstudo() {
+        function totalizaDespesasDoEstudoOld() {
 
             var aliqAfrmm = $scope.despesas.filter(function(item) {
                 return item.nome === 'Taxa AFRMM'; // todo: Criar mecanismo de Erro quando não encontrar a taxa.
@@ -882,6 +904,45 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                 }
             });
 
+        }
+
+        // 6
+        /**
+         * Itera pelo objeto <$scope.despesas> e faz o somatório para adicionar ao <$scope.estudo>
+         */
+        function totalizaDespesasDoEstudo() {
+
+            var desp = $scope.estudo.despesas;
+
+            var aliqAfrmm = $scope.despesas.filter(function(item) {
+                return item.nome === 'Taxa AFRMM'; // todo: Criar mecanismo de Erro quando não encontrar a taxa.
+            });
+            desp.afrmm.brl = $scope.estudo.frete_maritimo.valor.brl * aliqAfrmm[0].aliquota; //todo: Confirmar sobre a incidência do imposto (taxa de desembarque???)
+            desp.afrmm.usd = desp.afrmm.brl * $scope.config.cotacao_dolar;
+
+            // desp.total = Somatório de despesas aduaneiras + afrmm.
+            desp.total.brl = desp.afrmm.brl; // Ao invés de iniciar as despesas com zero, já inicializo com o afrmm.
+            $scope.despesas.forEach(function (item) {
+                if(item.tipo === 'despesa aduaneira' && item.ativa === true) {
+                    if(item.moeda === 'U$') {
+                        desp.total.brl += (item.valor * $scope.estudo.cotacao_dolar);
+                    } else {
+                        desp.total.brl += item.valor;
+                    }
+                }
+            });
+            desp.total.usd = desp.total.brl * $scope.config.cotacao_dolar;
+
+        }
+
+        function totalizaDespesasInternacionaisCompartilhadas() {
+            var total = {usd: 0, brl: 0};
+            var desp = $scope.estudo.despesas.internacionais.compartilhadas
+            for(var i = 0; i < desp.length; i++) {
+                total.usd += desp.usd;
+                total.brl += desp.brl;
+            }
+            return total;
         }
 
         // 7

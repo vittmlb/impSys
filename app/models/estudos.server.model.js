@@ -154,10 +154,11 @@ var ObjetoEstudoSchema = new Schema({
             brl: Number
         },
         internacionais: { // Despesas originadas no exterior.
-            compartilhadas: { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
+            compartilhadas: [{ // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
+                desc: String,
                 usd: Number,
                 brl: Number
-            },
+            }],
             individualizadas: { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
                 usd: Number,
                 brl: Number

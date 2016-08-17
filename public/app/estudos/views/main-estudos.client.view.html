@@ -88,7 +88,7 @@
                     <div ibox-tools></div>
                 </div>
                 <div class="ibox-content">
-                    <table class="table table-striped" data-show-toggle="false" id="tabelaProdutosDoEstudo">
+                    <table class="table table-striped" data-show-toggle="true" id="tabelaProdutosDoEstudo">
                         <thead>
                         <tr>
                             <th data-toggle="true">Produto</th>
@@ -217,27 +217,29 @@
             <div class="col">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <span class="label label-warning pull-right">Por Produto</span>
-                        <h5>Resultados</h5>
+                        <!--<span class="label label-warning pull-right">Internacionais</span>-->
+                        <h5>Despesas Compartilhadas <i ng-click="addDespesaInternacionalCompartilhadaModal()" style="margin-left: 100px; cursor: pointer; font-size: .9em;" class="fa fa-plus"></i></h5>
                     </div>
-                    <div data-ng-repeat="item in produtosDoEstudo | orderBy: 'estudo_do_produto.resultados.lucro.unitario.brl': reverse">
-                        <div class="ibox-content">
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <small class="stats-label">Modelo</small>
-                                    <h4>{{item.modelo}}</h4>
-                                </div>
+                    <div class="ibox-content">
+                        <table class="table table-hover no-margins" ng-show="produtosDoEstudo.length">
+                            <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th style="text-align: center;">Valor U$</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="item in estudo.despesas.internacionais.compartilhadas">
+                                <td>
+                                    <small>{{ item.desc }}</small>
+                                </td>
+                                <td style="text-align: center;">{{ item.usd | currency: 'U$ ' }}</td>
+                                <td style="text-align: center;"><i class="fa fa-times"></i></td>
+                            </tr>
 
-                                <div class="col-xs-4">
-                                    <small class="stats-label">Lucro Un.</small>
-                                    <h4>{{item.estudo_do_produto.resultados.lucro.unitario.brl | currency: 'R$ '}}</h4>
-                                </div>
-                                <div class="col-xs-4">
-                                    <small class="stats-label">% Retorno</small>
-                                    <h4>24%</h4>
-                                </div>
-                            </div>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div> <!-- User Activity -->
@@ -383,5 +385,5 @@
     <div ng-include="'app/estudos/views/partials/right-sidebar-estudos.partial.view.html'"></div>
 </section>
 <script> // todo: Procurar no Inspinia como carregar esses scripts de forma centralizada.
-//    $('#tblDadosEstudo').footable();
+//    $('#tabelaProdutosDoEstudo').footable();
 </script>
