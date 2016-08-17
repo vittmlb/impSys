@@ -88,50 +88,71 @@
                     <div ibox-tools></div>
                 </div>
                 <div class="ibox-content">
-                    <table class="table table-striped" data-show-toggle="true" id="tabelaProdutosDoEstudo">
-                        <thead>
-                        <tr>
-                            <th data-toggle="true">Produto</th>
-                            <th style="text-align: center;">Custo</th>
-                            <th style="text-align: center;">C.Paypal</th>
-                            <th style="text-align: center;">C.Dentro</th>
-                            <th style="text-align: center;">Qtd</th>
-                            <th style="text-align: center;">Despesa</th>
-                            <th style="text-align: center;">C.Final</th>
-                            <th style="text-align: center;">P.Venda</th>
-                            <th style="text-align: center;">Opções</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr data-ng-repeat="itemEstudo in produtosDoEstudo">
-                            <td>
-                                <span style="margin-right: 8px;">{{itemEstudo.nome}}</span><span><i class="fa fa-file-text clickable" aria-hidden="true"></i></span>
-                            </td>
-                            <td style="text-align: center;" data-ng-bind="itemEstudo.estudo_do_produto.custo_unitario.cheio.usd | currency: 'U$ '"></td> <!-- Custo Unitário Cheio -->
-                            <td style="text-align: center;">
-                                <input style="text-align: center;" type="number" class="form-control input-transparente text-center" placeholder="" name="custo_paypal" ng-model="itemEstudo.estudo_do_produto.custo_unitario.paypal.usd" ng-change="processaMudancas(itemEstudo, 'custo_paypal')">
-                            </td> <!-- Custo PAYPAL -->
-                            <td style="text-align: center;">
-                                <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_dentro" ng-model="itemEstudo.estudo_do_produto.custo_unitario.declarado.usd" ng-change="processaMudancas(itemEstudo, 'custo_dentro')">
-                            </td> <!-- Custo Dentro -->
-                            <td style="text-align: center;">
-                                <input style="text-align: center;" type="text" class="form-control input-transparente" placeholder="qtd" data-ng-model="itemEstudo.estudo_do_produto.qtd" ng-change="processaMudancas(itemEstudo, 'qtd')">
-                            </td> <!-- QTD -->
-                            <td>
-                                <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_dentro" ng-model="itemEstudo.estudo_do_produto.despesas.internacionais.individualizadas.usd" ng-change="processaMudancas(itemEstudo, 'despesas')">
-                            </td>
-                            <td style="text-align: center;">
-                                <span data-ng-bind="itemEstudo.estudo_do_produto.resultados.precos.custo.final.brl | currency: 'R$ '"></span>
-                            </td>
-                            <td>
-                                <input style="text-align: center;" type="text" class="form-control input-transparente" placeholder="P.Venda (R$)" data-ng-model="itemEstudo.estudo_do_produto.resultados.precos.venda.brl" ng-change="iniImport()">
-                            </td>
-                            <td style="text-align: center;">
-                                <i data-toggle="tooltip" data-placement="right" title="Remover produto"  ng-click="removeProdutoEstudo(itemEstudo)" class="fa fa-times clickable"></i>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <div class="project-list">
+
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th data-toggle="true">Produto</th>
+                                <th style="text-align: center;">Custo</th>
+                                <th style="text-align: center;">C.Paypal</th>
+                                <th style="text-align: center;">C.Dentro</th>
+                                <th style="text-align: center;">Qtd</th>
+                                <th style="text-align: center;">Despesa</th>
+                                <th style="text-align: center;">C.Final</th>
+                                <th style="text-align: center;">P.Venda</th>
+                                <th style="text-align: center;">Opções</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr data-ng-repeat="itemEstudo in produtosDoEstudo">
+                                <!--<td class="project-people pull-left">-->
+                                    <!--<a href=""><img alt="image" class="img-circle" ng-src="{{ itemEstudo.img_url }}"></a>-->
+                                <!--</td>-->
+                                <td class="project-title">
+                                    <a ui-sref="project_detail">{{ itemEstudo.nome }}</a>
+                                    <br/>
+                                    <small style="display: block;">Frete: R$ 2.450,00</small>
+                                    <small style="display: block;">Frete: R$ 2.450,00</small>
+                                </td>
+                                <td class="project-title">
+                                    <a>{{itemEstudo.estudo_do_produto.custo_unitario.cheio.usd | currency: 'U$ '}}</a>
+                                    <br>
+                                    <small>II:</small><small class="text-info"> {{ ncm.impostos.ii | percentage: 2}}</small>
+                                    <small>IPI: {{ ncm.impostos.ipi | percentage: 2 }}</small>
+                                    <small>Pis: {{ ncm.impostos.pis | percentage: 2 }}</small>
+                                    <small>Cofins: {{ ncm.impostos.cofins | percentage: 2 }}</small>
+                                </td>
+                                <td class="project-title">
+                                    <div>
+                                        <input style="text-align: center; border-bottom: 1px solid dimgray;" type="number" class="form-control input-transparente text-center" placeholder="" name="custo_paypal" ng-model="itemEstudo.estudo_do_produto.custo_unitario.paypal.usd" ng-change="processaMudancas(itemEstudo, 'custo_paypal')">
+                                        <small style="display: block; text-align: center;">paypal</small>
+                                    </div>
+                                </td>
+                                <td class="project-title">
+                                    <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_dentro" ng-model="itemEstudo.estudo_do_produto.custo_unitario.declarado.usd" ng-change="processaMudancas(itemEstudo, 'custo_dentro')">
+                                </td>
+                                <td class="project-title">
+                                    <input style="text-align: center;" type="text" class="form-control input-transparente" placeholder="qtd" data-ng-model="itemEstudo.estudo_do_produto.qtd" ng-change="processaMudancas(itemEstudo, 'qtd')">
+                                </td>
+                                <td class="project-title">
+                                    <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_dentro" ng-model="itemEstudo.estudo_do_produto.despesas.internacionais.individualizadas.usd" ng-change="processaMudancas(itemEstudo, 'despesas')">
+                                </td>
+                                <td class="project-title">
+                                    <span data-ng-bind="itemEstudo.estudo_do_produto.resultados.precos.custo.final.brl | currency: 'R$ '"></span>
+                                </td>
+                                <td class="project-title">
+                                    <input style="text-align: center;" type="text" class="form-control input-transparente" placeholder="P.Venda (R$)" data-ng-model="itemEstudo.estudo_do_produto.resultados.precos.venda.brl" ng-change="iniImport()">
+                                </td>
+                                <td class="project-title">
+                                    <i data-toggle="tooltip" data-placement="right" title="Remover produto"  ng-click="removeProdutoEstudo(itemEstudo)" class="fa fa-times clickable"></i>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div> <!-- Tabela de Produtos do Estudo -->
             <div class="row">
