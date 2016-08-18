@@ -334,10 +334,11 @@ var EstudoDoProduto = new Schema({
                 usd: Number,
                 brl: Number
             },
-            individualizadas: { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
+            individualizadas: [{ // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
+                desc: String,
                 usd: Number,
                 brl: Number
-            },
+            }],
             totais: { // Somatório das despesas compartilhadas e individualizadas.
                 usd: Number,
                 brl: Number

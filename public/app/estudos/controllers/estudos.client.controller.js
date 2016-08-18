@@ -201,6 +201,14 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             // usd: 0,
             // brl: 0
         };
+        $scope.currentProduto = {}; // Variável que armazena o produto selecionado para usar com ng-model e outras operações.
+        $scope.despesa_internacional_produto = {
+            // Variável referenciada no formulário modal usada para inserir a despesa internacional individualizada em <estudo_do_produto> despesas[].
+            // Despesas a serem diluídas no preço do produto.
+            // desc: '',
+            // usd: 0,
+            // brl: 0
+        };
 
         $scope.create = function() {
             var arrayTestes = [];
@@ -286,6 +294,27 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             $scope.iniImport();
         };
 
+        /**
+         * Invoca o formulário modal em que o usuário vai informar o nome e o valor da despesa compartilhada.
+         */
+        $scope.addDespesaInternacionalDoProdutoModal = function(produto) {
+            $scope.currentProduto = produto;
+            var modalInstance = $uibModal.open({
+                templateUrl: 'app/estudos/views/modals/adiciona-despesa-internacional-individual.modal.view.html',
+                controller: ModalInstanceCtrl,
+                scope: $scope,
+                windowClass: 'animated flipInY'
+            });
+        };
+
+        $scope.addDespesaInternacionalDoProduto = function() {
+            var produto = $scope.currentProduto;
+            $scope.despesa_internacional_produto.brl = $scope.despesa_internacional_produto.usd * $scope.config.cotacao_dolar; // Convertendo despesa internacional para brl.
+            produto.estudo_do_produto.despesas.internacionais.individualizadas.push($scope.despesa_internacional_produto);
+            $scope.despesa_internacional_produto = {};
+            $scope.currentProduto = {};
+            // $scope.iniImport();
+        };
 
         /**
          * Adiciona objeto <estudo_do_produto> ao objeto <produto> e depois faz um push para adicionar <produto> no array $scope.produtosDoEstudo.
@@ -419,10 +448,13 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                                 usd: 0,
                                 brl: 0
                             },
-                            individualizadas: { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
-                                usd: 0,
-                                brl: 0
-                            },
+                            individualizadas: [ // diluídas no PREÇO DO PRODUTO - Array com as despesas inerentes à cada produto.
+                                // { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
+                                //     desc: '',
+                                //     usd: 0,
+                                //     brl: 0
+                                // }
+                            ],
                             totais: { // Somatório das despesas compartilhadas e individualizadas.
                                 usd: 0,
                                 brl: 0
@@ -675,10 +707,13 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                             usd: 0,
                             brl: 0
                         },
-                        individualizadas: { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
-                            usd: 0,
-                            brl: 0
-                        },
+                        individualizadas: [ // diluídas no PREÇO DO PRODUTO - Array com as despesas inerentes à cada produto.
+                            // { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
+                            //     desc: '',
+                            //     usd: 0,
+                            //     brl: 0
+                            // }
+                        ],
                         totais: { // Somatório das despesas compartilhadas e individualizadas.
                             usd: 0,
                             brl: 0

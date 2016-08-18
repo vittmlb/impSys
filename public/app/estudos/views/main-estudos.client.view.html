@@ -110,10 +110,12 @@
                                     <!--<a href=""><img alt="image" class="img-circle" ng-src="{{ itemEstudo.img_url }}"></a>-->
                                 <!--</td>-->
                                 <td class="project-title">
+                                    <i class="fa fa-plus" style="cursor: pointer; margin-right: 3px;" ng-click="addDespesaInternacionalDoProdutoModal(itemEstudo)"></i>
                                     <a ui-sref="project_detail">{{ itemEstudo.nome }}</a>
                                     <br/>
-                                    <small style="display: block;">Frete: R$ 2.450,00</small>
-                                    <small style="display: block;">Frete: R$ 2.450,00</small>
+                                    <div data-ng-repeat="desp in itemEstudo.estudo_do_produto.despesas.internacionais.individualizadas">
+                                        <small style="display: block;">{{ desp.desc }}: {{ desp.usd | currency: 'usd ' }}</small>
+                                    </div>
                                 </td>
                                 <td class="project-title">
                                     <a>{{itemEstudo.estudo_do_produto.custo_unitario.cheio.usd | currency: 'U$ '}}</a>
