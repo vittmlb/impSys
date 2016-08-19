@@ -222,12 +222,13 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             // brl: 0
         };
 
-        function totalizaDespesasInternacionais(produto) {
+        function totalizaDespesasInternacionaisOld(produto) {
 
             // Compartilhadas
             determinaProporcionalidadeDosProdutos('valor');
             var total = {usd: 0, brl: 0};
             var despC = $scope.estudo.despesas.internacionais.compartilhadas;
+            var despI = $scope.estudo.despesas.internacionais.individualizadas;
             for(var i = 0; i < despC.length; i++) { // totaliza as despesas no objeto estudo.
                 total.usd += despC[i].usd;
                 total.brl += despC[i].brl;
@@ -252,6 +253,13 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             $scope.iniImport();
         }
 
+        function totalizaDespesasInternacionais() {
+            // Compartilhadas
+            determinaProporcionalidadeDosProdutos('valor');
+            processaDespesasInternacionaisCompartilhadas();
+
+        }
+
         function determinaProporcionalidadeDosProdutos(tipo) {
             switch (tipo) {
                 case 'valor':
@@ -265,7 +273,35 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                     });
             }
         }
+        function processaDespesasInternacionaisCompartilhadas() {
 
+            // Totaliza as despesas internacionais compartilhadas.
+            var total = {usd: 0, brl: 0};
+            var despC = $scope.estudo.despesas.internacionais.compartilhadas;
+            for(var i = 0; i < despC.length; i++) { // totaliza as despesas no objeto estudo.
+                total.usd += despC[i].usd;
+                total.brl += despC[i].brl;
+            }
+            $scope.estudo.despesas.internacionais.totais = total;
+
+            // Seta os valores proporcionais das despesas internacionais compartilhadas em cada um dos produtos.
+            $scope.produtosDoEstudo.forEach(function (produto) {
+                var despProdInt = produto.estudo_do_produto.despesas.internacionais;
+                var auxTotal = {usd: 0, brl: 0}; // objeto para ser jogado no array de int.compartilhadas.
+                for(var i = 0; i < despC.length; i++) {
+                    var desc = despC[i].desc;
+                    var usd = produto.estudo_do_produto.proporcionalidade.fob * despC[i].usd;
+                    var brl = produto.estudo_do_produto.proporcionalidade.fob * despC[i].brl;
+                    despProdInt.compartilhadas.push({'desc': desc, 'usd': usd, 'brl': brl});
+                    auxTotal.usd += usd;
+                    auxTotal.brl += brl;
+                }
+                despProdInt.totais = {'usd': auxTotal.usd, 'brl': auxTotal.brl};
+            });
+        }
+
+
+        
 
         $scope.create = function() {
             var arrayTestes = [];
@@ -357,7 +393,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             $scope.estudo.despesas.internacionais.compartilhadas.push($scope.despesa_internacional); // todo: Ver como "zerar" o objeto.
             $scope.despesa_internacional = {};
             totalizaDespesasInternacionais();
-
         };
 
         /**
@@ -679,6 +714,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             testaSomatorioValoresProduto(produto);
         }
 
+
         /**
          * Funçao provisória para testar se cada produto que tem seus valores alterados em algum campo da tabela de produtos apresenta o somatório de custos que compõe o preço final do ítem estão corretos.
          * todo: Apagar esta funçao assim que possível.
@@ -719,7 +755,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
          * @param produto
          */
         function zeraDadosEstudoDoProduto(produto) {
-            var despInternacionais = produto.estudo_do_produto.despesas;
+            // var despInternacionais = produto.estudo_do_produto.despesas;
             produto.estudo_do_produto = {
                 qtd: 0,
                 custo_unitario: produto.estudo_do_produto.custo_unitario, // Essa atribuiçao é para manter a integridade "estrutural" do objeto..
@@ -807,21 +843,8 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                         brl: 0
                     },
                     internacionais: { // Despesas originadas no exterior.
-                        compartilhadas: [
-                            //     { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
-                            //     desc: '',
-                            //     usd: 0,
-                            //     brl: 0
-                            // }
-                        ],
-                        individualizadas: [
-                            // diluídas no PREÇO DO PRODUTO - Array com as despesas inerentes à cada produto.
-                            // { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
-                            //     desc: '',
-                            //     usd: 0,
-                            //     brl: 0
-                            // }
-                        ],
+                        compartilhadas: produto.estudo_do_produto.despesas.internacionais.compartilhadas,
+                        individualizadas: produto.estudo_do_produto.despesas.internacionais.individualizadas,
                         totais: { // Somatório das despesas compartilhadas e individualizadas.
                             usd: 0,
                             brl: 0
@@ -972,6 +995,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                 }
                 else
                 {
+                    produto.zeraFob();
                     fob.declarado.usd = ((custUnit.declarado.usd * (1 + conny)) * qtd);
                     fob.declarado.brl = fob.declarado.usd * $scope.estudo.cotacao_dolar;
 
