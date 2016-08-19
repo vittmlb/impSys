@@ -201,7 +201,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             taxa_paypal: 0,
             frete_maritimo_usd: 0,
             seguro_frete_maritimo_usd: 0,
-            comissao_conny: 0,
             comissao_ml: 0,
             aliquota_simples: 0,
             percentual_comissao_conny: 0
@@ -250,12 +249,13 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             $scope.produtosDoEstudo.forEach(function (produto) {
                 auxProcessaMudancas(produto, 'despesas');
             });
-            iniImport();
+            $scope.iniImport();
         }
 
         function determinaProporcionalidadeDosProdutos(tipo) {
             switch (tipo) {
                 case 'valor':
+                    zeraDadosEstudo();
                     setFobProdutos();
                     totalizaDadosBasicosDoEstudo();
                     $scope.produtosDoEstudo.forEach(function (produto) {
@@ -656,7 +656,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             var cUnit = produto.estudo_do_produto.custo_unitario;
             var despUnit = 0;
             if(aux.qtd > 0) {
-                despUnit = desp / aux.qtd;
+                despUnit = desp.usd / aux.qtd;
             }
             var cCheio = produto.custo_usd + despUnit;
             cUnit.cheio.usd = cCheio; // Este objeto é inicializado com o valor custo_usd do produto. Aqui ele é alterado para refletir o total inicial + as despesas do produto.
@@ -719,9 +719,10 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
          * @param produto
          */
         function zeraDadosEstudoDoProduto(produto) {
+            var despInternacionais = produto.estudo_do_produto.despesas;
             produto.estudo_do_produto = {
                 qtd: 0,
-                custo_unitario: produto.estudo_do_produto.custo_unitario, // todo: Ainda não entendi a utilidade disso aqui.
+                custo_unitario: produto.estudo_do_produto.custo_unitario, // Essa atribuiçao é para manter a integridade "estrutural" do objeto..
                 fob: {declarado: {usd: 0, brl: 0}, cheio: {usd: 0, brl: 0}, paypal: {usd: 0, brl: 0}},
                 cif: {declarado: {usd: 0, brl: 0}, cheio: {usd: 0, brl: 0}},
                 medidas: {
@@ -805,24 +806,27 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                         usd: 0,
                         brl: 0
                     },
-                    // todo: Em princípio, O objeto 'internacionais' será recalculado no campo de adição de despesas internacionais - melhorar a descriçao dessa operação.
-                    // internacionais: { // Despesas originadas no exterior.
-                    //     // compartilhadas: { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
-                    //     //     usd: 0,
-                    //     //     brl: 0
-                    //     // }, //
-                    //     individualizadas: [ // diluídas no PREÇO DO PRODUTO - Array com as despesas inerentes à cada produto.
-                    //         // { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
-                    //         //     desc: '',
-                    //         //     usd: 0,
-                    //         //     brl: 0
-                    //         // }
-                    //     ],
-                    //     totais: { // Somatório das despesas compartilhadas e individualizadas.
-                    //         usd: 0,
-                    //         brl: 0
-                    //     }
-                    // },
+                    internacionais: { // Despesas originadas no exterior.
+                        compartilhadas: [
+                            //     { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
+                            //     desc: '',
+                            //     usd: 0,
+                            //     brl: 0
+                            // }
+                        ],
+                        individualizadas: [
+                            // diluídas no PREÇO DO PRODUTO - Array com as despesas inerentes à cada produto.
+                            // { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
+                            //     desc: '',
+                            //     usd: 0,
+                            //     brl: 0
+                            // }
+                        ],
+                        totais: { // Somatório das despesas compartilhadas e individualizadas.
+                            usd: 0,
+                            brl: 0
+                        }
+                    },
                     nacionais: { // Despesas originadas no exterior.
                         compartilhadas: { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
                             usd: 0,
@@ -837,7 +841,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                             brl: 0
                         }
                     },
-                    total: { // todo: confirmar se nos demais objetos o nome é total ou totais
+                    total: {
                         usd: 0,
                         brl: 0
                     }
@@ -988,6 +992,14 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
          */
         function totalizaDadosBasicosDoEstudo() {
 
+            $scope.estudo.fob.declarado.usd = 0;
+            $scope.estudo.fob.declarado.brl = 0;
+            $scope.estudo.fob.cheio.usd = 0;
+            $scope.estudo.fob.cheio.brl = 0;
+            $scope.estudo.medidas.peso.ocupado = 0;
+            $scope.estudo.medidas.volume.ocupado = 0;
+            $scope.estudo.medidas.volume.ocupado_percentual = 0;
+
             $scope.produtosDoEstudo.forEach(function (produto) {
 
                 if(produto.estudo_do_produto.qtd <= 0) {
@@ -996,10 +1008,10 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                 else
                 {
 
-                    $scope.estudo.fob.declarado.usd += produto.estudo_do_produto.custo_unitario.declarado.usd * produto.estudo_do_produto.qtd; // Calcula Fob
+                    $scope.estudo.fob.declarado.usd += produto.estudo_do_produto.custo_unitario.declarado.usd * produto.estudo_do_produto.qtd * (1 + $scope.config.percentual_comissao_conny); // Calcula Fob
                     $scope.estudo.fob.declarado.brl += $scope.estudo.fob.declarado.usd * $scope.estudo.cotacao_dolar;
 
-                    $scope.estudo.fob.cheio.usd += produto.estudo_do_produto.custo_unitario.cheio.usd * produto.estudo_do_produto.qtd;
+                    $scope.estudo.fob.cheio.usd += produto.estudo_do_produto.custo_unitario.cheio.usd * produto.estudo_do_produto.qtd * (1 + $scope.config.percentual_comissao_conny);
                     $scope.estudo.fob.cheio.brl += $scope.estudo.fob.cheio.usd * $scope.estudo.cotacao_dolar;
 
                     // $scope.estudo.totalPaypal += produto.estudo_do_produto.custo_unitario.paypal.usd * produto.estudo_do_produto.qtd; // todo: Ajustar a nomenclatura (totalPaypal não está em acordo com os demais nomes que usam '_').
