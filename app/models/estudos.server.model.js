@@ -162,6 +162,10 @@ var ObjetoEstudoSchema = new Schema({
             individualizadas: { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
                 usd: Number,
                 brl: Number
+            },
+            totais: { // Despesas internacionais totais - Somatório das despesas compartilhadas com as individualizadas
+                usd: Number,
+                brl: Number,
             }
         },
         nacionais: {
@@ -210,6 +214,10 @@ var ObjetoEstudoSchema = new Schema({
 
 var EstudoDoProduto = new Schema({
     qtd: Number,
+    proporcionalidade: { // exibe a proporcionalidade do produto no estudo, de acordo com cada uma das variáveis em questão.
+        fob: Number,
+        peso: Number,
+    },
     custo_unitario: {
         declarado: { // Custo que constará da Invoice, ou seja, será o custo declarado para o governo, mas não contemplará o montante enviado por paypal
             usd: Number,
@@ -330,10 +338,11 @@ var EstudoDoProduto = new Schema({
             brl: Number
         },
         internacionais: { // Despesas originadas no exterior.
-            compartilhadas: { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
+            compartilhadas: [{ // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
+                desc: String,
                 usd: Number,
                 brl: Number
-            },
+            }],
             individualizadas: [{ // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
                 desc: String,
                 usd: Number,

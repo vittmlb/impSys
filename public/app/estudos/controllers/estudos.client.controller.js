@@ -4,6 +4,15 @@
 angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal', '$routeParams', '$location', 'Produtos', 'Despesas', 'Estudos', '$http', '$stateParams', 'toaster',
     function($scope, $uibModal, $routeParams, $location, Produtos, Despesas, Estudos, $http, $stateParams, toaster) {
 
+        $scope.erros = {
+            produto: {
+                fob: []
+            },
+            estudo: {
+
+            }
+        };
+
         $scope.quantidades = [];
         $scope.produtosDoEstudo = [];
         $scope.estudo = {
@@ -135,6 +144,10 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                     individualizadas: { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
                         usd: 0,
                         brl: 0
+                    },
+                    totais: { // Despesas internacionais totais - Somatório das despesas compartilhadas com as individualizadas
+                        usd: 0,
+                        brl: 0
                     }
                 },
                 nacionais: {
@@ -210,6 +223,50 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             // brl: 0
         };
 
+        function totalizaDespesasInternacionais(produto) {
+
+            // Compartilhadas
+            determinaProporcionalidadeDosProdutos('valor');
+            var total = {usd: 0, brl: 0};
+            var despC = $scope.estudo.despesas.internacionais.compartilhadas;
+            for(var i = 0; i < despC.length; i++) { // totaliza as despesas no objeto estudo.
+                total.usd += despC[i].usd;
+                total.brl += despC[i].brl;
+            }
+            $scope.estudo.despesas.internacionais.totais = total; // todo: Ainda falta incluir as individualizadas.
+            $scope.produtosDoEstudo.forEach(function (produto) {
+                var despProdInt = produto.estudo_do_produto.despesas.internacionais;
+                var auxTotal = {usd: 0, brl: 0}; // objeto para ser jogado no array de int.compartilhadas.
+                for(var i = 0; i < despC.length; i++) {
+                    var desc = despC[i].desc;
+                    var usd = produto.estudo_do_produto.proporcionalidade.fob * despC[i].usd;
+                    var brl = produto.estudo_do_produto.proporcionalidade.fob * despC[i].brl;
+                    despProdInt.compartilhadas.push({'desc': desc, 'usd': usd, 'brl': brl});
+                    auxTotal.usd += usd;
+                    auxTotal.brl += brl;
+                }
+                despProdInt.totais = {'usd': auxTotal.usd, 'brl': auxTotal.brl};
+            });
+            $scope.produtosDoEstudo.forEach(function (produto) {
+                auxProcessaMudancas(produto, 'despesas');
+            });
+            iniImport();
+        }
+
+        function determinaProporcionalidadeDosProdutos(tipo) {
+            switch (tipo) {
+                case 'valor':
+                    setFobProdutos();
+                    totalizaDadosBasicosDoEstudo();
+                    $scope.produtosDoEstudo.forEach(function (produto) {
+                        if(produto.estudo_do_produto.qtd > 0) { // para evitar divisão por zero <estudo.fob.cheio>
+                            produto.estudo_do_produto.proporcionalidade.fob = produto.estudo_do_produto.fob.cheio.usd / $scope.estudo.fob.cheio.usd;
+                        }
+                    });
+            }
+        }
+
+
         $scope.create = function() {
             var arrayTestes = [];
             for(var i = 0; i < $scope.produtosDoEstudo.length; i++) {
@@ -271,6 +328,14 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             });
         };
 
+        $scope.testeModal = function() {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'app/estudos/views/modals/save-estudo.modal.view.html',
+                controller: ModalInstanceCtrl,
+                scope: $scope,
+                windowClass: 'animated flipInY'
+            });
+        }; // todo Mudar o nome da função
 
         /**
          * Invoca o formulário modal em que o usuário vai informar o nome e o valor da despesa compartilhada.
@@ -291,7 +356,8 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             $scope.despesa_internacional.brl = $scope.despesa_internacional.usd * $scope.config.cotacao_dolar; // Convertendo despesa internacional para brl.
             $scope.estudo.despesas.internacionais.compartilhadas.push($scope.despesa_internacional); // todo: Ver como "zerar" o objeto.
             $scope.despesa_internacional = {};
-            $scope.iniImport();
+            totalizaDespesasInternacionais();
+
         };
 
         /**
@@ -324,6 +390,10 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             if ($scope.produtosDoEstudo.indexOf(produto) === -1){
                 produto.estudo_do_produto = {
                     qtd: 0,
+                    proporcionalidade: { // exibe a proporcionalidade do produto no estudo, de acordo com cada uma das variáveis em questão.
+                        fob: 0,
+                        peso: 0,
+                    },
                     custo_unitario: {
                         declarado: { // Custo que constará da Invoice, ou seja, será o custo declarado para o governo, mas não contemplará o montante enviado por paypal
                             usd: produto.custo_usd,
@@ -444,11 +514,15 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                             brl: 0
                         },
                         internacionais: { // Despesas originadas no exterior.
-                            compartilhadas: { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
-                                usd: 0,
-                                brl: 0
-                            },
-                            individualizadas: [ // diluídas no PREÇO DO PRODUTO - Array com as despesas inerentes à cada produto.
+                            compartilhadas: [
+                            //     { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
+                            //     desc: '',
+                            //     usd: 0,
+                            //     brl: 0
+                            // }
+                            ],
+                            individualizadas: [
+                                // diluídas no PREÇO DO PRODUTO - Array com as despesas inerentes à cada produto.
                                 // { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
                                 //     desc: '',
                                 //     usd: 0,
@@ -548,7 +622,37 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
         $scope.processaMudancas = function(produto, campo) {
             // As variáveis abaixo servem apenas para reduzir o tamanho dos nomes.
             var aux = produto.estudo_do_produto;
-            var desp = aux.despesas.internacionais.individualizadas.usd;
+            var desp = aux.despesas.internacionais.totais;
+            var cUnit = produto.estudo_do_produto.custo_unitario;
+            var despUnit = 0;
+            if(aux.qtd > 0) {
+                despUnit = desp.usd / aux.qtd;
+            }
+            var cCheio = produto.custo_usd + despUnit;
+            cUnit.cheio.usd = cCheio; // Este objeto é inicializado com o valor custo_usd do produto. Aqui ele é alterado para refletir o total inicial + as despesas do produto.
+            switch (campo) {
+                case 'custo_paypal':
+                    cUnit.declarado.usd = cCheio - cUnit.paypal.usd;
+                    break;
+                case 'custo_dentro':
+                    cUnit.paypal.usd = cCheio - cUnit.declarado.usd;
+                    break;
+                case 'qtd':
+                    cUnit.paypal.usd = cUnit.paypal.usd + despUnit;
+                    cUnit.declarado.usd = cCheio - cUnit.paypal.usd;
+                    break;
+                case 'despesas':
+                    cUnit.paypal.usd = cUnit.paypal.usd + despUnit;
+                    cUnit.declarado.usd = cCheio - cUnit.paypal.usd;
+                    break;
+            }
+            testaSomatorioValoresProduto(produto);
+            $scope.iniImport();
+        };
+        function auxProcessaMudancas (produto, campo) {
+            // As variáveis abaixo servem apenas para reduzir o tamanho dos nomes.
+            var aux = produto.estudo_do_produto;
+            var desp = aux.despesas.internacionais.totais;
             var cUnit = produto.estudo_do_produto.custo_unitario;
             var despUnit = 0;
             if(aux.qtd > 0) {
@@ -573,8 +677,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                     break;
             }
             testaSomatorioValoresProduto(produto);
-            $scope.iniImport();
-        };
+        }
 
         /**
          * Funçao provisória para testar se cada produto que tem seus valores alterados em algum campo da tabela de produtos apresenta o somatório de custos que compõe o preço final do ítem estão corretos.
@@ -618,7 +721,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
         function zeraDadosEstudoDoProduto(produto) {
             produto.estudo_do_produto = {
                 qtd: 0,
-                custo_unitario: produto.estudo_do_produto.custo_unitario,
+                custo_unitario: produto.estudo_do_produto.custo_unitario, // todo: Ainda não entendi a utilidade disso aqui.
                 fob: {declarado: {usd: 0, brl: 0}, cheio: {usd: 0, brl: 0}, paypal: {usd: 0, brl: 0}},
                 cif: {declarado: {usd: 0, brl: 0}, cheio: {usd: 0, brl: 0}},
                 medidas: {
@@ -702,23 +805,24 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                         usd: 0,
                         brl: 0
                     },
-                    internacionais: { // Despesas originadas no exterior.
-                        compartilhadas: { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
-                            usd: 0,
-                            brl: 0
-                        },
-                        individualizadas: [ // diluídas no PREÇO DO PRODUTO - Array com as despesas inerentes à cada produto.
-                            // { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
-                            //     desc: '',
-                            //     usd: 0,
-                            //     brl: 0
-                            // }
-                        ],
-                        totais: { // Somatório das despesas compartilhadas e individualizadas.
-                            usd: 0,
-                            brl: 0
-                        }
-                    },
+                    // todo: Em princípio, O objeto 'internacionais' será recalculado no campo de adição de despesas internacionais - melhorar a descriçao dessa operação.
+                    // internacionais: { // Despesas originadas no exterior.
+                    //     // compartilhadas: { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
+                    //     //     usd: 0,
+                    //     //     brl: 0
+                    //     // }, //
+                    //     individualizadas: [ // diluídas no PREÇO DO PRODUTO - Array com as despesas inerentes à cada produto.
+                    //         // { // Despesas internacionais que dizem respeito a um único produto (viagem Conny para um fabricante, ou frete do produto para o porto.
+                    //         //     desc: '',
+                    //         //     usd: 0,
+                    //         //     brl: 0
+                    //         // }
+                    //     ],
+                    //     totais: { // Somatório das despesas compartilhadas e individualizadas.
+                    //         usd: 0,
+                    //         brl: 0
+                    //     }
+                    // },
                     nacionais: { // Despesas originadas no exterior.
                         compartilhadas: { // Despesas a serem compartilhadas por todos os produtos (como viagem da Conny para acompanhar o carregamento do contêiner).
                             usd: 0,
@@ -854,19 +958,24 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
 
             $scope.produtosDoEstudo.forEach(function (produto) {
 
+                var fob = produto.estudo_do_produto.fob;
+                var custUnit = produto.estudo_do_produto.custo_unitario;
+                var conny = $scope.estudo.config.percentual_comissao_conny;
+                var qtd = produto.estudo_do_produto.qtd;
+
                 if (produto.estudo_do_produto.qtd <= 0) {
                     zeraDadosEstudoDoProduto(produto); // Zera os campos totalizadores do objeto <produto.estudo_do_produto>.
                 }
                 else
                 {
-                    produto.estudo_do_produto.fob.declarado.usd = ((produto.estudo_do_produto.custo_unitario.declarado.usd * (1 + $scope.estudo.config.percentual_comissao_conny)) * produto.estudo_do_produto.qtd);
-                    produto.estudo_do_produto.fob.declarado.brl = produto.estudo_do_produto.fob.declarado.usd * $scope.estudo.cotacao_dolar;
+                    fob.declarado.usd = ((custUnit.declarado.usd * (1 + conny)) * qtd);
+                    fob.declarado.brl = fob.declarado.usd * $scope.estudo.cotacao_dolar;
 
-                    produto.estudo_do_produto.fob.paypal.usd = ((produto.estudo_do_produto.custo_unitario.paypal.usd) * (1 + $scope.estudo.config.percentual_comissao_conny)) * produto.estudo_do_produto.qtd * (1 + $scope.estudo.config.taxa_paypal + $scope.estudo.config.iof_cartao);
-                    produto.estudo_do_produto.fob.paypal.brl = produto.estudo_do_produto.fob.paypal.usd * $scope.estudo.cotacao_dolar_paypal;
+                    fob.paypal.usd = ((custUnit.paypal.usd) * (1 + conny)) * qtd * (1 + $scope.estudo.config.taxa_paypal + $scope.estudo.config.iof_cartao);
+                    fob.paypal.brl = fob.paypal.usd * $scope.estudo.cotacao_dolar_paypal;
 
-                    produto.estudo_do_produto.fob.cheio.usd = ((produto.estudo_do_produto.custo_unitario.cheio.usd) * (1 + $scope.estudo.config.percentual_comissao_conny)) * produto.estudo_do_produto.qtd;
-                    produto.estudo_do_produto.fob.cheio.brl = produto.estudo_do_produto.fob.cheio.usd * $scope.estudo.cotacao_dolar;
+                    fob.cheio.usd = ((custUnit.cheio.usd) * (1 + conny)) * qtd;
+                    fob.cheio.brl = fob.cheio.usd * $scope.estudo.cotacao_dolar;
                 }
 
             });
@@ -939,7 +1048,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                 }
             });
 
-        }
+        } // todo: Apagar esta função assim que confirmar que a nova funciona.
 
         // 6
         /**
@@ -970,14 +1079,13 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
 
         }
 
-        function totalizaDespesasInternacionaisCompartilhadas() {
-            var total = {usd: 0, brl: 0};
-            var desp = $scope.estudo.despesas.internacionais.compartilhadas
-            for(var i = 0; i < desp.length; i++) {
-                total.usd += desp.usd;
-                total.brl += desp.brl;
+        function totalizaDespesasInternacionaisDoProduto(produto) {
+            var desp = produto.estudo_do_produto.despesas.internacionais;
+            desp.totais = {usd: 0, brl: 0};
+            for(var i = 0; i < desp.individualizadas; i++) {
+                desp.totais.usd += desp.individualizadas[i].usd;
+                desp.totais.brl += (desp.totais.usd * $scope.config.cotacao_dolar);
             }
-            return total;
         }
 
         // 7
@@ -1238,8 +1346,20 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
         //endregion
 
         $scope.comparaDados = function() {
+            $scope.produtosDoEstudo.forEach(function (produto) {
+                if (regraFobProduto(produto)) {
+                    $scope.erros.produto.fob.push({'produto': produto, 'msg': 'OK'});
+                } else {
+                    $scope.erros.produto.fob.push({'produto': produto, 'msg': 'Erro: Fob usd - cheio / declarado / paypal não batem'});
+                }
+            });
 
         };
+
+        function regraFobProduto(produto) {
+            var fob = produto.estudo_do_produto.fob;
+            return areEqual(fob.cheio.usd, (fob.declarado.usd + fob.paypal.usd));
+        }
 
     }
 ]);
