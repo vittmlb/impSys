@@ -222,14 +222,19 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             // brl: 0
         };
 
+        $scope.proporcionalidade = { // Variável usada para cancular o total do FOB e utilizá-lo para determinar a proporcionalidade do valor de cada produto
+            totalFob: 0,
+            totalPeso: 0
+        };
+
         function totalizaDespesasInternacionais() {
             // Compartilhadas
-            determinaProporcionalidadeDosProdutos('valor');
+            determinaProporcionalidadeDosProdutos();
             processaDespesasInternacionaisCompartilhadas();
 
         }
 
-        function determinaProporcionalidadeDosProdutos(tipo) {
+        function determinaProporcionalidadeDosProdutosOld(tipo) {
             switch (tipo) {
                 case 'valor':
                     zeraDadosEstudo();
@@ -245,6 +250,27 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                     });
             }
         }
+
+        function determinaProporcionalidadeDosProdutos() {
+            var _fob = 0;
+            var _peso = 0;
+            $scope.produtosDoEstudo.forEach(function (prod) {
+                if(prod.estudo_do_produto.qtd > 0) {
+                    _fob += prod.estudo_do_produto.custo_unitario.cheio.usd * prod.estudo_do_produto.qtd;
+                    _peso += prod.peso * prod.estudo_do_produto.qtd;
+                }
+            });
+            $scope.produtosDoEstudo.forEach(function (prod) {
+                if(prod.estudo_do_produto.qtd > 0 && _fob > 0) {
+                    prod.estudo_do_produto.proporcionalidade.fob = (prod.estudo_do_produto.custo_unitario.cheio.usd * prod.estudo_do_produto.qtd) / _fob;
+                    prod.estudo_do_produto.proporcionalidade.peso = ((prod.peso * prod.estudo_do_produto.qtd) / _peso);
+                } else {
+                    prod.estudo_do_produto.proporcionalidade.fob = 0;
+                    prod.estudo_do_produto.proporcionalidade.peso = 0;
+                }
+            });
+        }
+
         function processaDespesasInternacionaisCompartilhadas() {
 
             // Totaliza as despesas internacionais compartilhadas.
@@ -760,6 +786,11 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             // var despInternacionais = produto.estudo_do_produto.despesas;
             produto.estudo_do_produto = {
                 qtd: 0,
+                memoria_paypal: produto.estudo_do_produto.memoria_paypal,
+                proporcionalidade: { // exibe a proporcionalidade do produto no estudo, de acordo com cada uma das variáveis em questão.
+                    fob: produto.estudo_do_produto.proporcionalidade.fob,
+                    peso: produto.estudo_do_produto.proporcionalidade.fob,
+                },
                 custo_unitario: produto.estudo_do_produto.custo_unitario, // Essa atribuiçao é para manter a integridade "estrutural" do objeto..
                 fob: {declarado: {usd: 0, brl: 0}, cheio: {usd: 0, brl: 0}, paypal: {usd: 0, brl: 0}},
                 cif: {declarado: {usd: 0, brl: 0}, cheio: {usd: 0, brl: 0}},
