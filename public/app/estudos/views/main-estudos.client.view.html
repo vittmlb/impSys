@@ -180,7 +180,6 @@
                             <div class="progress progress-mini">
                                 <uib-progressbar class="progress-striped" value="estudo.medidas.volume.ocupado_percentual" type="warning">{{estudo.medidas.volume.ocupado_percentual}}</uib-progressbar>
                             </div>
-
                             <div class="m-t-sm small">Contêiner de 20"</div>
                         </div>
                     </div>
@@ -189,13 +188,13 @@
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <span class="label label-primary pull-right">paypal x oficial</span>
-                            <h5>Comparaçao</h5>
+                            <h5>Comparação</h5>
                         </div>
                         <div class="ibox-content">
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h1 class="no-margins">$ 23.281.89</h1>
+                                    <h1 class="no-margins">{{ estudo.resultados.investimento.paypal.usd | currency: 'U$ ' }}</h1>
                                     <div class="font-bold text-navy">44% <i class="fa fa-level-up"></i> <small>Rapid pace</small></div>
                                 </div>
                                 <div class="col-md-6">
@@ -203,7 +202,6 @@
                                     <div class="font-bold text-navy">22% <i class="fa fa-level-up"></i> <small>Slow pace</small></div>
                                 </div>
                             </div>
-
 
                         </div>
                     </div>
@@ -279,14 +277,12 @@
                         <tr>
                             <th>Principal</th>
                             <th></th>
-                            <th data-breakpoints="all"></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td>Lucro Operação</td>
                             <td data-ng-bind="estudo.resultados.lucro.final.brl | currency: 'R$ '"></td>
-                            <td data-ng-bind="estudo.resultados.lucro.final.usd | currency: 'U$ '"></td>
                         </tr>
                         <tr>
                             <td>Investimento</td>

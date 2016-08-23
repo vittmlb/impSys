@@ -222,33 +222,12 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             // brl: 0
         };
 
-        $scope.proporcionalidade = { // Variável usada para cancular o total do FOB e utilizá-lo para determinar a proporcionalidade do valor de cada produto
-            totalFob: 0,
-            totalPeso: 0
-        };
-
         function totalizaDespesasInternacionais() {
             // Compartilhadas
+            processaDespesasInternacionaisIndividuais();
             determinaProporcionalidadeDosProdutos();
             processaDespesasInternacionaisCompartilhadas();
 
-        }
-
-        function determinaProporcionalidadeDosProdutosOld(tipo) {
-            switch (tipo) {
-                case 'valor':
-                    zeraDadosEstudo();
-                    loadEstudoComDadosConfig();
-                    setFobProdutos();
-                    totalizaDadosBasicosDoEstudo();
-                    $scope.produtosDoEstudo.forEach(function (produto) {
-                        if(produto.estudo_do_produto.qtd > 0) { // para evitar divisão por zero <estudo.fob.cheio>
-                            produto.estudo_do_produto.proporcionalidade.fob = produto.estudo_do_produto.fob.cheio.usd / $scope.estudo.fob.cheio.usd;
-                        } else {
-                            zeraDadosEstudoDoProduto(produto);
-                        }
-                    });
-            }
         }
 
         function determinaProporcionalidadeDosProdutos() {
@@ -292,15 +271,26 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                         var usd = produto.estudo_do_produto.proporcionalidade.fob * despC[i].usd;
                         var brl = produto.estudo_do_produto.proporcionalidade.fob * despC[i].brl;
                         despProdInt.compartilhadas.push({'desc': desc, 'usd': usd, 'brl': brl});
-                        auxTotal.usd += usd;
-                        auxTotal.brl += brl;
+                        despProdInt.totais.usd += usd;
+                        despProdInt.totais.brl += brl;
+                        // auxTotal.usd += usd;
+                        // auxTotal.brl += brl;
                     }
-                    despProdInt.totais = {'usd': auxTotal.usd, 'brl': auxTotal.brl};
+                    // despProdInt.totais = {'usd': auxTotal.usd, 'brl': auxTotal.brl};
                 }
             });
         }
+        function processaDespesasInternacionaisIndividuais() {
 
+            $scope.produtosDoEstudo.forEach(function (produto) {
+                produto.estudo_do_produto.despesas.internacionais.totais = {'usd': 0, 'brl': 0};
+                produto.estudo_do_produto.despesas.internacionais.individualizadas.forEach(function(desp) {
+                    produto.estudo_do_produto.despesas.internacionais.totais.usd += desp.usd;
+                    produto.estudo_do_produto.despesas.internacionais.totais.brl += desp.brl;
+                });
+            });
 
+        }
 
 
         $scope.create = function() {
@@ -424,7 +414,8 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             produto.estudo_do_produto.despesas.internacionais.individualizadas.push($scope.despesa_internacional_produto);
             $scope.despesa_internacional_produto = {};
             $scope.currentProduto = {};
-            // $scope.iniImport();
+            totalizaDespesasInternacionais();
+            processaMudancasTodosProdutos('despesas');
         };
 
         /**
@@ -1208,8 +1199,17 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                         estProd.despesas.total.brl
                     );
 
+                    estProd.resultados.investimento.paypal.usd = estProd.fob.paypal.usd;
+                    estProd.resultados.investimento.paypal.brl = estProd.fob.paypal.brl;
+
                     $scope.estudo.resultados.investimento.final.brl += estProd.resultados.investimento.final.brl;
                     $scope.estudo.resultados.investimento.cheio.brl += estProd.resultados.investimento.cheio.brl;
+
+                    $scope.estudo.resultados.investimento.paypal.usd += estProd.resultados.investimento.paypal.usd;
+                    $scope.estudo.resultados.investimento.paypal.brl += estProd.resultados.investimento.paypal.brl;
+
+                    $scope.estudo.resultados.investimento.declarado.usd += estProd.resultados.investimento.declarado.usd;
+                    $scope.estudo.resultados.investimento.declarado.brl += estProd.resultados.investimento.declarado.brl;
 
                     // Cálculo do preço de Custo final do produto.
                     estProd.resultados.precos.custo.final.brl = estProd.resultados.investimento.final.brl / estProd.qtd;
@@ -1409,7 +1409,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                 geraEstudoDeCadaProduto(); // Itera por cada produto de <$scope.ProdutosDoEstudo> para gerar um <estudo_do_produto> com os custos de importação individualizados e totalizar <$scope.estudo>.
             }
         };
-
 
         //endregion
 
