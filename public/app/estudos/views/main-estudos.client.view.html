@@ -98,7 +98,6 @@
                                 <th style="text-align: center;">C.Paypal</th>
                                 <th style="text-align: center;">C.Dentro</th>
                                 <th style="text-align: center;">Qtd</th>
-                                <th style="text-align: center;">Despesa</th>
                                 <th style="text-align: center;">C.Final</th>
                                 <th style="text-align: center;">P.Venda</th>
                                 <th style="text-align: center;">Opções</th>
@@ -111,11 +110,16 @@
                                 <!--</td>-->
                                 <td class="project-title">
                                     <i class="fa fa-plus" style="cursor: pointer; margin-right: 3px;" ng-click="addDespesaInternacionalDoProdutoModal(itemEstudo)"></i>
-                                    <a ui-sref="project_detail">{{ itemEstudo.nome }}</a>
+                                    <a ng-click="produtoViewModal(itemEstudo)">{{ itemEstudo.nome }}</a>
                                     <br/>
                                     <div data-ng-repeat="desp in itemEstudo.estudo_do_produto.despesas.internacionais.individualizadas">
                                         <small style="display: block;">{{ desp.desc }}: {{ desp.usd | currency: 'usd ' }}</small>
                                     </div>
+                                    <!--<small>Cheio USD:{{ itemEstudo.estudo_do_produto.custo_unitario.cheio.usd }}</small><br/>-->
+                                    <!--<small>Paypal USD: {{ itemEstudo.estudo_do_produto.custo_unitario.paypal.usd }}</small><br/>-->
+                                    <!--<small>Declarado USD: {{ itemEstudo.estudo_do_produto.custo_unitario.declarado.usd }}</small><br/>-->
+                                    <!--<small>Desp Int Tot: {{ itemEstudo.estudo_do_produto.despesas.internacionais.totais.usd }}</small>-->
+
                                 </td>
                                 <td class="project-title">
                                     <a>{{itemEstudo.estudo_do_produto.custo_unitario.cheio.usd | currency: 'U$ '}}</a>
@@ -136,9 +140,6 @@
                                 </td>
                                 <td class="project-title">
                                     <input style="text-align: center;" type="number" class="form-control input-transparente" placeholder="qtd" data-ng-model="itemEstudo.estudo_do_produto.qtd" ng-change="processaMudancas(itemEstudo, 'qtd')">
-                                </td>
-                                <td class="project-title">
-                                    <input type="text" class="form-control input-transparente text-center" placeholder="" name="custo_dentro" ng-model="itemEstudo.estudo_do_produto.despesas.internacionais.individualizadas.usd" ng-change="processaMudancas(itemEstudo, 'despesas')">
                                 </td>
                                 <td class="project-title">
                                     <span data-ng-bind="itemEstudo.estudo_do_produto.resultados.precos.custo.final.brl | currency: 'R$ '"></span>
