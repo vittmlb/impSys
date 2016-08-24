@@ -363,7 +363,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             });
         }; // todo Mudar o nome da função
         $scope.produtoViewModal = function(produto) {
-            $scope.currentProduto = produto;
+            $scope.currentProdutoView = produto;
             var modalInstance = $uibModal.open({
                 templateUrl: 'app/estudos/views/modals/view-produto-estudo.modal.view.html',
                 controller: ModalInstanceCtrl,
@@ -1090,29 +1090,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
         /**
          * Itera pelo objeto <$scope.despesas> e faz o somatório para adicionar ao <$scope.estudo>
          */
-        function totalizaDespesasDoEstudoOld() {
-
-            var aliqAfrmm = $scope.despesas.filter(function(item) {
-                return item.nome === 'Taxa AFRMM'; // todo: Criar mecanismo de Erro quando não encontrar a taxa.
-            });
-            $scope.estudo.despesas.afrmm.brl = $scope.estudo.frete_maritimo.valor.brl * aliqAfrmm[0].aliquota; //todo: Confirmar sobre a incidência do imposto (taxa de desembarque???)
-            $scope.estudo.despesas.total.brl = $scope.estudo.despesas.afrmm.brl; // Ao invés de iniciar as despesas com zero, já inicializo com o afrmm.
-            $scope.despesas.forEach(function (item) {
-                if(item.tipo === 'despesa aduaneira' && item.ativa === true) {
-                    if(item.moeda === 'U$') {
-                        $scope.estudo.despesas.total.brl += (item.valor * $scope.estudo.cotacao_dolar);
-                    } else {
-                        $scope.estudo.despesas.total.brl += item.valor;
-                    }
-                }
-            });
-
-        } // todo: Apagar esta função assim que confirmar que a nova funciona.
-
-        // 6
-        /**
-         * Itera pelo objeto <$scope.despesas> e faz o somatório para adicionar ao <$scope.estudo>
-         */
         function totalizaDespesasDoEstudo() {
 
             var desp = $scope.estudo.despesas;
@@ -1430,4 +1407,3 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
 
     }
 ]);
-
