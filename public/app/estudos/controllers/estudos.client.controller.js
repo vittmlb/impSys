@@ -266,6 +266,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                 if(produto.estudo_do_produto.qtd > 0) {
                     var despProdInt = produto.estudo_do_produto.despesas.internacionais;
                     var auxTotal = {usd: 0, brl: 0}; // objeto para ser jogado no array de int.compartilhadas.
+                    despProdInt.compartilhadas = [];
                     for(var i = 0; i < despC.length; i++) {
                         var desc = despC[i].desc;
                         var usd = produto.estudo_do_produto.proporcionalidade.fob * despC[i].usd;
