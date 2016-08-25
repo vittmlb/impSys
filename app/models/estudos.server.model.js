@@ -191,7 +191,19 @@ var ObjetoEstudoSchema = new Schema({
             },
             paypal: { // Investimento feito através do paypal
                 usd: Number,
-                brl: Number
+                brl: Number,
+                taxa_iof: { // Montante pago em IOF > não é a alíquota.
+                    usd: Number,
+                    brl: Number,
+                },
+                taxa_paypal: { // Montante pago em IOF > não é a alíquota.
+                    usd: Number,
+                    brl: Number,
+                },
+                taxa_conny: { // Montante pago em IOF > não é a alíquota.
+                    usd: Number,
+                    brl: Number,
+                }
             },
             final: { // Montante EFETIVAMENTE desembolsado para a aquisiçao do produto > declarado + paypal
                 brl: Number
@@ -243,7 +255,19 @@ var EstudoDoProduto = new Schema({
         },
         paypal: {
             usd: Number,
-            brl: Number
+            brl: Number,
+            taxa_iof: {
+                usd: Number,
+                brl: Number,
+            },
+            taxa_paypal: {
+                usd: Number,
+                brl: Number,
+            },
+            taxa_conny: {
+                usd: Number,
+                brl: Number,
+            }
         }
     },
     cif: {

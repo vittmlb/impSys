@@ -5,6 +5,7 @@
             <button style="top: -5px; position: relative; margin-left: 20px;" class="btn btn-sm btn-white handle handle-right" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i></button>
             <button style="top: -5px; position: relative; margin-left: 20px;" class="btn btn-sm btn-info" ng-click="testeModal()"><i class="fa fa-floppy-o"></i></button>
             <button style="top: -5px; position: relative; margin-left: 20px;" class="btn btn-sm btn-success"><i class="fa fa-tasks"></i></button>
+            <button style="top: -5px; position: relative; margin-left: 20px;" class="btn btn-sm btn-danger" ng-click="testeErros()"><i class="fa fa-tasks"></i></button>
         </div>
     </div> <!-- Botão Add Produto -->
     <div class="row">
@@ -194,8 +195,9 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h1 class="no-margins">{{ estudo.resultados.investimento.paypal.usd | currency: 'U$ ' }}</h1>
-                                    <div class="font-bold text-navy">44% <i class="fa fa-level-up"></i> <small>Rapid pace</small></div>
+                                    <h1 class="no-margins">{{ estudo.resultados.investimento.paypal.usd | currency }}</h1>
+                                    <!--<div class="font-bold text-navy">44% <i class="fa fa-level-up"></i> <small>Rapid pace</small></div>-->
+                                    <div class="font-bold text-navy">IOF <small>{{ estudo.resultados.investimento.paypal.taxa_iof.brl | currency: 'R$ ' }}</small></div>
                                 </div>
                                 <div class="col-md-6">
                                     <h1 class="no-margins">206,12</h1>

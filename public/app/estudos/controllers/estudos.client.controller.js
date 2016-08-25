@@ -12,6 +12,14 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
 
             }
         };
+        $scope.testeErros = function() {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'app/estudos/views/modals/viewErros.html',
+                controller: ModalInstanceCtrl,
+                scope: $scope,
+                windowClass: 'animated flipInY'
+            });
+        }; // todo Mudar o nome da função
 
         $scope.quantidades = [];
         $scope.produtosDoEstudo = [];
@@ -173,7 +181,19 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                     },
                     paypal: { // Investimento feito através do paypal
                         usd: 0,
-                        brl: 0
+                        brl: 0,
+                        taxa_iof: { // Montante pago em IOF > não é a alíquota.
+                            usd: 0,
+                            brl: 0,
+                        },
+                        taxa_paypal: { // Montante pago em IOF > não é a alíquota.
+                            usd: 0,
+                            brl: 0,
+                        },
+                        taxa_conny: { // Montante pago em IOF > não é a alíquota.
+                            usd: 0,
+                            brl: 0,
+                        }
                     },
                     final: { // Montante EFETIVAMENTE desembolsado para a aquisiçao do produto > declarado + paypal
                         brl: 0
@@ -274,10 +294,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                         despProdInt.compartilhadas.push({'desc': desc, 'usd': usd, 'brl': brl});
                         despProdInt.totais.usd += usd;
                         despProdInt.totais.brl += brl;
-                        // auxTotal.usd += usd;
-                        // auxTotal.brl += brl;
                     }
-                    // despProdInt.totais = {'usd': auxTotal.usd, 'brl': auxTotal.brl};
                 }
             });
         }
@@ -457,7 +474,19 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                         },
                         paypal: {
                             usd: 0,
-                            brl: 0
+                            brl: 0,
+                            taxa_iof: {
+                                usd: 0,
+                                brl: 0,
+                            },
+                            taxa_paypal: {
+                                usd: 0,
+                                brl: 0,
+                            },
+                            taxa_conny: {
+                                usd: 0,
+                                brl: 0,
+                            }
                         }
                     },
                     cif: {
@@ -778,13 +807,54 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             // var despInternacionais = produto.estudo_do_produto.despesas;
             produto.estudo_do_produto = {
                 qtd: 0,
+                fob: {
+                    declarado: { // FOB que constará da Invoice, ou seja, será o total declarado para o governo, mas não contemplará o montante enviado por paypal
+                        usd: 0,
+                        brl: 0
+                    },
+                    cheio: { // FOB real, como se o processo fosse feito integralmente por dentro (sem paypal)
+                        usd: 0,
+                        brl: 0
+                    },
+                    paypal: {
+                        usd: 0,
+                        brl: 0,
+                        taxa_iof: {
+                            usd: 0,
+                            brl: 0,
+                        },
+                        taxa_paypal: {
+                            usd: 0,
+                            brl: 0,
+                        },
+                        taxa_conny: {
+                            usd: 0,
+                            brl: 0,
+                        }
+                    }
+                },
                 memoria_paypal: produto.estudo_do_produto.memoria_paypal,
                 proporcionalidade: { // exibe a proporcionalidade do produto no estudo, de acordo com cada uma das variáveis em questão.
                     fob: produto.estudo_do_produto.proporcionalidade.fob,
                     peso: produto.estudo_do_produto.proporcionalidade.fob,
                 },
                 custo_unitario: produto.estudo_do_produto.custo_unitario, // Essa atribuiçao é para manter a integridade "estrutural" do objeto..
-                fob: {declarado: {usd: 0, brl: 0}, cheio: {usd: 0, brl: 0}, paypal: {usd: 0, brl: 0}},
+                paypal: {
+                    usd: 0,
+                    brl: 0,
+                    taxa_iof: {
+                        usd: 0,
+                        brl: 0,
+                    },
+                    taxa_paypal: {
+                        usd: 0,
+                        brl: 0,
+                    },
+                    taxa_conny: {
+                        usd: 0,
+                        brl: 0,
+                    }
+                },
                 cif: {declarado: {usd: 0, brl: 0}, cheio: {usd: 0, brl: 0}},
                 medidas: {
                     peso: {
@@ -970,7 +1040,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             $scope.estudo.medidas.peso = {contratado: 0, ocupado: 0, ocupado_percentual: 0};
             $scope.estudo.medidas.volume = {contratado: 0, ocupado: 0, ocupado_percentual: 0};
 
-            $scope.estudo.resultados.investimento = {declarado: {usd: 0, brl: 0}, paypal: {usd: 0, brl: 0}, final: {brl: 0}, cheio: {brl: 0}};
+            $scope.estudo.resultados.investimento = {declarado: {usd: 0, brl: 0}, paypal: {usd: 0, brl: 0, taxa_iof: {usd: 0, brl: 0}, taxa_paypal: {usd: 0, brl: 0}, taxa_conny: {usd: 0, brl: 0} }, final: {brl: 0}, cheio: {brl: 0}};
             $scope.estudo.resultados.lucro = {final: {usd: 0, brl: 0}};
             $scope.estudo.resultados.roi = {brl: 0};
 
@@ -1012,7 +1082,9 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
 
                 var fob = produto.estudo_do_produto.fob;
                 var custUnit = produto.estudo_do_produto.custo_unitario;
-                var conny = $scope.estudo.config.percentual_comissao_conny;
+                var tx_conny = $scope.estudo.config.percentual_comissao_conny;
+                var tx_iof = $scope.estudo.config.iof_cartao;
+                var tx_paypal = $scope.estudo.config.taxa_paypal;
                 var qtd = produto.estudo_do_produto.qtd;
 
                 if (produto.estudo_do_produto.qtd <= 0) {
@@ -1020,13 +1092,25 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                 }
                 else
                 {
-                    fob.declarado.usd = ((custUnit.declarado.usd * (1 + conny)) * qtd);
+                    fob.declarado.usd = ((custUnit.declarado.usd * (1 + tx_conny)) * qtd);
                     fob.declarado.brl = fob.declarado.usd * $scope.estudo.cotacao_dolar;
 
-                    fob.paypal.usd = ((custUnit.paypal.usd) * (1 + conny)) * qtd * (1 + $scope.estudo.config.taxa_paypal + $scope.estudo.config.iof_cartao);
+
+                    var aux_conny = ((custUnit.paypal.usd) * (tx_conny));
+                    fob.paypal.taxa_conny.usd = aux_conny * qtd;
+                    fob.paypal.taxa_conny.brl = fob.paypal.taxa_conny.usd * $scope.config.cotacao_dolar_paypal;
+
+                    var aux_paypal = ((custUnit.paypal.usd + aux_conny) * (tx_paypal));
+                    fob.paypal.taxa_paypal.usd = aux_paypal * qtd;
+                    fob.paypal.taxa_paypal.brl = fob.paypal.taxa_paypal.usd * $scope.config.cotacao_dolar_paypal;
+
+                    fob.paypal.taxa_iof.usd = ((custUnit.paypal.usd + aux_conny + aux_paypal) * (tx_iof)) * qtd;
+                    fob.paypal.taxa_iof.brl = fob.paypal.taxa_iof.usd * $scope.config.cotacao_dolar_paypal;
+
+                    fob.paypal.usd = (((((custUnit.paypal.usd) * (1 + tx_conny)) * qtd) * (1 + $scope.estudo.config.taxa_paypal)) * (1 + $scope.estudo.config.iof_cartao));
                     fob.paypal.brl = fob.paypal.usd * $scope.estudo.cotacao_dolar_paypal;
 
-                    fob.cheio.usd = ((custUnit.cheio.usd) * (1 + conny)) * qtd;
+                    fob.cheio.usd = ((custUnit.cheio.usd) * (1 + tx_conny)) * qtd;
                     fob.cheio.brl = fob.cheio.usd * $scope.estudo.cotacao_dolar;
                 }
 
@@ -1180,14 +1264,6 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                     estProd.resultados.investimento.paypal.usd = estProd.fob.paypal.usd;
                     estProd.resultados.investimento.paypal.brl = estProd.fob.paypal.brl;
 
-                    $scope.estudo.resultados.investimento.final.brl += estProd.resultados.investimento.final.brl;
-                    $scope.estudo.resultados.investimento.cheio.brl += estProd.resultados.investimento.cheio.brl;
-
-                    $scope.estudo.resultados.investimento.paypal.usd += estProd.resultados.investimento.paypal.usd;
-                    $scope.estudo.resultados.investimento.paypal.brl += estProd.resultados.investimento.paypal.brl;
-
-                    $scope.estudo.resultados.investimento.declarado.usd += estProd.resultados.investimento.declarado.usd;
-                    $scope.estudo.resultados.investimento.declarado.brl += estProd.resultados.investimento.declarado.brl;
 
                     // Cálculo do preço de Custo final do produto.
                     estProd.resultados.precos.custo.final.brl = estProd.resultados.investimento.final.brl / estProd.qtd;
@@ -1196,6 +1272,29 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
 
                     // Calcula o resultado unitário e total de cada um dos produtos.
                     calculaResultadosPorProduto(produto);
+
+                    // Região para acumular os dados do Estudo
+
+                    $scope.estudo.resultados.investimento.final.brl += estProd.resultados.investimento.final.brl;
+                    $scope.estudo.resultados.investimento.cheio.brl += estProd.resultados.investimento.cheio.brl;
+
+                    $scope.estudo.resultados.investimento.paypal.usd += estProd.resultados.investimento.paypal.usd;
+                    $scope.estudo.resultados.investimento.paypal.brl += estProd.resultados.investimento.paypal.brl;
+
+                    // Totaliza os valores gastos com a taxa da Conny, obtidos à partir do estudo_do_produto.fob.paypal
+                    $scope.estudo.resultados.investimento.paypal.taxa_conny.usd += estProd.fob.paypal.taxa_conny.usd;
+                    $scope.estudo.resultados.investimento.paypal.taxa_conny.brl += estProd.fob.paypal.taxa_conny.brl;
+
+                    // Totaliza os valores gastos com a taxa do Paypal, obtidos à partir do estudo_do_produto.fob.paypal
+                    $scope.estudo.resultados.investimento.paypal.taxa_paypal.usd += estProd.fob.paypal.taxa_paypal.usd;
+                    $scope.estudo.resultados.investimento.paypal.taxa_paypal.brl += estProd.fob.paypal.taxa_paypal.brl;
+
+                    // Totaliza os valores gastos com IOF, obtidos à partir do estudo_do_produto.fob.paypal
+                    $scope.estudo.resultados.investimento.paypal.taxa_iof.usd += estProd.fob.paypal.taxa_iof.usd;
+                    $scope.estudo.resultados.investimento.paypal.taxa_iof.brl += estProd.fob.paypal.taxa_iof.brl;
+
+                    $scope.estudo.resultados.investimento.declarado.usd += estProd.resultados.investimento.declarado.usd;
+                    $scope.estudo.resultados.investimento.declarado.brl += estProd.resultados.investimento.declarado.brl;
 
                     // Update (soma) dos lucros dos produtos para formar o Lucro Total do Estudo.
                     $scope.estudo.resultados.lucro.final.brl += estProd.resultados.lucro.total.brl;
@@ -1375,6 +1474,8 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
             estProd.resultados.lucro.total.brl = estProd.resultados.lucro.unitario.brl * estProd.qtd;
         }
 
+
+
         $scope.iniImport = function() {
             zeraDadosEstudo();
             loadEstudoComDadosConfig();
@@ -1385,17 +1486,26 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                 setCifEstudo(); // Seta os Valores CIF (usd/brl/integral) do objeto <$scope.estudo>
                 totalizaDespesasDoEstudo(); // Itera pelo objeto <$scope.despesas> e faz o somatório para adicionar ao <$scope.estudo>
                 geraEstudoDeCadaProduto(); // Itera por cada produto de <$scope.ProdutosDoEstudo> para gerar um <estudo_do_produto> com os custos de importação individualizados e totalizar <$scope.estudo>.
+                $scope.comparaDados();
             }
         };
 
         //endregion
 
         $scope.comparaDados = function() {
+            zeraErros();
             $scope.produtosDoEstudo.forEach(function (produto) {
-                if (regraFobProduto(produto)) {
-                    $scope.erros.produto.fob.push({'produto': produto, 'msg': 'OK'});
-                } else {
-                    $scope.erros.produto.fob.push({'produto': produto, 'msg': 'Erro: Fob usd - cheio / declarado / paypal não batem'});
+                if(produto.estudo_do_produto.qtd > 0) {
+                    if (regraFobProduto(produto)) {
+                        $scope.erros.produto.fob.push({'produto': `FOB ${produto.nome} : OK !!!`});
+                    } else {
+                        $scope.erros.produto.fob.push({'produto': `FOB ${produto.nome} : Erro !!`});
+                    }
+                    if(regraValorUnitarioInvestimento(produto)) {
+                        $scope.erros.produto.fob.push({'produto': `Custo ${produto.nome} : OK !!! Custo Unitário * qtd = total do investimento em BRL`});
+                    } else {
+                        $scope.erros.produto.fob.push({'produto': `FOB ${produto.nome} : Erro !! Custo Unitário * qtd != total do investimento em BRL`});
+                    }
                 }
             });
 
@@ -1403,7 +1513,31 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
 
         function regraFobProduto(produto) {
             var fob = produto.estudo_do_produto.fob;
-            return areEqual(fob.cheio.usd, (fob.declarado.usd + fob.paypal.usd));
+            return areEqual(fob.cheio.usd, (fob.declarado.usd + (fob.paypal.usd - fob.paypal.taxa_iof.usd - fob.paypal.taxa_paypal.usd)));
+        }
+
+        function regraValorUnitarioInvestimento(produto) {
+            var total_brl = produto.estudo_do_produto.qtd * produto.estudo_do_produto.resultados.precos.custo.final.brl;
+            return comparaValoresComMargem(produto.estudo_do_produto.resultados.investimento.final.brl, total_brl, 0.5);
+        }
+
+        function comparaValoresComMargem(valor_a, valor_b, margem) {
+            var result = valor_a - valor_b;
+            if (result < 0) {
+                result = result * -1;
+            }
+            return (result < margem);
+        }
+
+        function zeraErros() {
+            $scope.erros = {
+                produto: {
+                    fob: []
+                },
+                estudo: {
+
+                }
+            };
         }
 
     }
