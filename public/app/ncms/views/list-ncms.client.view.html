@@ -44,21 +44,22 @@
                                         <span class="label label-danger" ng-show="ncm.li">Licença</span>
                                     </td>
                                     <td class="project-title">
-                                        <a ui-sref="project_detail">{{ ncm.descricao }}</a>
+                                        <a href="#!/ncms/{{ ncm._id }}">{{ ncm.descricao }}</a>
                                         <br/>
                                         <small style="font-size: 0.9em;">{{ncm.cod_ncm}}</small>
                                     </td>
                                     <td class="project-title">
                                         <a>Impostos</a>
                                         <br>
-                                        <small>II:</small><small class="text-info"> {{ ncm.impostos.ii | percentage: 2}}</small>
-                                        <small>IPI: {{ ncm.impostos.ipi | percentage: 2 }}</small>
-                                        <small>Pis: {{ ncm.impostos.pis | percentage: 2 }}</small>
-                                        <small>Cofins: {{ ncm.impostos.cofins | percentage: 2 }}</small>
+                                        <small>II: </small> <small class="text-danger font-bold"> {{ ncm.impostos.ii | percentage: 2}} </small>
+                                        <small>IPI: </small> <small class="text-danger font-bold">{{ ncm.impostos.ipi | percentage: 2 }} </small>
+                                        <small>Pis: </small> <small class="text-danger font-bold">{{ ncm.impostos.pis | percentage: 2 }} </small>
+                                        <small>Cofins: </small><small class="text-danger font-bold">{{ ncm.impostos.cofins | percentage: 2 }}</small>
                                     </td>
                                     <td class="project-people">
-                                        <a href=""><img alt="image" class="img-circle" src="img/a3.jpg"></a>
-
+                                        <a data-ng-repeat="prod in ncm._produtoId | limitTo: 3" ng-show="ncm._produtoId.length" href="#!/produtos/{{ prod._id }}">
+                                            <img alt="image" class="img-circle" ng-src="{{ prod.img_url }}">
+                                        </a>
                                     </td>
                                     <td class="project-actions">
                                         <a href="#!/ncms/{{ ncm._id }}" class="btn btn-white btn-sm"><i class="fa fa-eye"></i></a>

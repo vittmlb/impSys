@@ -2,6 +2,8 @@
  * Created by Vittorio on 30/05/2016.
  */
 var Produtos = require('mongoose').model('Produto');
+var ncms = require('./ncms.server.controller.js');
+
 var fs = require('fs');
 var gutil = require('gulp-util');
 var path = require('path');
@@ -14,6 +16,7 @@ exports.create = function(req, res) {
                 message: err
             });
         } else {
+            update_ncm(req, res);
             res.json(produto);
         }
     });
@@ -45,18 +48,13 @@ exports.delete = function(req, res) {
             });
         } else {
             removeImageFile(img_url);
+            delete_ncm(req, res);
             res.json(produto);
         }
     });
 };
 
 exports.update = function(req, res) {
-    // var parsed_ncm = JSON.parse(req.body.ncm);
-    // if(req.body.usa_impostos_ncm) {
-    //     req.body.impostosDoProduto = parsed_ncm.impostos;
-    // } else {
-    //     req.body.impostosDoProduto = req.body.impostos;
-    // }
     var produto = req.produto;
     var img_url_deletion = false;
     if(produto.img_url !== req.body.img_url) {
@@ -83,6 +81,7 @@ exports.update = function(req, res) {
             if(img_url_deletion) {
                 removeImageFile(img_url_deletion);
             }
+            update_ncm(req, res);
             res.json(produto);
         }
     });
@@ -120,4 +119,14 @@ function removeImageFile(filePath) {
             }
         });
     }
+}
+
+// Funçoes para atualizar objectIds em outros objetos.
+function update_ncm(req, res) {
+    req.params.ncmId = req.body.ncm._id;
+    ncms.update_ncm_produto(req, res);
+}
+function delete_ncm(req, res) {
+    req.params.ncm = req.produto.ncm._id;
+    ncms.delete_ncm_produto(req, res);
 }

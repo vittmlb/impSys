@@ -28,7 +28,10 @@ var NcmSchema = new Schema({
     },
     obs: {
         type: String
-    }
+    },
+    _produtoId: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Produto'
+    }]
 });
 
 NcmSchema.set('toJSON', {
