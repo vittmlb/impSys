@@ -7,90 +7,84 @@
                     <a href="index.html">Home</a>
                 </li>
                 <li class="active">
-                    <a>Página NCM</a>
+                    <a>Cadastrar NCM</a>
                 </li>
             </ol>
         </div>
     </div>
-    
     <div class="wrapper wrapper-content animated fadeInRight">
-
         <div class="row">
-            <div class="col-lg-8">
-                <div class="ibox">
-                    <div class="ibox-content">
-                        <div class="row">
-                            <div class="col-xs-8">
-                                <h2 style="display: inline;" >{{ ncm.cod_ncm }}</h2>
-                            </div>
-                            <div class="col-xs-4">
-                                <button style="top: 5px; margin-left: 10px; position: relative;" class="btn btn-sm btn-white pull-right"><i class="fa fa-times"></i></button>
-                                <button style="top: 5px; margin-left: 10px; position: relative;" class="btn btn-sm btn-white pull-right"><i class="fa fa-pencil"></i></button>
-                            </div>
-                        </div>
-
-                        <h3>{{ ncm.descricao }}</h3>
-                        <br/>
-                        <h4>II: {{ ncm.impostos.ii | percentage: 2}}</h4>
-                        <h4>IPI: {{ ncm.impostos.ipi | percentage: 2}}</h4>
-                        <h4>PIS: {{ ncm.impostos.pis | percentage: 2}}</h4>
-                        <h4>Cofins: {{ ncm.impostos.cofins | percentage: 2}}</h4>
-                        <br/>
-                        <h4>Observações: </h4>
-                        <p>
-                            {{ ncm.obs }}
-                        </p>
-
-                    </div>
-                </div>
+            <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Produtos relacionados a este NCM</h5>
-
+                        <h5>Formulário de Cadastro NCMs</h5>
                         <div ibox-tools></div>
                     </div>
                     <div class="ibox-content">
-
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th>Produto</th>
-                                <th>Modelo</th>
-                                <th>Custo</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr data-ng-repeat="prod in ncm._produtoId">
-                                <td>{{ prod.nome }}</td>
-                                <td>{{ prod.modelo }}</td>
-                                <td>{{ prod.custo_usd | currency: 'U$ ' }}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 m-b-lg">
-                <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
-                    <div class="vertical-timeline-block">
-                        <div data-ng-repeat="prod in ncm._produtoId | limitTo: 2" class="vertical-timeline-block">
-                            <div class="vertical-timeline-icon navy-bg">
-                                <img alt="image" class="img-circle" ng-src="{{ prod.img_url }}" style="width: 34px;">
+                        <form data-ng-submit="update()" class="form-horizontal">
+                            <div class="form-group"><label class="col-sm-2 control-label">NCM</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputCodNcm" data-ng-model="ncm.cod_ncm" placeholder="Código NCM">
+                                </div>
                             </div>
-
-                            <div class="vertical-timeline-content">
-                                <h2>{{ prod.nome }}</h2>
-                                <h3>{{ prod.modelo }}</h3>
-                                <p>{{ prod.descricao }}</p>
-                                <a href="#!/produtos/{{ prod._id }}" class="btn btn-sm btn-primary">Detalhes</a>
-                                <span class="vertical-date">
-                                        Preço<br>
-                                        <small>{{ prod.custo_usd | currency: 'U$ ' }}</small>
-                                    </span>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">Descrição</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputDescricao" data-ng-model="ncm.descricao" placeholder="Descrição">
+                                </div>
                             </div>
-                        </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">Licença para Importação <br/>
+                                <small class="text-navy">produto requer li ?</small>
+                            </label>
+                                <div class="col-sm-10">
+                                    <div style="margin-top: 11px;"><label> <input type="checkbox"  id="checkBoxLi" data-ng-model="ncm.li"> Licença Importação </label></div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">II</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputImpostoII" data-ng-model="ncm.impostos.ii" placeholder="Imposto de Importação">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">IPI</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputImpostoIPI" data-ng-model="ncm.impostos.ipi" placeholder="IPI">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">PIS</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputImpostoPIS" data-ng-model="ncm.impostos.pis" placeholder="PIS">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">COFINS</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputImpostoCOFINS" data-ng-model="ncm.impostos.cofins" placeholder="COFINS">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group"><label class="col-sm-2 control-label">OBS</label>
+
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" name="inputObs" id="inputObs" cols="30" rows="10" data-ng-model="obs" placeholder="Obs"></textarea>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input style="margin-left: 15px;" type="submit" class="btn btn-primary pull-right" value="Update">
+                                    <button class="btn btn-white pull-right" type="submit">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </section>
