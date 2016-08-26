@@ -333,7 +333,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                 toaster.pop({
                     type: 'error',
                     title: 'Erro',
-                    body: errorResponse,
+                    body: errorResponse.message,
                     timeout: 3000
                 });
             });

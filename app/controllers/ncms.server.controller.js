@@ -62,6 +62,11 @@ exports.update = function(req, res) {
 
 exports.delete = function(req, res) {
     var ncm = req.ncm;
+    if(_temProdutoAssociado(req)){
+        return res.status(400).send({
+            message: 'O NCM não pode ser excluído pois ainda há produtos a ele vinculados'
+        });
+    }
     ncm.remove(function (err) {
         if(err) {
             return res.status(400).send({
@@ -121,4 +126,8 @@ function _removeProdutoNcmAntigo(req, res) {
             }
         }
     });
+}
+
+function _temProdutoAssociado(req) {
+    return (req.ncm._produtoId.length);
 }

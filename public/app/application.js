@@ -19,7 +19,8 @@ var mainAppModule = angular.module('impsys', [
     'ui.router',
     'ngAnimate',
     'ui.bootstrap',
-    'ngFileUpload'
+    'ngFileUpload',
+    'oitozero.ngSweetAlert'
 ]);
 //todo: Ver se dá pra tirar o ui.router daí.
 
