@@ -14,7 +14,20 @@ var PaisSchema = new Schema({
     sigla_pais: {
         type: String,
         trim: true
+    },
+    nome_pais_en: {
+        type: String,
+        trim: true,
+        required: true,
     }
+});
+
+PaisSchema.virtual('flag_url').get(function (size) {
+    return `/uploads/flags/${size}/${this.nome_pais_en}.png`;
+});
+
+PaisSchema.set('toJSON', {
+    virtuals: true
 });
 
 mongoose.model('Pais', PaisSchema);
