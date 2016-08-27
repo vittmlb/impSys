@@ -49,7 +49,7 @@
                                         <small style="font-size: 0.9em;">{{ pais.sigla_pais }}</small>
                                     </td>
                                     <td class="project-title">
-                                        <a>Impostos</a>
+                                        <a>Estados</a>
                                         <br>
                                         <small>II:</small><small class="text-info"> {{ ncm.impostos.ii | percentage: 2}}</small>
                                         <small>IPI: {{ ncm.impostos.ipi | percentage: 2 }}</small>
@@ -57,13 +57,13 @@
                                         <small>Cofins: {{ ncm.impostos.cofins | percentage: 2 }}</small>
                                     </td>
                                     <td class="project-people">
-                                        <a href=""><img alt="image" class="img-circle" src="img/a3.jpg"></a>
+                                        <a href=""><img alt="image" class="icon-flag" ng-src="{{ pais.flag_url }}"></a>
 
                                     </td>
                                     <td class="project-actions">
                                         <a href="#!/paises/{{ pais._id }}" class="btn btn-white btn-sm"><i class="fa fa-eye"></i></a>
                                         <a href="#!/paises/{{ pais._id }}/edit" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i></a>
-                                        <a ng-click="delete(pais)" class="btn btn-white btn-sm"><i class="fa fa-times"></i></a>
+                                        <a ng-click="deleteAlert(pais)" class="btn btn-white btn-sm"><i class="fa fa-times"></i></a>
                                     </td>
                                 </tr>
 

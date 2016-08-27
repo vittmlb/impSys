@@ -19,11 +19,17 @@ var PaisSchema = new Schema({
         type: String,
         trim: true,
         required: true,
-    }
+    },
+    _estadoId: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Estado'
+    }],
+    _cidadeId: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Cidade'
+    }]
 });
 
 PaisSchema.virtual('flag_url').get(function (size) {
-    return `/uploads/flags/${size}/${this.nome_pais_en}.png`;
+    return `/uploads/flags/64/${this.nome_pais_en}.png`;
 });
 
 PaisSchema.set('toJSON', {

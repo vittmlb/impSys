@@ -2,6 +2,7 @@
  * Created by Vittorio on 14/08/2016.
  */
 var Estados = require('mongoose').model('Estado');
+var paises = require('./paises.server.controller');
 
 exports.create = function(req, res) {
     var estado = new Estados(req.body);
@@ -11,6 +12,7 @@ exports.create = function(req, res) {
                 message: err
             });
         } else {
+            update_pais(req, res);
             res.json(estado);
         }
     });
@@ -52,6 +54,7 @@ exports.update = function(req, res) {
                 message: err
             });
         } else {
+            update_pais(req, res);
             res.json(estado);
         }
     });
@@ -65,7 +68,19 @@ exports.delete = function(req, res) {
                 message: err
             });
         } else {
+            delete_pais(req, res);
             res.json(estado);
         }
     })
 };
+
+// Funçoes para atualizar objectIds em outros objetos.
+function update_pais(req, res) {
+    // req.params.estadoId = req.body.estado._id;
+    req.params.paisId = req.estado.pais_estado._id;
+    paises.update_estado_pais(req, res);
+}
+function delete_pais(req, res) {
+    req.params.estado = req.estado.pais._id;
+    paises.delete_estado_pais(req, res);
+}
