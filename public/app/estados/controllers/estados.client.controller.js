@@ -3,6 +3,17 @@
  */
 angular.module('estados').controller('EstadosController', ['$scope', '$stateParams', '$location', 'Estados', 'Paises',
     function($scope, $stateParams, $location, Estados, Paises) {
+        var SweetAlertOptions = {
+            removerNcm: {
+                title: "Deseja remover o NCM?",
+                text: "Você não poderá mais recuperá-lo!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",confirmButtonText: "Sim, remover!",
+                cancelButtonText: "Não, cancelar!",
+                closeOnConfirm: false,
+                closeOnCancel: false }
+        };
         $scope.ListaPaises = Paises.query();
         $scope.create = function() {
             var estado = new Estados({
@@ -50,6 +61,18 @@ angular.module('estados').controller('EstadosController', ['$scope', '$statePara
                     $scope.error = errorResponse.data.message;
                 });
             }
+        };
+
+        $scope.deleteAlert = function(estado) {
+            SweetAlert.swal(SweetAlertOptions.removerNcm,
+                function(isConfirm){
+                    if (isConfirm) {
+                        $scope.delete(estado);
+                        SweetAlert.swal("Removido!", "O Estado foi removido.", "success");
+                    } else {
+                        SweetAlert.swal("Cancelado", "O Estado não foi removido :)", "error");
+                    }
+                });
         };
     }
 ]);

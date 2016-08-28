@@ -19,7 +19,7 @@ exports.create = function(req, res) {
 };
 
 exports.list = function(req, res) {
-    Estados.find().populate('pais_estado').exec(function (err, estados) {
+    Estados.find().populate('pais_estado').populate('_cidadeId').exec(function (err, estados) {
         if(err) {
             return res.status(400).send({
                 message: err
@@ -35,7 +35,7 @@ exports.read = function(req, res) {
 };
 
 exports.findById = function(req, res, next, id) {
-    Estados.findById(id).populate('pais_estado').exec(function (err, estado) {
+    Estados.findById(id).populate('pais_estado').populate('_cidadeId').exec(function (err, estado) {
         if(err) return next(err);
         if(!estado) return next(new Error(`Failed to load estado id: ${id}`));
         req.estado = estado;
@@ -62,6 +62,11 @@ exports.update = function(req, res) {
 
 exports.delete = function(req, res) {
     var estado = req.estado;
+    if(_temCidadeAssociado(req)) {
+        return res.status(400).send({
+            message: 'O Estado não pode ser removido pois ainda há cidades a ele vinculados'
+        });
+    }
     estado.remove(function(err) {
         if(err) {
             return res.status(400).send({
@@ -83,4 +88,64 @@ function update_pais(req, res) {
 function delete_pais(req, res) {
     req.params.estado = req.estado.pais._id;
     paises.delete_estado_pais(req, res);
+}
+
+// Cidades
+exports.update_cidade_estado = function(req, res) {
+    _removeCidadeEstadoAntigo(req, res);
+    Estados.findById(req.params.estadoId).exec(function (err, estado) {
+        if(err) {
+            return res.status(400).send({
+                message: err
+            });
+        } else {
+            estado._cidadeId.push(req.params.cidadeId);
+            estado.save();
+        }
+    });
+};
+exports.delete_cidade_estado = function(req, res) {
+    Estados.findById(req.params.estado).exec(function (err, estado) {
+        if(err) {
+            return res.status(400).send({
+                message: err
+            });
+        } else {
+            var index = estado._cidadeId.indexOf(req.params.cidadeId);
+            if(index > -1) {
+                estado._cidadeId.splice(index, 1);
+            }
+        }
+        estado.save();
+    });
+};
+
+/**
+ * Remove a objectId de uma cidade da lista de cidades vinculadas a um estado
+ * @param req
+ * @param res
+ * @private
+ */
+function _removeCidadeEstadoAntigo(req, res) {
+    var cidade_id = req.params.cidadeId;
+    Estados.findOne({_cidadeId: cidade_id}).exec(function (err, estado) {
+        if(err) {
+            return res.status(400).send({
+                message: err
+            });
+        } else {
+            if(estado){
+                if(estado._doc.hasOwnProperty('_cidadeId')) {
+                    var index = estado._cidadeId.indexOf(cidade_id);
+                    if(index > -1) {
+                        estado._cidadeId.splice(index, 1);
+                        estado.save();
+                    }
+                }
+            }
+        }
+    });
+}
+function _temCidadeAssociado(req) {
+    return (req.estado._cidadeId.length);
 }

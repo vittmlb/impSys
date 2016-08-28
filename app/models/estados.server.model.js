@@ -18,7 +18,10 @@ var EstadoSchema = new Schema({
     },
     pais_estado: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Pais'
-    }
+    },
+    _cidadeId: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Cidade'
+    }]
 });
 
 mongoose.model('Estado', EstadoSchema);

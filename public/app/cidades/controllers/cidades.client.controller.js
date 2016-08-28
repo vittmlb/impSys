@@ -3,6 +3,17 @@
  */
 angular.module('cidades').controller('CidadesController', ['$scope', '$stateParams', '$location', 'Cidades', 'Estados',
     function($scope, $stateParams, $location, Cidades, Estados) {
+        var SweetAlertOptions = {
+            removerNcm: {
+                title: "Deseja remover o NCM?",
+                text: "Você não poderá mais recuperá-lo!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",confirmButtonText: "Sim, remover!",
+                cancelButtonText: "Não, cancelar!",
+                closeOnConfirm: false,
+                closeOnCancel: false }
+        };
         $scope.ListaEstados = Estados.query();
         $scope.create = function() {
             var cidade = new Cidades({
@@ -50,5 +61,18 @@ angular.module('cidades').controller('CidadesController', ['$scope', '$statePara
                 });
             }
         };
+
+        $scope.deleteAlert = function(cidade) {
+            SweetAlert.swal(SweetAlertOptions.removerNcm,
+                function(isConfirm){
+                    if (isConfirm) {
+                        $scope.delete(cidade);
+                        SweetAlert.swal("Removido!", "A Cidade foi removida.", "success");
+                    } else {
+                        SweetAlert.swal("Cancelado", "A Cidade não foi removida :)", "error");
+                    }
+                });
+        };
+
     }
 ]);

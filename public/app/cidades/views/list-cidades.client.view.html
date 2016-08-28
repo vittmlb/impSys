@@ -49,7 +49,7 @@
                                         <small style="font-size: 0.9em;">{{ cidade.estado_cidade.nome_estado }}</small>
                                     </td>
                                     <td class="project-title">
-                                        <a>{{ cidade.estado_cidade.pais_estado.nome_pais }}</a>
+                                        <a>{{ cidade }}</a>
                                         <br>
                                         <small>II:</small><small class="text-info"> {{ ncm.impostos.ii | percentage: 2}}</small>
                                         <small>IPI: {{ ncm.impostos.ipi | percentage: 2 }}</small>
@@ -57,13 +57,13 @@
                                         <small>Cofins: {{ ncm.impostos.cofins | percentage: 2 }}</small>
                                     </td>
                                     <td class="project-people">
-                                        <a href=""><img alt="image" class="img-circle" src="img/a3.jpg"></a>
+                                        <a href=""><img alt="image" class="flag" ng-src="{{ cidade.estado_cidade.pais_estado.flag_url }}"></a>
 
                                     </td>
                                     <td class="project-actions">
                                         <a href="#!/cidades/{{ cidade._id }}" class="btn btn-white btn-sm"><i class="fa fa-eye"></i></a>
                                         <a href="#!/cidades/{{ cidade._id }}/edit" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i></a>
-                                        <a ng-click="delete(cidade)" class="btn btn-white btn-sm"><i class="fa fa-times"></i></a>
+                                        <a ng-click="deleteAlert(cidade)" class="btn btn-white btn-sm"><i class="fa fa-times"></i></a>
                                     </td>
                                 </tr>
 

@@ -1,12 +1,12 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-4">
-        <h2>NCMs</h2>
+        <h2>Estados</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="index.html">Home</a>
             </li>
             <li class="active">
-                <strong>Lista Países</strong>
+                <strong>Lista Estados</strong>
             </li>
         </ol>
     </div>
@@ -17,10 +17,10 @@
             <section data-ng-controller="EstadosController" data-ng-init="find()">
                 <div class="ibox">
                     <div class="ibox-title">
-                        <h5>Lista de Países</h5>
+                        <h5>Lista de Estados</h5>
 
                         <div class="ibox-tools">
-                            <a ui-sref="pais_create" class="btn btn-primary btn-xs">Criar novo País</a>
+                            <a ui-sref="estado_create" class="btn btn-primary btn-xs">Criar novo Estado</a>
                         </div>
                     </div>
                     <div class="ibox-content">
@@ -57,7 +57,7 @@
                                         <small>Cofins: {{ ncm.impostos.cofins | percentage: 2 }}</small>
                                     </td>
                                     <td class="project-people">
-                                        <a href=""><img alt="image" class="img-circle" src="img/a3.jpg"></a>
+                                        <a href=""><img alt="image" class="flag" ng-src="{{ estado.pais_estado.flag_url }}"></a>
 
                                     </td>
                                     <td class="project-actions">

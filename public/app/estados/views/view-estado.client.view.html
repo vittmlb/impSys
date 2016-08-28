@@ -1,7 +1,7 @@
 <section data-ng-controller="EstadosController" data-ng-init="findOne()">
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>País</h2>
+            <h2>Estado</h2>
             <ol class="breadcrumb">
                 <li>
                     <a href="index.html">Home</a>
@@ -21,7 +21,7 @@
                     <div class="ibox-content">
                         <div class="row">
                             <div class="col-xs-8">
-                                <h2 style="display: inline;" >{{ estado.nome_estado }}</h2>
+                                <h2 style="display: inline;" >{{ estado.nome_estado }} <span class="flag"><img style="height: 25px;" ng-src="{{ estado.pais_estado.flag_url }}" alt=""></span></h2>
                             </div>
                             <div class="col-xs-4">
                                 <button ng-click="deleteAlert()" style="top: 5px; margin-left: 10px; position: relative;" class="btn btn-sm btn-white pull-right"><i class="fa fa-times"></i></button>
@@ -38,7 +38,7 @@
                 </div>
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Produtos relacionados a este NCM</h5>
+                        <h5>???</h5>
 
                         <div ibox-tools></div>
                     </div>
@@ -47,19 +47,19 @@
                         <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th>Produto</th>
-                                <th>Modelo</th>
-                                <th>Custo</th>
+                                <th>Cidade</th>
+                                <th>Estado</th>
+                                <th>País</th>
                                 <th>Opções</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr data-ng-repeat="prod in ncm._produtoId">
-                                <td>{{ prod.nome }}</td>
-                                <td>{{ prod.modelo }}</td>
-                                <td>{{ prod.custo_usd | currency: 'U$ ' }}</td>
+                            <tr data-ng-repeat="cidade in estado._cidadeId">
+                                <td>{{ cidade.nome_cidade }}</td>
+                                <td>{{ estado.sigla_estado }}</td>
+                                <td><img style="height: 25px;" ng-src="{{ estado.pais_estado.flag_url }}" alt="{{ estado.pais_estado.nome_pais }}"></td>
                                 <td>
-                                    <a href="#!/produtos/{{ prod._id }}"><i style="color: dimgray; font-size: 1.1em; margin-left: 10px;" class="fa fa-pencil pull-left"></i></a>
+                                    <a href="#!/cidades/{{ cidade._id }}"><i style="color: dimgray; font-size: 1.1em; margin-left: 10px;" class="fa fa-pencil pull-left"></i></a>
                                 </td>
                             </tr>
                             </tbody>

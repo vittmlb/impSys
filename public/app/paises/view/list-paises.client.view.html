@@ -1,6 +1,6 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-4">
-        <h2>NCMs</h2>
+        <h2>Países</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="index.html">Home</a>
@@ -51,10 +51,7 @@
                                     <td class="project-title">
                                         <a>Estados</a>
                                         <br>
-                                        <small>II:</small><small class="text-info"> {{ ncm.impostos.ii | percentage: 2}}</small>
-                                        <small>IPI: {{ ncm.impostos.ipi | percentage: 2 }}</small>
-                                        <small>Pis: {{ ncm.impostos.pis | percentage: 2 }}</small>
-                                        <small>Cofins: {{ ncm.impostos.cofins | percentage: 2 }}</small>
+                                        <small style="margin-right: 12px;" data-ng-repeat="estado in pais._estadoId | limitTo: 3">{{ estado.nome_estado }} </small>
                                     </td>
                                     <td class="project-people">
                                         <a href=""><img alt="image" class="icon-flag" ng-src="{{ pais.flag_url }}"></a>

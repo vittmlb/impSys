@@ -13,7 +13,7 @@ var CidadeSchema = new Schema({
     },
     estado_cidade: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Estado'
-    }
+    },
 });
 
 mongoose.model('Cidade', CidadeSchema);
