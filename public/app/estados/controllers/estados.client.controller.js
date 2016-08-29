@@ -1,11 +1,11 @@
 /**
  * Created by Vittorio on 14/08/2016.
  */
-angular.module('estados').controller('EstadosController', ['$scope', '$stateParams', '$location', 'Estados', 'Paises',
-    function($scope, $stateParams, $location, Estados, Paises) {
+angular.module('estados').controller('EstadosController', ['$scope', '$stateParams', '$location', 'Estados', 'Paises', 'toaster', 'SweetAlert',
+    function($scope, $stateParams, $location, Estados, Paises, toaster, SweetAlert) {
         var SweetAlertOptions = {
-            removerNcm: {
-                title: "Deseja remover o NCM?",
+            removerEstado: {
+                title: "Deseja remover o Estado?",
                 text: "Você não poderá mais recuperá-lo!",
                 type: "warning",
                 showCancelButton: true,
@@ -41,30 +41,48 @@ angular.module('estados').controller('EstadosController', ['$scope', '$statePara
                 $location.path('/estados/' + response._id);
             }, function(errorResponse) {
                 console.log(errorResponse);
-                $scope.error = errorResponse.data.message;
+                toaster.pop({
+                    type: 'error',
+                    title: 'Erro',
+                    body: errorResponse.data.message,
+                    timeout: 4000
+                });
             });
         };
         $scope.delete = function(estado) {
             if(estado) {
-                estado.$remove(function() {
-                    for(var i in $scope.estados) {
-                        if($scope.estados[i] === estado) {
+                estado.$remove(function () {
+                    for (var i in $scope.estados) {
+                        if ($scope.estados[i] === estado) {
                             $scope.estados.splice(i, 1);
                         }
                     }
-                })
+                }, function (errorResponse) {
+                    console.log(errorResponse);
+                    toaster.pop({
+                        type: 'error',
+                        title: 'Erro',
+                        body: errorResponse.data.message,
+                        timeout: 4000
+                    });
+                });
             } else {
                 $scope.estado.$remove(function () {
                     $location.path('/estados');
                 }, function(errorResponse) {
                     console.log(errorResponse);
-                    $scope.error = errorResponse.data.message;
+                    toaster.pop({
+                        type: 'error',
+                        title: 'Erro',
+                        body: errorResponse.data.message,
+                        timeout: 4000
+                    });
                 });
             }
         };
 
         $scope.deleteAlert = function(estado) {
-            SweetAlert.swal(SweetAlertOptions.removerNcm,
+            SweetAlert.swal(SweetAlertOptions.removerEstado,
                 function(isConfirm){
                     if (isConfirm) {
                         $scope.delete(estado);

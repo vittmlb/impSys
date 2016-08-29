@@ -1,12 +1,12 @@
 /**
  * Created by Vittorio on 14/08/2016.
  */
-angular.module('cidades').controller('CidadesController', ['$scope', '$stateParams', '$location', 'Cidades', 'Estados',
-    function($scope, $stateParams, $location, Cidades, Estados) {
+angular.module('cidades').controller('CidadesController', ['$scope', '$stateParams', '$location', 'Cidades', 'Estados', 'toaster', 'SweetAlert',
+    function($scope, $stateParams, $location, Cidades, Estados, toaster, SweetAlert) {
         var SweetAlertOptions = {
-            removerNcm: {
-                title: "Deseja remover o NCM?",
-                text: "Você não poderá mais recuperá-lo!",
+            removerCidade: {
+                title: "Deseja remover a Cidade?",
+                text: "Você não poderá mais recuperá-la!",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",confirmButtonText: "Sim, remover!",
@@ -31,9 +31,12 @@ angular.module('cidades').controller('CidadesController', ['$scope', '$statePara
             $scope.cidades = Cidades.query();
         };
         $scope.findOne = function() {
-            $scope.cidade = Cidades.get({
+            Cidades.get({
                 cidadeId: $stateParams.cidadeId
+            }).$promise.then(function(data) {
+                $scope.cidade = data;
             });
+
         };
         $scope.update = function() {
             $scope.cidade.$update(function (response) {
@@ -57,13 +60,18 @@ angular.module('cidades').controller('CidadesController', ['$scope', '$statePara
                     $location.path('/cidades');
                 }, function(errorResponse) {
                     console.log(errorResponse);
-                    $scope.error = errorResponse.data.message;
+                    toaster.pop({
+                        type: 'error',
+                        title: 'Erro',
+                        body: errorResponse.data.message,
+                        timeout: 4000
+                    });
                 });
             }
         };
 
         $scope.deleteAlert = function(cidade) {
-            SweetAlert.swal(SweetAlertOptions.removerNcm,
+            SweetAlert.swal(SweetAlertOptions.removerCidade,
                 function(isConfirm){
                     if (isConfirm) {
                         $scope.delete(cidade);

@@ -3,6 +3,7 @@
  */
 
 var Fornecedores = require('mongoose').model('Fornecedor');
+var cidades = require('./cidades.server.controller');
 
 exports.create = function(req, res) {
     var fornecedor = new Fornecedores(req.body);
@@ -12,6 +13,7 @@ exports.create = function(req, res) {
                 message: err
             });
         } else {
+            update_cidade(req, res);
             res.json(fornecedor);
         }
     });
@@ -54,6 +56,7 @@ exports.update = function(req, res) {
                 message: err
             });
         } else {
+            update_cidade(req, res);
             res.json(fornecedor);
         }
     });
@@ -67,7 +70,18 @@ exports.delete = function(req, res) {
                 message: err
             });
         } else {
+            delete_cidade(req, res);
             res.json(fornecedor);
         }
     });
 };
+
+// Funçoes para atualizar objectIds em outros objetos.
+function update_cidade(req, res) {
+    req.params.cidadeId = req.fornecedor.cidade_fornecedor._id;
+    cidades.update_fornecedor_cidade(req, res);
+}
+function delete_cidade(req, res) {
+    req.params.cidade = req.fornecedor.cidade._id;
+    cidades.delete_fornecedor_cidade(req, res);
+}

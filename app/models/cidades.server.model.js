@@ -14,6 +14,9 @@ var CidadeSchema = new Schema({
     estado_cidade: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Estado'
     },
+    _fornecedorId: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Fornecedor'
+    }]
 });
 
 mongoose.model('Cidade', CidadeSchema);

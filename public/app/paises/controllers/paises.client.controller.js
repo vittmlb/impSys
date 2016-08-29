@@ -54,6 +54,14 @@ angular.module('paises').controller('PaisesController', ['$scope', '$stateParams
                             $scope.paises.splice(i, 1);
                         }
                     }
+                }, function(errorResponse) {
+                    console.log(errorResponse);
+                    toaster.pop({
+                        type: 'error',
+                        title: 'Erro',
+                        body: errorResponse.data.message,
+                        timeout: 4000
+                    });
                 });
             } else {
                 $scope.pais.$remove(function () {

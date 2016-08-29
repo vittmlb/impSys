@@ -46,19 +46,19 @@
                         <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th>Produto</th>
-                                <th>Modelo</th>
+                                <th>Fornecedor</th>
+                                <th>Estado</th>
                                 <th>Custo</th>
                                 <th>Opções</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr data-ng-repeat="prod in ncm._produtoId">
-                                <td>{{ prod.nome }}</td>
-                                <td>{{ prod.modelo }}</td>
+                            <tr data-ng-repeat="fornecedor in cidade._fornecedorId">
+                                <td>{{ fornecedor.nome_fornecedor }}</td>
+                                <td>{{ fornecedor.estado_cidade }}</td>
                                 <td>{{ prod.custo_usd | currency: 'U$ ' }}</td>
                                 <td>
-                                    <a href="#!/produtos/{{ prod._id }}"><i style="color: dimgray; font-size: 1.1em; margin-left: 10px;" class="fa fa-pencil pull-left"></i></a>
+                                    <a href="#!/fornecedores/{{ fornecedor._id }}"><i style="color: dimgray; font-size: 1.1em; margin-left: 10px;" class="fa fa-pencil pull-left"></i></a>
                                 </td>
                             </tr>
                             </tbody>
