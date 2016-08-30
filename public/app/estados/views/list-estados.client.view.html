@@ -51,10 +51,7 @@
                                     <td class="project-title">
                                         <a>{{ estado.pais_estado.nome_pais }}</a>
                                         <br>
-                                        <small>II:</small><small class="text-info"> {{ ncm.impostos.ii | percentage: 2}}</small>
-                                        <small>IPI: {{ ncm.impostos.ipi | percentage: 2 }}</small>
-                                        <small>Pis: {{ ncm.impostos.pis | percentage: 2 }}</small>
-                                        <small>Cofins: {{ ncm.impostos.cofins | percentage: 2 }}</small>
+                                        <small>{{ estado._id }}</small>
                                     </td>
                                     <td class="project-people">
                                         <a href=""><img alt="image" class="flag" ng-src="{{ estado.pais_estado.flag_url }}"></a>

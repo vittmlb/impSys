@@ -20,7 +20,10 @@ var FornecedorSchema = new Schema({
     }],
     cidade_fornecedor: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Cidade'
-    }
+    },
+    _produtoId: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Produto'
+    }]
 });
 
 mongoose.model('Fornecedor', FornecedorSchema);

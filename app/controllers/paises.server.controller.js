@@ -33,7 +33,10 @@ exports.read = function(req, res) {
 };
 
 exports.findById = function(req, res, next, id) {
-    Paises.findById(id).populate('_estadoId').exec(function (err, pais) {
+    Paises.findById(id).populate({
+        path: '_estadoId',
+        populate: {path: '_cidadeId', populate: {path: '_fornecedorId'}}
+    }).exec(function (err, pais) {
         if(err) return next(err);
         if(!pais) return next(new Error(`Failed to load pais id: ${id}`));
         req.pais = pais;
@@ -90,7 +93,7 @@ exports.update_estado_pais = function(req, res) {
 };
 
 exports.delete_estado_pais = function(req, res) {
-    Paises.findById(req.params.pais).exec(function (err, pais) {
+    Paises.findById(req.params.paisId).exec(function (err, pais) {
         if(err) {
             return res.status(400).send({
                 message: err
@@ -131,7 +134,6 @@ function _removeEstadoPaisAntigo(req, res) {
         }
     });
 }
-
 function _temEstadoAssociado(req) {
     return (req.pais._estadoId.length);
 }

@@ -12,7 +12,7 @@ exports.create = function(req, res) {
                 message: err
             });
         } else {
-            update_pais(req, res);
+            add_pais(req, res, estado);
             res.json(estado);
         }
     });
@@ -80,13 +80,25 @@ exports.delete = function(req, res) {
 };
 
 // Funçoes para atualizar objectIds em outros objetos.
+
+/**
+ * Adiciona a _id do estado à lista de ids ( [_estadoId]) de estados no objeto país
+ * @param req
+ * @param res
+ * @param estado
+ */
+function add_pais(req, res, estado) {
+    req.params.estadoId = estado._id;
+    req.params.paisId = estado.pais_estado;
+    paises.update_estado_pais(req, res);
+}
 function update_pais(req, res) {
-    // req.params.estadoId = req.body.estado._id;
-    req.params.paisId = req.estado.pais_estado._id;
+    req.params.paisId = req.body.pais_estado._id;
     paises.update_estado_pais(req, res);
 }
 function delete_pais(req, res) {
-    req.params.estado = req.estado.pais._id;
+    req.params.paisId = req.estado.pais_estado._id;
+    req.params.estadoId = req.estado._id;
     paises.delete_estado_pais(req, res);
 }
 
@@ -105,7 +117,7 @@ exports.update_cidade_estado = function(req, res) {
     });
 };
 exports.delete_cidade_estado = function(req, res) {
-    Estados.findById(req.params.estado).exec(function (err, estado) {
+    Estados.findById(req.params.estadoId).exec(function (err, estado) {
         if(err) {
             return res.status(400).send({
                 message: err

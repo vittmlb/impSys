@@ -4,8 +4,8 @@
 angular.module('paises').controller('PaisesController', ['$scope', '$stateParams', '$location', 'Paises', '$http', 'toaster', 'SweetAlert',
     function($scope, $stateParams, $location, Paises, $http, toaster, SweetAlert) {
         var SweetAlertOptions = {
-            removerNcm: {
-                title: "Deseja remover o NCM?",
+            removerPais: {
+                title: "Deseja remover o País?",
                 text: "Você não poderá mais recuperá-lo!",
                 type: "warning",
                 showCancelButton: true,
@@ -65,7 +65,7 @@ angular.module('paises').controller('PaisesController', ['$scope', '$stateParams
                 });
             } else {
                 $scope.pais.$remove(function () {
-                    $location.path('/paises/');
+                    $location.path('/paises');
                 }, function(errorResponse) {
                     console.log(errorResponse);
                     toaster.pop({
@@ -79,7 +79,7 @@ angular.module('paises').controller('PaisesController', ['$scope', '$stateParams
         };
 
         $scope.deleteAlert = function(pais) {
-            SweetAlert.swal(SweetAlertOptions.removerNcm,
+            SweetAlert.swal(SweetAlertOptions.removerPais,
                 function(isConfirm){
                     if (isConfirm) {
                         $scope.delete(pais);

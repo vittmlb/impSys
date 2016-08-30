@@ -3,6 +3,7 @@
  */
 var Produtos = require('mongoose').model('Produto');
 var ncms = require('./ncms.server.controller.js');
+var fornecedores = require('./fornecedores.server.controller');
 
 var fs = require('fs');
 var gutil = require('gulp-util');
@@ -16,7 +17,8 @@ exports.create = function(req, res) {
                 message: err
             });
         } else {
-            update_ncm(req, res);
+            add_ncm(req, res, produto);
+            add_fornecedor(req, res, produto);
             res.json(produto);
         }
     });
@@ -49,6 +51,7 @@ exports.delete = function(req, res) {
         } else {
             removeImageFile(img_url);
             delete_ncm(req, res);
+            delete_fornecedor(req, res);
             res.json(produto);
         }
     });
@@ -82,13 +85,17 @@ exports.update = function(req, res) {
                 removeImageFile(img_url_deletion);
             }
             update_ncm(req, res);
+            update_fornecedor(req, res);
             res.json(produto);
         }
     });
 };
 
 exports.findById = function(req, res, next, id) {
-    Produtos.findById(id).populate('ncm').populate('fornecedor').exec(function (err, produto) {
+    Produtos.findById(id).populate('ncm').populate({
+        path: 'fornecedor',
+        populate: {path: 'cidade_fornecedor', populate: {path: 'estado_cidade'}}
+    }).exec(function (err, produto) {
         if(err) return next(err);
         if(!produto) return next(new Error(`Failed to load produto id: ${id}`));
         req.produto = produto;
@@ -98,6 +105,12 @@ exports.findById = function(req, res, next, id) {
 
 exports.findByIdOld = function(req, res, next, id) {
     Produtos.findById(id).exec(function (err, produto) {
+        if(err) return next(err);
+        if(!produto) return next(new Error(`Failed to load produto id: ${id}`));
+        req.produto = produto;
+        next();
+    });
+    Produtos.findById(id).populate('ncm').populate('fornecedor').exec(function (err, produto) {
         if(err) return next(err);
         if(!produto) return next(new Error(`Failed to load produto id: ${id}`));
         req.produto = produto;
@@ -122,6 +135,11 @@ function removeImageFile(filePath) {
 }
 
 // Funçoes para atualizar objectIds em outros objetos.
+function add_ncm(req, res, produto) {
+    req.params.produtoId = produto._id;
+    req.params.ncmId = produto.ncm;
+    ncms.update_ncm_produto(req, res);
+}
 function update_ncm(req, res) {
     req.params.ncmId = req.body.ncm._id;
     ncms.update_ncm_produto(req, res);
@@ -129,4 +147,19 @@ function update_ncm(req, res) {
 function delete_ncm(req, res) {
     req.params.ncm = req.produto.ncm._id;
     ncms.delete_ncm_produto(req, res);
+}
+
+
+function add_fornecedor(req, res, produto) {
+    req.params.produtoId = produto._id;
+    req.params.fornecedorId = produto.fornecedor;
+    fornecedores.update_fornecedor_do_produto(req, res);
+}
+function update_fornecedor(req, res) {
+    req.params.fornecedorId = req.produto.fornecedor._id;
+    fornecedores.update_fornecedor_do_produto(req, res);
+}
+function delete_fornecedor(req, res) {
+    req.params.fornecedorId = req.produto.fornecedor._id;
+    fornecedores.delete_fornecedor_do_produto(req, res);
 }

@@ -25,7 +25,12 @@ angular.module('estados').controller('EstadosController', ['$scope', '$statePara
                 $location.path('/estados/' + response._id);
             }, function(errorResponse) {
                 console.log(errorResponse);
-                $scope.error = errorResponse.data.message;
+                toaster.pop({
+                    type: 'error',
+                    title: 'Erro',
+                    body: errorResponse.data.message,
+                    timeout: 4000
+                });
             });
         };
         $scope.find = function() {

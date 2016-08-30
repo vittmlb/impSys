@@ -1,12 +1,12 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-4">
-        <h2>NCMs</h2>
+        <h2>Fornecedores</h2>
         <ol class="breadcrumb">
             <li>
                 <a href="index.html">Home</a>
             </li>
             <li class="active">
-                <strong>Lista NCMs</strong>
+                <strong>Lista de Fornecedores</strong>
             </li>
         </ol>
     </div>
@@ -20,7 +20,7 @@
                         <h5>Lista de Fornecedores</h5>
 
                         <div class="ibox-tools">
-                            <a ui-sref="ncm_create" class="btn btn-primary btn-xs">Criar novo Fornecedor</a>
+                            <a ui-sref="fornecedor_create" class="btn btn-primary btn-xs">Criar novo Fornecedor</a>
                         </div>
                     </div>
                     <div class="ibox-content">
@@ -63,7 +63,7 @@
                                     <td class="project-actions">
                                         <a href="#!/fornecedores/{{ fornecedor._id }}" class="btn btn-white btn-sm"><i class="fa fa-eye"></i></a>
                                         <a href="#!/fornecedores/{{ fornecedor._id }}/edit" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i></a>
-                                        <a ng-click="delete(fornecedor)" class="btn btn-white btn-sm"><i class="fa fa-times"></i></a>
+                                        <a ng-click="deleteAlert(fornecedor)" class="btn btn-white btn-sm"><i class="fa fa-times"></i></a>
                                     </td>
                                 </tr>
 

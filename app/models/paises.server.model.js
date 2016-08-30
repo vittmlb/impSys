@@ -23,9 +23,9 @@ var PaisSchema = new Schema({
     _estadoId: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Estado'
     }],
-    _cidadeId: [{
-        type: mongoose.Schema.Types.ObjectId, ref: 'Cidade'
-    }]
+    // _cidadeId: [{
+    //     type: mongoose.Schema.Types.ObjectId, ref: 'Cidade'
+    // }]
 });
 
 PaisSchema.virtual('flag_url').get(function (size) {

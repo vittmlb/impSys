@@ -4,6 +4,7 @@
   "description": "Sistema para cálculo de importações.",
   "main": "server.js",
   "dependencies": {
+    "async": "^2.0.1",
     "body-parser": "^1.15.0",
     "compression": "^1.6.1",
     "connect": "^3.4.1",

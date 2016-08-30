@@ -13,7 +13,7 @@ exports.create = function(req, res) {
                 message: err
             });
         } else {
-            update_estado(req, res);
+            add_estado(req, res, cidade);
             res.json(cidade);
         }
     });
@@ -39,17 +39,14 @@ exports.read = function(req, res) {
 exports.findById = function(req, res, next, id) {
     Cidades.findById(id).populate({
         path: 'estado_cidade',
-        populate: {path: 'pais_estado'}
+        populate: {path: 'pais_estado', populate: {path: '_estadoId'}}
         })
         .populate('_fornecedorId')
         .exec(function (err, cidade) {
-        if(err) {
-            return res.status(400).send({
-                message: err
-            });
-        } else {
-            res.json(cidade);
-        }
+            if(err) return next(err);
+            if(!cidade) return next(new Error(`Failed to load cidade id: ${id}`));
+            req.cidade = cidade;
+            next();
     });
 };
 
@@ -89,13 +86,18 @@ exports.delete = function(req, res) {
 };
 
 // Funçoes para atualizar objectIds em outros objetos.
+function add_estado(req, res, cidade) {
+    req.params.cidadeId = cidade._id;
+    req.params.estadoId = req.body.estado_cidade._id;
+    estados.update_cidade_estado(req, res);
+}
 function update_estado(req, res) {
     // req.params.estadoId = req.body.estado._id;
     req.params.estadoId = req.cidade.estado_cidade._id;
     estados.update_cidade_estado(req, res);
 }
 function delete_estado(req, res) {
-    req.params.cidade = req.cidade.estado_cidade._id;
+    req.params.estadoId = req.cidade.estado_cidade._id;
     estados.delete_cidade_estado(req, res);
 }
 

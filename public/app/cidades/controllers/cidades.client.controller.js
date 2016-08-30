@@ -31,12 +31,14 @@ angular.module('cidades').controller('CidadesController', ['$scope', '$statePara
             $scope.cidades = Cidades.query();
         };
         $scope.findOne = function() {
+            // $scope.cidade = Cidades.get({
+            //     cidadeId: $stateParams.cidadeId
+            // });
             Cidades.get({
                 cidadeId: $stateParams.cidadeId
             }).$promise.then(function(data) {
                 $scope.cidade = data;
             });
-
         };
         $scope.update = function() {
             $scope.cidade.$update(function (response) {
@@ -54,6 +56,14 @@ angular.module('cidades').controller('CidadesController', ['$scope', '$statePara
                             $scope.cidades.splice(i, 1);
                         }
                     }
+                }, function(errorResponse) {
+                    console.log(errorResponse);
+                    toaster.pop({
+                        type: 'error',
+                        title: 'Erro',
+                        body: errorResponse.data.message,
+                        timeout: 4000
+                    });
                 });
             } else {
                 $scope.cidade.$remove(function () {
