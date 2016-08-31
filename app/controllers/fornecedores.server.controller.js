@@ -5,6 +5,7 @@
 var Fornecedores = require('mongoose').model('Fornecedor');
 var Cidades = require('mongoose').model('Cidade');
 var Estados = require('mongoose').model('Estado');
+var Paises = require('mongoose').model('Pais');
 var cidades = require('./cidades.server.controller');
 
 exports.create = function(req, res) {
@@ -40,24 +41,14 @@ exports.read = function(req, res) {
 exports.findById = function(req, res, next, id) {
     Fornecedores.findById(id).populate({
         path: 'cidade_fornecedor',
-        populate: {path: 'estado_cidade', populate: {path: 'pais_estado'}}
+        populate: {path: 'estado_cidade'}
     }).exec(function (err, fornecedor) {
         if(err) return next(err);
         if(!fornecedor) return next(new Error(`Failed to load fornecedor id: ${id}`));
-        req.fornecedor = fornecedor;
-        next();
-    });
-};
-
-exports.findByIdOld = function(req, res, next, id) {
-    Fornecedores.findById(id).populate({
-        path: 'cidade_fornecedor',
-        populate: {path: 'estado_cidade', populate: {path: 'pais_estado'}}
-    }).exec(function (err, fornecedor) {
-        if(err) return next(err);
-        if(!fornecedor) return next(new Error(`Failed to load fornecedor id: ${id}`));
-        req.fornecedor = fornecedor;
-        next();
+        Fornecedores.populate(fornecedor, {path: 'cidade_fornecedor.estado_cidade.pais_estado', model: 'Pais'}, function(err, output) {
+            req.fornecedor = output;
+            next();
+        });
     });
 };
 

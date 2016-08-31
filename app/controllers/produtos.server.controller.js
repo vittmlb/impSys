@@ -2,6 +2,7 @@
  * Created by Vittorio on 30/05/2016.
  */
 var Produtos = require('mongoose').model('Produto');
+var Estudos = require('mongoose').model('Estudo');
 var ncms = require('./ncms.server.controller.js');
 var fornecedores = require('./fornecedores.server.controller');
 
@@ -92,7 +93,7 @@ exports.update = function(req, res) {
 };
 
 exports.findById = function(req, res, next, id) {
-    Produtos.findById(id).populate('ncm').populate({
+    Produtos.findById(id).populate('_estudoId').populate('ncm').populate({
         path: 'fornecedor',
         populate: {path: 'cidade_fornecedor', populate: {path: 'estado_cidade'}}
     }).exec(function (err, produto) {
@@ -110,11 +111,24 @@ exports.findByIdOld = function(req, res, next, id) {
         req.produto = produto;
         next();
     });
-    Produtos.findById(id).populate('ncm').populate('fornecedor').exec(function (err, produto) {
+    Produtos.findById(id).populate('ncm').populate('_estudoId').populate('fornecedor').exec(function (err, produto) {
         if(err) return next(err);
         if(!produto) return next(new Error(`Failed to load produto id: ${id}`));
         req.produto = produto;
         next();
+    });
+};
+
+exports.update_produto_do_estudo = function(req, res) {
+    Produtos.findById(req.params.produtoId).exec(function (err, produto) {
+        if(err) {
+            return res.status(400).send({
+                message: err
+            });
+        } else {
+            produto._estudoId.push(req.params.estudoId);
+            produto.save();
+        }
     });
 };
 
@@ -156,7 +170,7 @@ function add_fornecedor(req, res, produto) {
     fornecedores.update_fornecedor_do_produto(req, res);
 }
 function update_fornecedor(req, res) {
-    req.params.fornecedorId = req.produto.fornecedor._id;
+    req.params.fornecedorId = req.produto.fornecedor;
     fornecedores.update_fornecedor_do_produto(req, res);
 }
 function delete_fornecedor(req, res) {

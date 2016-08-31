@@ -63,9 +63,13 @@
                                 <div class="text-muted">
                                     {{ produto.notas }}
                                 </div>
+                                Estudo
+                                <div data-ng-repeat="estudo in produto._estudoId">
+                                    Estudo: {{ estudo }}
+                                </div>
                                 <dl class="small m-t-md">
-                                    <dt>Description lists</dt>
-                                    <dd>A description list is perfect for defining terms.</dd>
+                                    <dt>Fornecedor</dt>
+                                    <dd>{{ produto.fornecedor.nome_fornecedor }}</dd>
                                     <dt>Euismod</dt>
                                     <dd>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</dd>
                                     <dd>Donec id elit non mi porta gravida at eget metus.</dd>
@@ -133,20 +137,23 @@
             <div class="col-lg-4 m-b-lg">
                 <div id="vertical-timeline" class="vertical-container light-timeline no-margins">
                     <div class="vertical-timeline-block">
-                        <div data-ng-repeat="prod in ncm._produtoId | limitTo: 2" class="vertical-timeline-block">
+                        <div data-ng-repeat="estudo in produto._estudoId | limitTo: 2" class="vertical-timeline-block">
                             <div class="vertical-timeline-icon navy-bg">
-                                <img alt="image" class="img-circle" ng-src="{{ prod.img_url }}" style="width: 34px;">
+                                <i class="fa fa-briefcase"></i>
                             </div>
 
                             <div class="vertical-timeline-content">
-                                <h2>{{ prod.nome }}</h2>
-                                <h3>{{ prod.modelo }}</h3>
-                                <p>{{ prod.descricao }}</p>
+                                <h2 style="margin-bottom: 0">{{ estudo.nome_estudo }}</h2>
+                                <span class="small">Criado em: {{ estudo.criadoEm | date: 'dd/MM/yyyy' }}</span>
+                                <div ng-repeat="prd in estudo.produtosDoEstudo">
+                                    <h3>{{ prd.produto_ref }}</h3>
+                                </div>
+                                <p>{{ estudo.criadoEm | date: 'dd/MM/yyyy' }}</p>
                                 <a href="#!/produtos/{{ prod._id }}" class="btn btn-sm btn-primary">Detalhes</a>
                                 <span class="vertical-date">
                                         Preço<br>
                                         <small>{{ prod.custo_usd | currency: 'U$ ' }}</small>
-                                    </span>
+                                </span>
                             </div>
                         </div>
                     </div>

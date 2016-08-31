@@ -2,6 +2,7 @@
  * Created by Vittorio on 15/08/2016.
  */
 var Estudos = require('mongoose').model('Estudo');
+var produtos = require('./produtos.server.controller');
 
 exports.create = function(req, res) {
     var estudo = new Estudos(req.body);
@@ -11,6 +12,7 @@ exports.create = function(req, res) {
                 message: err
             });
         } else {
+            add_estudo(req, res, estudo);
             res.json(estudo);
         }
     });
@@ -68,3 +70,12 @@ exports.delete = function(req, res) {
         }
     });
 };
+
+function add_estudo(req, res, estudo) {
+    var estudo_id = estudo._id;
+    estudo.produtosDoEstudo.forEach(function (data) {
+        req.params.produtoId = data.produto_ref;
+        req.params.estudoId = estudo_id;
+        produtos.update_produto_do_estudo(req, res);
+    });
+}

@@ -62,7 +62,10 @@ var ProdutoSchema = new Schema({
     },
     fornecedor: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Fornecedor'
-    }
+    },
+    _estudoId: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Estudo'
+    }]
 });
 
 ProdutoSchema.set('toJSON', {
