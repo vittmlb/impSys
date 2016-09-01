@@ -146,3 +146,42 @@ function _removeProdutoFornecedorAntigo(req, res) {
 function _temProdutoAssociado(req) {
     return (req.fornecedor._produtoId.length);
 }
+
+// Contatos
+exports.update_fornecedor_do_contato = function(req, res) {
+    _removeContatoFornecedorAntigo(req, res);
+    Fornecedores.findById(req.params.fornecedorId).exec(function (err, fornecedor) {
+        if(err) {
+            return res.status(400).send({
+                message: err
+            });
+        } else {
+            fornecedor._contatoId.push(req.params.contatoId);
+            fornecedor.save(); //todo: Criar callback aqui.
+        }
+    });
+};
+exports.delete_fornecedor_do_contato = function(req, res) {
+    _removeContatoFornecedorAntigo(req, res);
+};
+
+function _removeContatoFornecedorAntigo(req, res) {
+    var contato_id = req.params.contatoId;
+    Fornecedores.findById({_contatoId: contato_id}).exec(function (err, fornecedor) {
+        if(err) {
+            // return res.status(400).send({
+            //     message: err
+            // });
+        } else {
+            if(fornecedor) {
+                if(fornecedor._doc.hasOwnProperty('_contatoId')) {
+                    var index = fornecedor._contatoId.indexOf(contato_id);
+                    if(index > -1) {
+                        fornecedor._contatoId.splice(index, 1);
+                        fornecedor.save(); // todo: incluir callback aqui.
+                    }
+                }
+            }
+        }
+    });
+}

@@ -34,6 +34,7 @@ module.exports = function() {
     require('../app/models/estados.server.model');
     require('../app/models/cidades.server.model');
     require('../app/models/estudos.server.model');
+    require('../app/models/contatos.server.model');
 
     return db;
 };

@@ -23,6 +23,9 @@ var FornecedorSchema = new Schema({
     },
     _produtoId: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Produto'
+    }],
+    _contatoId: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Contato'
     }]
 });
 
