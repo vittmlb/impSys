@@ -14,14 +14,15 @@ angular.module('contatos').controller('ContatosController', ['$scope', '$statePa
                 closeOnConfirm: false,
                 closeOnCancel: false }
         };
-        $scope.email = {};
-        $scope.listaEmails = [];
+        $scope.comunicacao = {};
+        $scope.listaComunicacoes = [];
         $scope.listaFornecedores = Fornecedores.query();
+        $scope.tiposDeComunicacao = ['email', 'skype', 'msn', 'facebook', 'twitter', 'whatsapp'];
 
         $scope.create = function() {
             var contato = new Contatos({
                 nome_contato: this.nome_contato,
-                emails: this.listaEmails,
+                comunicacao: this.listaComunicacoes,
                 fornecedor: this.fornecedor
             });
             contato.$save(function (response) {
@@ -97,9 +98,9 @@ angular.module('contatos').controller('ContatosController', ['$scope', '$statePa
                 });
         };
 
-        $scope.addExtraEmail = function() {
-            $scope.listaEmails.push($scope.email);
-            $scope.email = {};
+        $scope.addComunicacao = function() {
+            $scope.listaComunicacoes.push($scope.comunicacao);
+            $scope.comunicacao = {};
         };
 
     }

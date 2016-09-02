@@ -28,7 +28,7 @@
                     <div class="">
                         <div>
                             <h2 class="no-margins">{{ contato.nome_contato }}</h2>
-                            <h4>Founder of Groupeq</h4>
+                            <h4>{{ contato.fornecedor.nome_fornecedor }}</h4>
                             <small>
                                 There are many variations of passages of Lorem Ipsum available, but the majority
                                 have suffered alteration in some form Ipsum available.
@@ -79,6 +79,14 @@
         <div class="row">
 
             <div class="col-lg-3">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h3>Personal friends</h3>
+                        <ul class="list-unstyled file-list">
+                            <li data-ng-repeat="com in contato.comunicacao"><a href=""><i class="fa fa-envelope"></i> {{ com.info }}</a></li>
+                        </ul>
+                    </div>
+                </div>
 
                 <div class="ibox">
                     <div class="ibox-content">
@@ -119,20 +127,6 @@
                             <a href=""><img alt="image" class="img-circle" src="img/a2.jpg"></a>
                             <a href=""><img alt="image" class="img-circle" src="img/a1.jpg"></a>
                         </div>
-                    </div>
-                </div>
-
-                <div class="ibox">
-                    <div class="ibox-content">
-                        <h3>Personal friends</h3>
-                        <ul class="list-unstyled file-list">
-                            <li><a href=""><i class="fa fa-file"></i> Project_document.docx</a></li>
-                            <li><a href=""><i class="fa fa-file-picture-o"></i> Logo_zender_company.jpg</a></li>
-                            <li><a href=""><i class="fa fa-stack-exchange"></i> Email_from_Alex.mln</a></li>
-                            <li><a href=""><i class="fa fa-file"></i> Contract_20_11_2014.docx</a></li>
-                            <li><a href=""><i class="fa fa-file-powerpoint-o"></i> Presentation.pptx</a></li>
-                            <li><a href=""><i class="fa fa-file"></i> 10_08_2015.docx</a></li>
-                        </ul>
                     </div>
                 </div>
 

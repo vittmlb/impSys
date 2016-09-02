@@ -167,11 +167,11 @@ exports.delete_fornecedor_do_contato = function(req, res) {
 
 function _removeContatoFornecedorAntigo(req, res) {
     var contato_id = req.params.contatoId;
-    Fornecedores.findById({_contatoId: contato_id}).exec(function (err, fornecedor) {
+    Fornecedores.findOne({_contatoId: contato_id}).exec(function (err, fornecedor) {
         if(err) {
-            // return res.status(400).send({
-            //     message: err
-            // });
+            return res.status(400).send({
+                message: err
+            });
         } else {
             if(fornecedor) {
                 if(fornecedor._doc.hasOwnProperty('_contatoId')) {

@@ -35,7 +35,7 @@ exports.list = function(req, res) {
 };
 
 exports.findById = function(req, res, next, id) {
-    Contatos.findById(id).exec(function (err, contato) {
+    Contatos.findById(id).populate('fornecedor').exec(function (err, contato) {
         if(err) return next(err);
         if(!contato) return next(new Error(`Failed to load contato id: ${id}`));
         req.contato = contato;
@@ -46,7 +46,7 @@ exports.findById = function(req, res, next, id) {
 exports.update = function(req, res) {
     var contato = req.contato;
     contato.nome_contato = req.body.nome_contato;
-    contato.emails = req.body.emails;
+    contato.comunicacao = req.body.comunicacao;
     contato.fornecedor = req.body.fornecedor;
     contato.save(function (err) {
         if(err) {
