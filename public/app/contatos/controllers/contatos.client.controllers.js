@@ -41,8 +41,11 @@ angular.module('contatos').controller('ContatosController', ['$scope', '$statePa
             $scope.contatos = Contatos.query();
         };
         $scope.findOne = function() {
-            $scope.contato = Contatos.get({
+            Contatos.get({
                 contatoId: $stateParams.contatoId
+            }).$promise.then(function(data) {
+                $scope.contato = data;
+                $scope.listaComunicacoes = data.comunicacao;
             });
         };
         $scope.update = function() {

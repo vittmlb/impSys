@@ -68,10 +68,9 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-3">
-                <small>Sales in last 24h</small>
-                <h2 class="no-margins">206 480</h2>
-                <div sparkline spark-data="chart.sparkline1" spark-options="chart.sparkline1Options"></div>
+            <div class="col-lg-3 m-b-lg">
+                <button ng-click="deleteAlert()" style="top: 5px; margin-right: 44px; position: relative;" class="btn btn-sm btn-white pull-right"><i class="fa fa-times"></i></button>
+                <a href="#!/contatos/{{ contato._id }}/edit" style="top: 5px; margin-right: 10px; position: relative;" class="btn btn-sm btn-white pull-right"><i class="fa fa-pencil"></i></a>
             </div>
 
 
@@ -81,7 +80,7 @@
             <div class="col-lg-3">
                 <div class="ibox">
                     <div class="ibox-content">
-                        <h3>Personal friends</h3>
+                        <h3>Comunicação</h3>
                         <ul class="list-unstyled file-list">
                             <li data-ng-repeat="com in contato.comunicacao"><a href=""><i class="fa fa-envelope"></i> {{ com.info }}</a></li>
                         </ul>

@@ -12,8 +12,9 @@ exports.create = function(req, res) {
                 message: err
             });
         } else {
-            add_fornecedor(req, res, contato);
-            res.json(contato);
+            add_fornecedor(req, res, contato).then(function() {
+                res.json(contato);
+            });
         }
     });
 };
@@ -54,8 +55,9 @@ exports.update = function(req, res) {
                 message: err
             });
         } else {
-            update_fornecedor(req, res, contato);
-            res.json(contato);
+            update_fornecedor(req, res, contato).then(function() {
+                res.json(contato);
+            });
         }
     });
 };
@@ -75,9 +77,13 @@ exports.delete = function(req, res) {
 };
 
 function add_fornecedor(req, res, contato) {
-    req.params.contatoId = contato._id;
-    req.params.fornecedorId = req.body.fornecedor._id;
-    fornecedores.update_fornecedor_do_contato(req, res);
+    return new Promise(function(resolve, reject) {
+        req.params.contatoId = contato._id;
+        req.params.fornecedorId = req.body.fornecedor._id;
+        fornecedores.update_fornecedor_do_contato(req, res).then(function(data) {
+            resolve('success');
+        });
+    });
 }
 function update_fornecedor(req, res, contato) {
     req.params.fornecedorId = contato.fornecedor._id;
