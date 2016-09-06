@@ -48,6 +48,7 @@ module.exports = function() {
     require('../app/routes/cidades.server.routes')(app);
     require('../app/routes/estudos.server.routes')(app);
     require('../app/routes/contatos.server.routes')(app);
+    require('../app/routes/categorias.server.routes')(app);
     
     return app;
 

@@ -65,7 +65,7 @@ exports.update = function(req, res) {
                 message: err
             });
         } else {
-            update_cidade(req, res);
+            update_cidade(req, res, fornecedor);
             res.json(fornecedor);
         }
     });
@@ -96,9 +96,12 @@ function add_cidade(req, res, fornecedor) {
     req.params.cidadeId = fornecedor.cidade_fornecedor;
     cidades.update_fornecedor_cidade(req, res);
 }
-function update_cidade(req, res) {
-    req.params.cidadeId = req.fornecedor.cidade_fornecedor._id;
-    cidades.update_fornecedor_cidade(req, res);
+function update_cidade(req, res, fornecedor) {
+    var promise = new Promise(function (resolve, reject) {
+        req.params.cidadeId = fornecedor.cidade_fornecedor._id;
+        cidades.update_fornecedor_cidade(req, res);
+    });
+
 }
 function delete_cidade(req, res, fornecedor) {
     req.params.cidade = fornecedor.cidade_fornecedor;
