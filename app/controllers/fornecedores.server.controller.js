@@ -16,8 +16,15 @@ exports.create = function(req, res) {
                 message: err
             });
         } else {
-            add_cidade(req, res, fornecedor);
-            res.json(fornecedor);
+            var addPromise = add_cidade(req, res, fornecedor);
+            addPromise.then(function () {
+                res.json(fornecedor);
+            });
+            addPromise.catch(function (err) {
+                return res.status(400).send({
+                    message: err
+                });
+            });
         }
     });
 };
@@ -65,8 +72,15 @@ exports.update = function(req, res) {
                 message: err
             });
         } else {
-            update_cidade(req, res, fornecedor);
-            res.json(fornecedor);
+            var updatePromise = update_cidade(req, res, fornecedor);
+            updatePromise.then(function () {
+                res.json(fornecedor);
+            });
+            updatePromise.catch(function (err) {
+                return res.status(400).send({
+                    message: err
+                });
+            });
         }
     });
 };
@@ -92,16 +106,29 @@ exports.delete = function(req, res) {
 
 // Funçoes para atualizar objectIds em outros objetos.
 function add_cidade(req, res, fornecedor) {
-    req.params.fornecedorId = fornecedor._id;
-    req.params.cidadeId = fornecedor.cidade_fornecedor;
-    cidades.update_fornecedor_cidade(req, res);
+    return new Promise(function (resolve, reject) {
+        req.params.fornecedorId = fornecedor._id;
+        req.params.cidadeId = fornecedor.cidade_fornecedor;
+        var updatePromise = cidades.update_fornecedor_cidade(req, res);
+        updatePromise.then(function (cidade) {
+            resolve(cidade);
+        });
+        updatePromise.catch(function (err) {
+            reject(err);
+        });
+    });
 }
 function update_cidade(req, res, fornecedor) {
-    var promise = new Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         req.params.cidadeId = fornecedor.cidade_fornecedor._id;
-        cidades.update_fornecedor_cidade(req, res);
+        var updatePromise = cidades.update_fornecedor_cidade(req, res);
+        updatePromise.then(function (cidade) {
+            resolve(cidade);
+        });
+        updatePromise.catch(function (err) {
+            reject(err);
+        });
     });
-
 }
 function delete_cidade(req, res, fornecedor) {
     req.params.cidade = fornecedor.cidade_fornecedor;

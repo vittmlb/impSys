@@ -31,9 +31,6 @@ angular.module('cidades').controller('CidadesController', ['$scope', '$statePara
             $scope.cidades = Cidades.query();
         };
         $scope.findOne = function() {
-            // $scope.cidade = Cidades.get({
-            //     cidadeId: $stateParams.cidadeId
-            // });
             Cidades.get({
                 cidadeId: $stateParams.cidadeId
             }).$promise.then(function(data) {

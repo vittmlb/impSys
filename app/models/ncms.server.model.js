@@ -8,7 +8,8 @@ var NcmSchema = new Schema({
     cod_ncm: {
         type: String,
         trim: true,
-        required: true
+        required: true,
+        unique: true
     },
     descricao: {
         type: String,

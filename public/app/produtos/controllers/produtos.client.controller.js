@@ -69,6 +69,7 @@ angular.module('produtos').controller('ProdutosController', ['$scope', '$routePa
                 modelo: this.modelo,
                 descricao: this.descricao,
                 custo_usd: this.custo_usd,
+                moq: this.moq,
                 // ncm: parsed_ncm._id,
                 ncm: $scope.parsed_ncm._id,
                 usa_impostos_ncm: this.usa_impostos_ncm,

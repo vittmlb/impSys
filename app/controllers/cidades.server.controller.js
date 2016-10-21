@@ -60,7 +60,7 @@ exports.update = function(req, res) {
                 message: err
             });
         } else {
-            update_estado(req, res);
+            update_estado(req, res, cidade);
             res.json(cidade);
         }
     });
@@ -85,15 +85,14 @@ exports.delete = function(req, res) {
     });
 };
 
-// Funçoes para atualizar objectIds em outros objetos.
+// Estados
 function add_estado(req, res, cidade) {
     req.params.cidadeId = cidade._id;
-    req.params.estadoId = req.body.estado_cidade._id;
+    req.params.estadoId = cidade.estado_cidade._id;
     estados.update_cidade_estado(req, res);
 }
-function update_estado(req, res) {
-    // req.params.estadoId = req.body.estado._id;
-    req.params.estadoId = req.cidade.estado_cidade._id;
+function update_estado(req, res, cidade) {
+    req.params.estadoId = cidade.estado_cidade._id;
     estados.update_cidade_estado(req, res);
 }
 function delete_estado(req, res) {
@@ -104,17 +103,32 @@ function delete_estado(req, res) {
 // Fornecedores
 exports.update_fornecedor_cidade = function(req, res) {
     _removeFornecedorCidadeAntigo(req, res);
-    Cidades.findById(req.params.cidadeId).exec(function (err, cidade) {
-        if(err) {
-            return res.status(400).send({
-                message: err
-            });
-        } else {
-            cidade._fornecedorId.push(req.params.fornecedorId);
-            cidade.save();
-        }
+    var updatePromise = Cidades.findById(req.params.cidadeId).exec();
+    updatePromise.then(function (cidade) {
+        cidade._fornecedorId.push(req.params.fornecedorId);
+        cidade.save();
     });
+    updatePromise.catch(function (err) {
+        return res.status(400).send({
+            message: err
+        });
+    });
+    return updatePromise;
 };
+exports.update_fornecedor_cidadeOld = function(req, res) {
+    _removeFornecedorCidadeAntigo(req, res);
+    var updatePromise =
+        Cidades.findById(req.params.cidadeId).exec(function (err, cidade) {
+            if(err) {
+                return res.status(400).send({
+                    message: err
+                });
+            } else {
+                cidade._fornecedorId.push(req.params.fornecedorId);
+                cidade.save();
+            }
+        });
+}; // todo: REMOVE !!!
 exports.delete_fornecedor_cidade = function(req, res) {
     Cidades.findById(req.params.cidade).exec(function (err, cidade) {
         if(err) {
@@ -139,23 +153,24 @@ exports.delete_fornecedor_cidade = function(req, res) {
  */
 function _removeFornecedorCidadeAntigo(req, res) {
     var fornecedor_id = req.params.fornecedorId;
-    Cidades.findOne({_fornecedorId: fornecedor_id}).exec(function (err, cidade) {
-        if(err) {
-            return res.status(400).send({
-                message: err
-            });
-        } else {
-            if(cidade){
-                if(cidade._doc.hasOwnProperty('_fornecedorId')) {
-                    var index = cidade._fornecedorId.indexOf(fornecedor_id);
-                    if(index > -1) {
-                        cidade._fornecedorId.splice(index, 1);
-                        cidade.save();
-                    }
+    var promise = Cidades.findOne({_fornecedorId: fornecedor_id}).exec();
+    promise.then(function (cidade) {
+        if(cidade){
+            if(cidade._doc.hasOwnProperty('_fornecedorId')) {
+                var index = cidade._fornecedorId.indexOf(fornecedor_id);
+                if(index > -1) {
+                    cidade._fornecedorId.splice(index, 1);
+                    cidade.save();
                 }
             }
         }
     });
+    promise.catch(function (err) {
+        return res.status(400).send({
+            message: err
+        });
+    });
+    return promise; // todo: Vale à pena encadear essa promessa com o evento seguinte? Acho que não !!!
 }
 function _temFornecedorAssociado(req) {
     return (req.cidade._fornecedorId.length);

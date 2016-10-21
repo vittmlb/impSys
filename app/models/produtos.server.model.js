@@ -30,6 +30,9 @@ var ProdutoSchema = new Schema({
             return value / 100;
         }
     },
+    moq: {
+        type: Number
+    },
     ncm: {
       type: mongoose.Schema.Types.ObjectId, ref: 'NCM'
     },

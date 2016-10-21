@@ -78,34 +78,36 @@ exports.delete = function(req, res) {
     });
 };
 
-exports.update_estado_pais = function(req, res) {
-    _removeEstadoPaisAntigo(req, res);
-    Paises.findById(req.params.paisId).exec(function (err, pais) {
-        if(err) {
-            return res.status(400).send({
-                message: err
-            });
-        } else {
+exports.update_estado_paisOld = function(req) {
+    _removeEstadoPaisAntigo(req);
+    var updatePromise = Paises.findById(req.params.paisId).exec();
+    updatePromise.then(function (pais) {
+        pais._estadoId.push(req.params.estadoId);
+        pais.save();
+    });
+    updatePromise.then(function (err) {
+        return err;
+    });
+    return updatePromise;
+};
+exports.update_estado_pais = function(req) {
+    _removeEstadoPaisAntigo(req).then(function () {
+        var updatePromise = Paises.findById(req.params.paisId).exec();
+        updatePromise.then(function (pais) {
             pais._estadoId.push(req.params.estadoId);
             pais.save();
-        }
+        });
+        updatePromise.then(function (err) {
+            return err;
+        });
+        return updatePromise;
+    }).catch(function(err) {
+        return Promise.reject(err);
     });
 };
 
-exports.delete_estado_pais = function(req, res) {
-    Paises.findById(req.params.paisId).exec(function (err, pais) {
-        if(err) {
-            return res.status(400).send({
-                message: err
-            });
-        } else {
-            var index = pais._estadoId.indexOf(req.params.estadoId);
-            if(index > -1) {
-                pais._estadoId.splice(index, 1);
-            }
-        }
-        pais.save();
-    });
+exports.delete_estado_pais = function(req) {
+    return _removeEstadoPaisAntigo(req);
 };
 
 /**
@@ -114,25 +116,24 @@ exports.delete_estado_pais = function(req, res) {
  * @param res
  * @private
  */
-function _removeEstadoPaisAntigo(req, res) {
-    var estado_id = req.params.estadoId;
-    Paises.findOne({_estadoId: estado_id}).exec(function (err, pais) {
-        if(err) {
-            return res.status(400).send({
-                message: err
-            });
-        } else {
-            if(pais){
-                if(pais._doc.hasOwnProperty('_estadoId')) {
-                    var index = pais._estadoId.indexOf(estado_id);
-                    if(index > -1) {
-                        pais._estadoId.splice(index, 1);
-                        pais.save();
-                    }
+function _removeEstadoPaisAntigo(req) {
+    // var estado_id = req.params.estadoId;
+    var promise = Paises.findOne({_estadoId: estado_id}).exec();
+    promise.then(function (pais) {
+        if(pais){
+            if(pais._doc.hasOwnProperty('_estadoId')) {
+                var index = pais._estadoId.indexOf(estado_id);
+                if(index > -1) {
+                    pais._estadoId.splice(index, 1);
+                    pais.save();
                 }
             }
         }
     });
+    promise.catch(function (err) {
+        return err;
+    });
+    return promise;
 }
 function _temEstadoAssociado(req) {
     return (req.pais._estadoId.length);

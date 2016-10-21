@@ -68,6 +68,7 @@ exports.update = function(req, res) {
     produto.modelo = req.body.modelo;
     produto.descricao = req.body.descricao;
     produto.custo_usd = req.body.custo_usd;
+    produto.moq = req.body.moq;
     produto.ncm = req.body.ncm._id;
     produto.usa_impostos_ncm = req.body.usa_impostos_ncm;
     produto.impostos = req.body.impostos;

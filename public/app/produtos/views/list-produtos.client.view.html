@@ -32,6 +32,7 @@
                                     <div class="product-desc">
                                         <span class="product-price">{{item.custo_usd | currency: 'U$ '}}</span>
                                         <small class="text-muted">Modelo: {{item.modelo}}</small>
+                                        <small ng-show="item.moq">Moq: {{item.moq}}</small>
                                         <a href="#!/produtos/{{item._id}}" class="product-name">{{item.nome | limitTo: 23}}</a>
                                         <div class="small m-t-xs">{{item.descricao | limitTo: 30}}</div>
                                     </div>

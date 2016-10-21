@@ -111,15 +111,17 @@
                                 <!--</td>-->
                                 <td class="project-title">
                                     <i class="fa fa-plus" style="cursor: pointer; margin-right: 3px;" ng-click="addDespesaInternacionalDoProdutoModal(itemEstudo)"></i>
-                                    <a ng-click="produtoViewModal(itemEstudo)">{{ itemEstudo.nome }}</a>
+                                    <a href="#"><img style="width: 40px;" class="img-circle" ng-src="{{ itemEstudo.img_url }}" alt="Imagem {{ itemEstudo.nome }}"></a>
+                                    <a ng-click="produtoViewModal(itemEstudo)">{{ itemEstudo.nome | limitTo: 20 }}</a>
                                     <br/>
                                     <div data-ng-repeat="desp in itemEstudo.estudo_do_produto.despesas.internacionais.individualizadas">
                                         <small style="display: block;">{{ desp.desc }}: {{ desp.usd | currency: 'usd ' }}</small>
                                     </div>
-                                    <small>Cheio USD:{{ itemEstudo.estudo_do_produto.custo_unitario.cheio.usd }}</small><br/>
-                                    <small>Paypal USD: {{ itemEstudo.estudo_do_produto.custo_unitario.paypal.usd }}</small><br/>
-                                    <small>Declarado USD: {{ itemEstudo.estudo_do_produto.custo_unitario.declarado.usd }}</small><br/>
-                                    <small>Desp Int Tot: {{ itemEstudo.estudo_do_produto.despesas.internacionais.totais.usd }}</small>
+                                    <small>{{ itemEstudo.modelo }}</small><br>
+                                    <!--<small>Cheio USD:{{ itemEstudo.estudo_do_produto.custo_unitario.cheio.usd }}</small><br/>-->
+                                    <!--<small>Paypal USD: {{ itemEstudo.estudo_do_produto.custo_unitario.paypal.usd }}</small><br/>-->
+                                    <!--<small>Declarado USD: {{ itemEstudo.estudo_do_produto.custo_unitario.declarado.usd }}</small><br/>-->
+                                    <!--<small>Desp Int Tot: {{ itemEstudo.estudo_do_produto.despesas.internacionais.totais.usd }}</small>-->
 
                                 </td>
                                 <td class="project-title">

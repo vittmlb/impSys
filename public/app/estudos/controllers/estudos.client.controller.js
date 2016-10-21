@@ -78,7 +78,7 @@ angular.module('estudos').controller('EstudosController', ['$scope', '$uibModal'
                     ocupado_percentual: 0
                 }
             },
-            aliq_icms: 0.16, // todo: Carregar esta informação à partir do objeto despesas.
+            aliq_icms: 0.18, // todo: Carregar esta informação à partir do objeto despesas.
             tributos: {
                 declarado: { // Tributos que constarão da Invoice, ou seja, será o total declarado para o governo, mas não contemplará o montante enviado por paypal
                     ii: {
